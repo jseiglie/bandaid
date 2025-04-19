@@ -40,10 +40,8 @@ module.exports = (sequelize, DataTypes)=>{
     );
 
     Bands.associate = function (models) {
-        // Define the relationship between Bands and Collections
-       // Users.hasMany(models.Collections, { foreignKey: 'user_id' });
-         Bands.belongsToMany(models.Users, { through: 'UserBands', foreignKey: 'band_id' });        
-    };
+        Bands.belongsToMany(models.Users, { through: "UserBands", foreignKey: "band_id", onDelete: "CASCADE" });
+      };
 
     return Bands
 }

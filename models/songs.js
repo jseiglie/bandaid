@@ -110,15 +110,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   Songs.associate = function (models) {
-    // Define the relationship between Songs and SetLists
     Songs.belongsToMany(models.SetLists, {
       through: "SetListSongs",
       foreignKey: "song_id",
+      onDelete: "CASCADE",
     });
-    // Define the relationship between Songs and Bands
-    Songs.belongsTo(models.Bands, { foreignKey: "band_id" });
-    // Define the relationship between Songs and Users
-    Songs.belongsTo(models.Users, { foreignKey: "proposed_by" });
+    Songs.belongsTo(models.Bands, { foreignKey: "band_id", onDelete: "CASCADE" });
+    Songs.belongsTo(models.Users, { foreignKey: "proposed_by", onDelete: "CASCADE" });
   };
 
   return Songs;

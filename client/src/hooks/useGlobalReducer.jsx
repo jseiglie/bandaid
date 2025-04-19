@@ -1,6 +1,10 @@
 import { useContext, useReducer, createContext, useEffect } from "react";
 import storeReducer, { initialStore } from "../state/store";
-
+import setListServices from "../services/setListServices";
+import bandServices from "../services/bandServices";
+import liveServices from "../services/liveServices";
+import songServices from "../services/songServices";
+import userServices from "../services/userServices";
 const StoreContext = createContext();
 
 export function StoreProvider({ children }) {
@@ -13,14 +17,36 @@ export function StoreProvider({ children }) {
       const parsedData = JSON.parse(storedData);
       dispatch({ type: "init", payload: parsedData });
     }
-    fetch("http://localhost:3000/api/band/bands")
-      .then((res) => res.json())
+
+    bandServices.getBands()
       .then((data) => {
         console.log(data);
         // Handle the response data as needed.
       })
-      .catch((err) => console.error(err));
-    dispatch({ type: "test", payload: { ok: true } });
+
+      setListServices.getSetLists()
+      .then((data) => {
+        console.log(data);
+        // Handle the response data as needed.
+      })
+      liveServices.getLives()
+      .then((data) => {
+        console.log(data);
+        // Handle the response data as needed.
+      })
+      songServices.getSongs()
+      .then((data) => {
+        console.log(data);
+        // Handle the response data as needed.
+      })
+      userServices.getUsers()
+      .then((data) => {
+        console.log(data);
+        // Handle the response data as needed.
+      });
+      
+
+      dispatch({ type: "test", payload: { ok: true } });
   }, []);
   return (
     <StoreContext.Provider value={{ store, dispatch }}>

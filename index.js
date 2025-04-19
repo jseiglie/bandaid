@@ -10,7 +10,10 @@ const sequelize = require('./config/index');
 
 //routes import
 const bandRoute = require('./routes/bandRoute');
-
+const setListRoute = require('./routes/setListRoute');
+const userRoute = require('./routes/userRoute');
+const songRoute = require('./routes/songRoute');
+const liveRoute = require('./routes/liveRoutes');
 
 const app = express();
 const server = createServer(app);
@@ -28,20 +31,14 @@ app.use('/api', router);
 app.use('/api/test', (req, res) => {
   res.json({ message: 'Hello from the server!' });
 });
-app.use('/api/band', bandRoute)
+app.use('/api/band', bandRoute);
+app.use('/api/set_list', setListRoute);
+app.use('/api/user', userRoute);
+app.use('/api/songs', songRoute);
+app.use('/api/lives', liveRoute);
 
 
 
-
-//db
-const sequelizeOptions = {};
-
-
-if (!process.env.PROD) {
-  sequelizeOptions.force = true;
-}
-
-sequelizeOptions.force = true;
 
 
 app.get('*', (req, res) => {

@@ -44,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
     SetLists.belongsToMany(models.Songs, {
       through: "SetListSongs",
       foreignKey: "setlist_id",
+      onDelete: "CASCADE",
     });
    };
 

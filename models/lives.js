@@ -36,6 +36,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(255),
         allowNull: true,
       },
+      promoted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false,
+      },
     },
     {
       tableName: "Lives",
@@ -45,10 +50,14 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Lives.associate = function (models) {
-    // Define the relationship between Lives and Bands
-    Lives.belongsTo(models.Bands, { foreignKey: "band_id" });
-    // Define the relationship between Lives and SetLists
-    Lives.belongsTo(models.SetLists, { foreignKey: "setlist_id" });
+    Lives.belongsTo(models.Bands, {
+      foreignKey: "band_id",
+      onDelete: "CASCADE",
+    });
+    Lives.belongsTo(models.SetLists, {
+      foreignKey: "setlist_id",
+      onDelete: "CASCADE",
+    });
   };
 
   return Lives;
