@@ -16,6 +16,7 @@ client/dist
 /config
 /client/config
 # misc
+/client/.env
 .DS_Store
 .env
 .env.local
