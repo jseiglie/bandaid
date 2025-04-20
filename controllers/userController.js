@@ -1,7 +1,7 @@
 const userClass = require('../class/users.class.js')
 const responseObject = require('../utils/response.js');
 const userController = {}
-const { tokenGenerator } = require('../utils/auth.js')
+const { tokenGenerator } = require('../middleware/auth.js')
 userController.getUsers = async (req, res) => {
   try {
     console.log('Fetching bands...');
