@@ -1,11 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Hero } from "../components/hero/hero";
 
 export const Home = () => {
   return (
-    <div>
-      home
-      <Link to={"/test"}>test</Link>
-    </div>
+    <main className="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column  justify-content-center">
+     
+
+      <Hero />
+     
+    </main>
   );
 };

@@ -21,23 +21,23 @@ export function StoreProvider({ children }) {
     bandServices.getBands()
       .then((data) => {
         console.log(data);
-        // Handle the response data as needed.
+       
       })
 
       setListServices.getSetLists()
       .then((data) => {
         console.log(data);
-        // Handle the response data as needed.
+       
       })
       liveServices.getLives()
       .then((data) => {
         console.log(data);
-        // Handle the response data as needed.
+       
       })
       songServices.getSongs()
       .then((data) => {
         console.log(data);
-        // Handle the response data as needed.
+       
       })
       userServices.getUsers()
       .then((data) => {
