@@ -2,3 +2,8 @@
     max-width: 90%;
     min-height: 80vh;
 }
+
+.hero-wrapper{
+    min-height: 80vh;
+    align-content: center;
+}

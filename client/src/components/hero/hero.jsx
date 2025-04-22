@@ -4,7 +4,7 @@ import React from "react";
 
 export const Hero = () => {
   return (
-    <section className="px-3 text-center text-white">
+    <section className="px-3 text-center text-white hero-wrapper">
       <h1>BandAid</h1>
       <p className="lead">
         Cover is a one-page template for building simple and beautiful home
@@ -13,10 +13,10 @@ export const Hero = () => {
       </p>
       <p className="lead">
         <a
-          href="#"
+          href="/login"
           className="btn btn-lg btn-light fw-bold border-white bg-white"
         >
-          Learn more
+          Hey ho, let's go!
         </a>
       </p>
     </section>
