@@ -18,35 +18,23 @@ export function StoreProvider({ children }) {
       dispatch({ type: "init", payload: parsedData });
     }
 
-    bandServices.getBands()
-      .then((data) => {
-        console.log(data);
-       
-      })
+    bandServices.getBands().then((data) => {
+      dispatch({ type: "store", payload: { key: "bands", data } });
+    });
 
-      setListServices.getSetLists()
-      .then((data) => {
-        console.log(data);
-       
-      })
-      liveServices.getLives()
-      .then((data) => {
-        console.log(data);
-       
-      })
-      songServices.getSongs()
-      .then((data) => {
-        console.log(data);
-       
-      })
-      userServices.getUsers()
-      .then((data) => {
-        console.log(data);
-        // Handle the response data as needed.
-      });
-      
+    setListServices.getSetLists().then((data) => {
+      dispatch({ type: "store", payload: { key: "setLists", data } });
+    });
+    liveServices.getLives().then((data) => {
+      dispatch({ type: "store", payload: { key: "lives", data } });
+    });
+    songServices.getSongs().then((data) => {
+      dispatch({ type: "store", payload: { key: "songs", data } });
+    });
+    userServices.getUsers().then((data) => {
+      dispatch({ type: "store", payload: { key: "users", data } });
+    });
 
-      dispatch({ type: "test", payload: { ok: true } });
   }, []);
   return (
     <StoreContext.Provider value={{ store, dispatch }}>

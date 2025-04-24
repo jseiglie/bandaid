@@ -5,7 +5,7 @@ import "./Features.css";
 export const Features = () => {
   const { store, dispatch } = useGlobalReducer();
   return (
-    <section className="text-white mt-5">
+    <section className="container-fluid text-white mt-2">
       <h3 className="my-5">Why BandAid?</h3>
       <p className="lead my-5 border border-2 p-5 rounded">
         BandAid is a web application designed to help bands and musicians manage

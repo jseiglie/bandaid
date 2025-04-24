@@ -1,9 +1,12 @@
-.cover-container {
-    max-width: 90%;
-    min-height: 80vh;
-}
+
 
 .hero-wrapper{
     min-height: 80vh;
     align-content: center;
+    background-image: url('../../assets/images/bg.jpg');
+    background-size: cover;
+}
+
+.hero-hook{
+    background-color: #ecebeb0a;
 }

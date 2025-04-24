@@ -5,12 +5,14 @@ import React from "react";
 export const Hero = () => {
   return (
     <section className="px-3 text-center text-white hero-wrapper">
-      <h1>BandAid</h1>
-      <p className="lead">
-        Cover is a one-page template for building simple and beautiful home
-        pages. Download, edit the text, and add your own fullscreen background
-        photo to make it your own.
-      </p>
+      <div className="hero-hook">
+        <h1 className="fs-1">BandAid</h1>
+        <p className="lead fw-bold">
+          Cover is a one-page template for building simple and beautiful home
+          pages. Download, edit the text, and add your own fullscreen background
+          photo to make it your own.
+        </p>
+      </div>
       <p className="lead">
         <a
           href="/login"
