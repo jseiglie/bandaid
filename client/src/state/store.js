@@ -1,5 +1,6 @@
 export const initialStore = () => {
   return {
+    user: null,
     auth: false,
     ok: false,
     features: [

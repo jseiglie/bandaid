@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import defaultImgFeatures from "../../assets/images/img-placeholder-700x300.svg";
 import defaultImgBands from "../../assets/images/img-placeholder-400.svg";
-import { max, min } from "moment";
 
 export const Card = (props) => {
   const defaultImg =
