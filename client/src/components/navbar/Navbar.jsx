@@ -32,7 +32,7 @@ export const Navbar = () => {
       </Link>
       <Link
         className="mx-2 nav-link text-white fw-bold py-1 px-0"
-        to={user ? "/band_manager" : "/login"}
+        to={user ? "/band_manager" : "/auth"}
       >
         <span className="fa-regular fa-xl fa-circle-user"></span>
       </Link>

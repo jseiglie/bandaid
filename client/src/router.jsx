@@ -14,6 +14,7 @@ import { Register } from "./pages/Register";
 import { BandPrivate } from "./pages/BandPrivate";
 import { BandPublic } from "./pages/BandPublic";
 import { BandManagerDashboard } from "./pages/BandManagerDashboard";
+import { Auth } from "./pages/auth";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,6 +23,7 @@ export const router = createBrowserRouter(
       <Route path="/home" element={<Home />} />
       <Route path="/features" element={<Features />} />
       <Route path="/contact" element={<Contact />} />
+      <Route path="/auth" element={<Auth/>}/>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/user/profile" element={<Profile />} />

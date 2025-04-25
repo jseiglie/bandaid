@@ -11,7 +11,7 @@ validationUtils.validateEmail = (email) => {
   if (email.length < 5) {
     return false;
   }
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/ // Basic email format
   return emailRegex.test(email);
 }
 
@@ -22,7 +22,7 @@ validationUtils.validatePassword = (password) => {
   if (password.length < 6) {
     return false;
   }
-  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/;
+  const passwordRegex = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/;
   return passwordRegex.test(password);
 }
 

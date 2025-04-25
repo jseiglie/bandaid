@@ -17,9 +17,9 @@ userServices.getUsers = async () => {
   }
 };
 
-userServices.login = async (formData) => {
+userServices.auth = async (login, formData) => {
   try {
-    const data = await fetcher("/user/login", {
+    const data = await fetcher(`/user/${login? 'login': 'register'}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,7 +30,7 @@ userServices.login = async (formData) => {
     return data;
   } catch (error) {
     console.error(error);
-    throw new Error("Error logging in");
+    return error;
   }
 };
 
