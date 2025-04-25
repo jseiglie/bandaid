@@ -2,16 +2,42 @@ const validationUtils = {};
 
 
 validationUtils.validateEmail = (email) => {
+  if (!email) {
+    return false;
+  }
+  if (email.length > 254) {
+    return false;
+  }
+  if (email.length < 5) {
+    return false;
+  }
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
 
 validationUtils.validatePassword = (password) => {
-  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+  if (!password) {
+    return false;
+  }
+  if (password.length < 6) {
+    return false;
+  }
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/;
   return passwordRegex.test(password);
 }
 
 validationUtils.validateUsername = (username) => {
+  if (!username) {
+    return false;
+  }
+  if (username.length < 3 || username.length > 20) {
+    return false;
+  }
+  if (username.includes(" ")) {
+    return false;
+  }
+
+  
   const usernameRegex = /^[a-zA-Z0-9]{3,20}$/; // Alphanumeric and 3-20 characters
   return usernameRegex.test(username);
 }

@@ -17,4 +17,21 @@ userServices.getUsers = async () => {
   }
 };
 
+userServices.login = async (formData) => {
+  try {
+    const data = await fetcher("/user/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error logging in");
+  }
+};
+
 export default userServices;
