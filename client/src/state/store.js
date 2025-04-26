@@ -1,7 +1,8 @@
 export const initialStore = () => {
   return {
-    user: null,
-    auth: false,
+    user: localStorage.getItem("user") || null,
+    auth: !!localStorage.getItem("token"),
+    token: localStorage.getItem("token") || null,
     ok: false,
     features: [
       {
@@ -34,7 +35,6 @@ export const initialStore = () => {
 //  NO PUEDE SER ASYNC!!!!
 export default function storeReducer(store, action = {}) {
   switch (action.type) {
-   
     case "store":
       return {
         ...store,

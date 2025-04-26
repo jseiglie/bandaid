@@ -54,17 +54,6 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  // password hashing
-  Users.beforeCreate(async (user) => {
-    const hashedPassword = await bcrypt.hash(user.password, 10);
-    user.password = hashedPassword;
-  });
-  // username generation
-  Users.beforeCreate(async (user) => {
-    if (!user.username) {
-      user.username = user.email.split("@")[0];
-    }
-  });
   // existing username and email check
   Users.beforeCreate(async (user) => {
     //check if email is registered
@@ -79,19 +68,7 @@ module.exports = (sequelize, DataTypes) => {
       throw new Error("Username already registered");
     }
   });
-  // password hashing on update
-  Users.beforeUpdate(async (user) => {
-    if (user.changed("password")) {
-      const hashedPassword = await bcrypt.hash(user.password, 10);
-      user.password = hashedPassword;
-    }
-  });
-
-//password check
-  Users.prototype.validPassword = async function (password) {
-    return await bcrypt.compare(password, this.password);
-  };
-  //return user object without password
+  
   Users.prototype.toJSON = function () {
     const user = this.get();
     delete user.password;

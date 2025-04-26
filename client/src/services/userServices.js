@@ -19,7 +19,7 @@ userServices.getUsers = async () => {
 
 userServices.auth = async (login, formData) => {
   try {
-    const data = await fetcher(`/user/${login? 'login': 'register'}`, {
+    const data = await fetcher(`/user/auth/${login? 'login': 'register'}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -1,9 +1,49 @@
 require("dotenv").config();
+UsersModel = require("../models").Users;
 const bcrypt = require("bcrypt");
 const randomUsername = require("../utils/randomUsername");
-UsersModel = require("../models").Users;
+const responseObject = require("../utils/response");
+const jwt = require("jsonwebtoken");
+const JWT_SECRET =
+  process.env.JWT_SECRET ||
+  "Pw#u=z>y9Cq@s7+Fk3LZGVe<}&-AdBW?./h!;%8$nx]H~*S6rv";
+
 module.exports = class Users {
   constructor() {}
+
+  static generateToken(userId, expires) {
+    try {
+      const expirationDate = {};
+      if (!expires) {
+        expirationDate.expiresIn = "1d";
+      }
+      return jwt.sign({ id: userId }, JWT_SECRET, expirationDate); // Customize expiration as needed
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  }
+
+  // Verify JWT Token
+  static verifyToken(token) {
+    try {
+      return jwt.verify(token, JWT_SECRET);
+    } catch (error) {
+      console.error(error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  static getId(token) {
+    try {
+      if (this.verifyToken(token)) {
+        const { id } = jwt.verify(token, JWT_SECRET);
+        return id;
+      }
+    } catch (error) {
+      console.error("Error getting ID from token:", error);
+      return { success: false, error: error.message };
+    }
+  }
 
   static async getUsers() {
     try {
@@ -115,38 +155,39 @@ module.exports = class Users {
       return { success: false, error: error.message };
     }
   }
-
-  // Check if the provided password matches the hashed password
-  static async checkPassword(password, userPassword) {
+  static async checkPassword(password, hashedPassword) {
     try {
-      if (!password || !userPassword) throw new Error("Missing parameters");
-      const isMatch = await bcrypt.compare(password, userPassword);
-      return isMatch;
+      return await bcrypt.compare(password, hashedPassword);
     } catch (error) {
-      console.error("Error comparing passwords:", error);
+      console.error("Error checking password:", error);
       return { success: false, error: error.message };
     }
   }
-
-  static async login(username, password) {
+  static async login(username, email, password) {
     try {
-      if (!username || !password) {
-        throw new Error("All fields are required");
-      }
-      const user = await UsersModel.findOne({
-        where: { username, password },
+      let userbyEmail;
+      let userbyUsername;
+      userbyEmail = await UsersModel.findOne({
+        where: { email },
       });
-      if (!user) {
-        throw new Error("Invalid username or password");
+
+      if (!userbyEmail) {
+        userbyUsername = await UsersModel.findOne({
+          where: { username },
+        });
+        if (!userbyUsername) {
+          throw new Error("Invalid username/email or password");
+        }
       }
-      // Check if the password is correct
+      const user = userbyEmail || userbyUsername;
+
       const passwordMatch = await this.checkPassword(password, user.password);
+
       if (!passwordMatch) throw new Error("Wrong password and/or email");
 
       // Omit the password before returning the user
       delete user.dataValues.password;
-      const token = this.generateToken(user.id, keepMeLogged);
-      return user;
+      return {user, token: this.generateToken(user.id, "1d")};
     } catch (error) {
       console.error("Error logging in:", error);
       throw error;
@@ -154,7 +195,7 @@ module.exports = class Users {
   }
   static async register(username, email, password) {
     try {
-      if (!username || !email || !password) {
+      if (!email || !password) {
         throw new Error("All fields are required");
       }
       const existingUser = await UsersModel.findOne({
@@ -169,9 +210,14 @@ module.exports = class Users {
       const user = await UsersModel.create({
         username: username || randomUsername(email),
         email,
-        password:hashedPassword,
+        password: hashedPassword,
       });
-      return user;
+      delete user.dataValues.password;
+
+      return {
+        user,
+        token: this.generateToken(user.id, "1d"),
+      };
     } catch (error) {
       console.error("Error registering user:", error);
       throw error;

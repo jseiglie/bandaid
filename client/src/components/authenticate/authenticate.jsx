@@ -6,8 +6,10 @@ import userServices from "../../services/userServices";
 
 import validationUtils from "../../utils/validationUtils";
 import { Spinner } from "../spinner/spinner";
+import useGlobalReducer from "../../hooks/useGlobalReducer";
 
 export const Authenticate = (props) => {
+  const { store, dispatch } = useGlobalReducer();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -65,33 +67,38 @@ export const Authenticate = (props) => {
 
     !error.error &&
       userServices.auth(props.login, formData).then((data) => {
-        console.log("---------data resp-----------", data);
-
         setLoading(false);
         if (!data.success) {
           setLoading(false);
           setError({ ...error, error: data.message, message: data.message });
           setSuccess(false);
-        } else {
-          setLoading(false);
-          setSuccess(true);
-          setError({
-            error: null,
-            message: null,
-          });
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("user", JSON.stringify(data.user));
-          if (data.success) navigate("/band_manager");
+          return;
         }
+        setLoading(false);
+        setSuccess(true);
+        setError({
+          error: null,
+          message: null,
+        });
+        localStorage.setItem("token", data.data.token);
+        localStorage.setItem("user", JSON.stringify(data.data.user));
+        dispatch({
+          type: "store",
+          payload: { key: "user", data: data.data.user },
+        });
+        dispatch({
+          type: "store",
+          payload: { key: "token", data: data.data.token },
+        });
+        dispatch({
+          type: "store",
+          payload: { key: "auth", data: true },
+        });
+        if (data.success) navigate("/band_manager");
       });
   };
   return (
     <section className="text-white">
-      {/* {error.message && (
-        <div className="alert alert-danger" role="alert">
-          {error.message}
-        </div>
-      )} */}
       <h3>Login</h3>
       <form className="form-control" onSubmit={handleSubmit}>
         <div className="form-floating mb-3">
