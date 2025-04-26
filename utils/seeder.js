@@ -1,17 +1,24 @@
-const { Users, Bands, Songs, SetLists, Lives, SetListSongs, UserBands } = require('../models');
+const { Bands, Songs, SetLists, Lives, SetListSongs, UserBands } = require('../models');
+const Users = require('../class/users.class.js'); // Import the Users class
 
 const seedDatabase = async () => {
   try {
     console.log('Seeding database...');
 
-    // Seed Users
-    const users = await Users.bulkCreate([
-      { username: 'user1', email: 'user1@example.com', password: 'password1' },
-      { username: 'user2', email: 'user2@example.com', password: 'password2' },
-      { username: 'user3', email: 'user3@example.com', password: 'password3' },
-      { username: 'user4', email: 'user4@example.com', password: 'password4' },
-      { username: 'user5', email: 'user5@example.com', password: 'password5' },
-    ], { returning: true });
+    // Seed Users using the register method
+    const users = [];
+    const userData = [
+      { username: 'user1', email: 'user1@example.com', password: 'user123!' },
+      { username: 'user2', email: 'user2@example.com', password: 'user223!' },
+      { username: 'user3', email: 'user3@example.com', password: 'user323!' },
+      { username: 'user4', email: 'user4@example.com', password: 'user423!' },
+      { username: 'user5', email: 'user5@example.com', password: 'user523!' },
+    ];
+
+    for (const user of userData) {
+      const registeredUser = await Users.register(user.username, user.email, user.password);
+      users.push(registeredUser);
+    }
 
     // Seed Bands
     const bands = await Bands.bulkCreate([
