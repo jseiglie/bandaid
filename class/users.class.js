@@ -4,6 +4,9 @@ const bcrypt = require("bcrypt");
 const randomUsername = require("../utils/randomUsername");
 const responseObject = require("../utils/response");
 const jwt = require("jsonwebtoken");
+const bandController = require("../controllers/band.controller.js");
+const Bands = require("./bands.class");
+const BandMembers = require("../class/bandMembers.class.js");
 const JWT_SECRET =
   process.env.JWT_SECRET ||
   "Pw#u=z>y9Cq@s7+Fk3LZGVe<}&-AdBW?./h!;%8$nx]H~*S6rv";
@@ -185,9 +188,33 @@ module.exports = class Users {
 
       if (!passwordMatch) throw new Error("Wrong password and/or email");
 
-      // Omit the password before returning the user
+      // Remeber to remove the password before returning
       delete user.dataValues.password;
-      return {user, token: this.generateToken(user.id, "1d")};
+      // Resolving band and band members for logged in user
+      const userBandsQuery = await Bands.getBandsByUserId(user.dataValues.id);
+      const userBands = await Promise.all(
+        userBandsQuery.map(async (band) => {
+          const bandData = await Bands.getBandById(band.dataValues.band_id);
+
+          //Band members for each band
+          const BandMembersQuery = await BandMembers.getBandMembersByBandId(
+            band.dataValues.band_id
+          );
+          const BandMembersData = await Promise.all(
+            BandMembersQuery.map(async (member) => {
+              return await Users.getUserById(member.dataValues.user_id);
+            })
+          );
+
+          // Add BandMembers to the band object
+          bandData.dataValues.bandMembers = BandMembersData;
+          return bandData;
+        })
+      );
+
+      user.dataValues.bands = userBands;
+
+      return { user, token: this.generateToken(user.dataValues.id, "1d") };
     } catch (error) {
       console.error("Error logging in:", error);
       throw error;

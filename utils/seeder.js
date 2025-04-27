@@ -1,11 +1,11 @@
-const { Bands, Songs, SetLists, Lives, SetListSongs, UserBands } = require('../models');
+const { Bands, Songs, SetLists, Lives, SetListSongs, UserBands, BandMembers } = require('../models');
 const Users = require('../class/users.class.js'); // Import the Users class
 
 const seedDatabase = async () => {
   try {
     console.log('Seeding database...');
 
-    // Seed Users using the register method
+    //Seed Users using the register method
     const users = [];
     const userData = [
       { username: 'user1', email: 'user1@example.com', password: 'user123!' },
@@ -67,12 +67,23 @@ const seedDatabase = async () => {
 
     // Seed UserBands
     await UserBands.bulkCreate([
-      { user_id: users[0].id, band_id: bands[0].id },
-      { user_id: users[1].id, band_id: bands[1].id },
-      { user_id: users[2].id, band_id: bands[2].id },
-      { user_id: users[3].id, band_id: bands[3].id },
-      { user_id: users[4].id, band_id: bands[4].id },
+      { user_id: users[0].id || 1, band_id: bands[0].id },
+      { user_id: users[1].id || 2, band_id: bands[1].id },
+      { user_id: users[2].id || 3, band_id: bands[2].id },
+      { user_id: users[3].id || 4, band_id: bands[3].id },
+      { user_id: users[4].id || 1, band_id: bands[4].id },
     ]);
+
+    // Seed BandMembers
+    await BandMembers.bulkCreate([
+      { user_id: users[0].id || 1, band_id: bands[0].id, role: 'Guitarist' },
+      { user_id: users[1].id || 2, band_id: bands[0].id, role: 'Drummer' },
+      { user_id: users[2].id || 3, band_id: bands[1].id, role: 'Vocalist' },
+      { user_id: users[3].id || 2, band_id: bands[2].id, role: 'Bassist' },
+      { user_id: users[4].id || 1, band_id: bands[3].id, role: 'Keyboardist' },
+      { user_id: users[0].id || 1, band_id: bands[4].id, role: 'Producer' },
+    ]);
+
 
     console.log('Database seeded successfully!');
   } catch (error) {

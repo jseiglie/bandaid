@@ -1,5 +1,5 @@
 const express = require("express");
-const liveController = require("../controllers/liveController");
+const liveController = require("../controllers/live.controller");
 const router = express.Router();
 
 router.get("/lives", liveController.getLives);
