@@ -9,12 +9,13 @@ const cors = require('cors');
 const sequelize = require('./config/index');
 
 //routes import
-const bandRoute = require('./routes/band.route');
-const setListRoute = require('./routes/setList.route');
-const userRoute = require('./routes/user.route');
-const songRoute = require('./routes/song.route');
+const bandRoute = require('./routes/band.routes');
+const setListRoute = require('./routes/setList.routes');
+const userRoute = require('./routes/user.routes');
+const songRoute = require('./routes/song.routes');
 const liveRoute = require('./routes/live.routes');
-const bandMemberRoute = require('./routes/bandMembers.route');
+const bandMemberRoute = require('./routes/bandMembers.routes');
+const musicianProfileRoute = require('./routes/musicianProfile.route');
 
 const app = express();
 const server = createServer(app);
@@ -38,7 +39,7 @@ app.use('/api/user', userRoute);
 app.use('/api/songs', songRoute);
 app.use('/api/lives', liveRoute);
 app.use('/api/band_members', bandMemberRoute);
-
+app.use('/api/musician_profiles', musicianProfileRoute);
 
 
 
