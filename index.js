@@ -15,7 +15,7 @@ const userRoute = require('./routes/user.routes');
 const songRoute = require('./routes/song.routes');
 const liveRoute = require('./routes/live.routes');
 const bandMemberRoute = require('./routes/bandMembers.routes');
-const musicianProfileRoute = require('./routes/musicianProfile.route');
+const musicianProfileRoute = require('./routes/musicianProfile.routes');
 
 const app = express();
 const server = createServer(app);

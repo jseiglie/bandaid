@@ -7,6 +7,8 @@ const jwt = require("jsonwebtoken");
 const bandController = require("../controllers/band.controller.js");
 const Bands = require("./bands.class");
 const BandMembers = require("../class/bandMembers.class.js");
+const MusicianProfile = require("../class/musicianProfile.class.js");
+
 const JWT_SECRET =
   process.env.JWT_SECRET ||
   "Pw#u=z>y9Cq@s7+Fk3LZGVe<}&-AdBW?./h!;%8$nx]H~*S6rv";
@@ -168,51 +170,41 @@ module.exports = class Users {
   }
   static async login(username, email, password) {
     try {
-      let userbyEmail;
-      let userbyUsername;
-      userbyEmail = await UsersModel.findOne({
-        where: { email },
-      });
-
-      if (!userbyEmail) {
-        userbyUsername = await UsersModel.findOne({
+      const user =
+        (await UsersModel.findOne({
+          where: { email },
+        })) ||
+        (await UsersModel.findOne({
           where: { username },
-        });
-        if (!userbyUsername) {
-          throw new Error("Invalid username/email or password");
-        }
+        }));
+
+      if (!user) {
+        throw new Error("Invalid username/email or password");
       }
-      const user = userbyEmail || userbyUsername;
 
       const passwordMatch = await this.checkPassword(password, user.password);
+      if (!passwordMatch) {
+        throw new Error("Wrong password and/or email");
+      }
 
-      if (!passwordMatch) throw new Error("Wrong password and/or email");
-
-      // Remeber to remove the password before returning
+      // Remove password from user object
       delete user.dataValues.password;
-      // Resolving band and band members for logged in user
-      const userBandsQuery = await Bands.getBandsByUserId(user.dataValues.id);
-      const userBands = await Promise.all(
-        userBandsQuery.map(async (band) => {
-          const bandData = await Bands.getBandById(band.dataValues.band_id);
 
-          //Band members for each band
-          const BandMembersQuery = await BandMembers.getBandMembersByBandId(
-            band.dataValues.band_id
+      const userBands = await this.getUserBandsWithMembers(user.dataValues.id);
+
+      if (userBands) {
+        const musicianProfile = await MusicianProfile.getProfileByUserId(
+          user.dataValues.id
+        );
+        if (musicianProfile && musicianProfile.social_links) {
+          musicianProfile.social_links = JSON.parse(
+            musicianProfile.social_links
           );
-          const BandMembersData = await Promise.all(
-            BandMembersQuery.map(async (member) => {
-              return await Users.getUserById(member.dataValues.user_id);
-            })
-          );
+        }
 
-          // Add BandMembers to the band object
-          bandData.dataValues.bandMembers = BandMembersData;
-          return bandData;
-        })
-      );
-
-      user.dataValues.bands = userBands;
+        user.dataValues.bands = userBands;
+        user.dataValues.profile = musicianProfile;
+      }
 
       return { user, token: this.generateToken(user.dataValues.id, "1d") };
     } catch (error) {
@@ -220,33 +212,55 @@ module.exports = class Users {
       throw error;
     }
   }
-  static async register(username, email, password) {
+
+  // get bands and their members
+  static async getUserBandsWithMembers(userId) {
     try {
-      if (!email || !password) {
-        throw new Error("All fields are required");
-      }
-      const existingUser = await UsersModel.findOne({
-        where: { email },
-      });
-      if (existingUser) {
-        throw new Error("Email already exists");
-      }
+      const userBandsQuery = await Bands.getBandsByUserId(userId);
 
-      // Hash the password before saving
-      const hashedPassword = await this.hash(password);
-      const user = await UsersModel.create({
-        username: username || randomUsername(email),
-        email,
-        password: hashedPassword,
-      });
-      delete user.dataValues.password;
+      return await Promise.all(
+        userBandsQuery.map(async (band) => {
+          const bandData = await Bands.getBandById(band.dataValues.band_id);
 
-      return {
-        user,
-        token: this.generateToken(user.id, "1d"),
-      };
+          const bandMembers = await this.getBandMembersWithProfiles(
+            band.dataValues.band_id
+          );
+
+          bandData.dataValues.bandMembers = bandMembers;
+          return bandData;
+        })
+      );
     } catch (error) {
-      console.error("Error registering user:", error);
+      console.error("Error fetching user bands with members:", error);
+      throw error;
+    }
+  }
+
+  // get band members and their profiles
+  static async getBandMembersWithProfiles(bandId) {
+    try {
+      const bandMembersQuery = await BandMembers.getBandMembersByBandId(bandId);
+
+      return await Promise.all(
+        bandMembersQuery.map(async (member) => {
+          const user = await Users.getUserById(member.dataValues.user_id);
+
+          const musicianProfile = await MusicianProfile.getProfileByUserId(
+            user.id
+          );
+          if (musicianProfile && musicianProfile.social_links) {
+            musicianProfile.social_links = JSON.parse(
+              musicianProfile.social_links
+            );
+          }
+
+          // Add profile to the user object
+          user.dataValues.profile = musicianProfile;
+          return user;
+        })
+      );
+    } catch (error) {
+      console.error("Error fetching band members with profiles:", error);
       throw error;
     }
   }
