@@ -96,10 +96,17 @@ userController.getUserByUsername = async (req, res) => {
 userController.login = async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    if ((!email || !username) && !password) {
+    const credentials = {
+      username: username || null,
+      email: email || null,
+      password: password || null,
+    }
+
+    
+    if ((!credentials.email || !credentials.username) && !credentials.password) {
       throw new Error("All fields are required");
     }
-    const user = await userClass.login(username, email, password);
+    const user = await userClass.login(credentials);
     if (user) {
       res.status(200).send(responseObject(200, true, "Login successful", user));
     } else {
@@ -115,8 +122,8 @@ userController.login = async (req, res) => {
 
 userController.register = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
-    const user = await userClass.register(username, email, password);
+    const { email, password } = req.body;
+    const user = await userClass.register(email, password);
     if (user) {
       res
         .status(201)

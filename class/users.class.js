@@ -8,7 +8,8 @@ const bandController = require("../controllers/band.controller.js");
 const Bands = require("./bands.class");
 const BandMembers = require("../class/bandMembers.class.js");
 const MusicianProfile = require("../class/musicianProfile.class.js");
-
+const { Lives } = require("../models"); 
+const { Op } = require("sequelize");
 const JWT_SECRET =
   process.env.JWT_SECRET ||
   "Pw#u=z>y9Cq@s7+Fk3LZGVe<}&-AdBW?./h!;%8$nx]H~*S6rv";
@@ -168,7 +169,7 @@ module.exports = class Users {
       return { success: false, error: error.message };
     }
   }
-  static async login(username, email, password) {
+  static async login({ username, email, password }) {
     try {
       const user =
         (await UsersModel.findOne({
@@ -226,7 +227,17 @@ module.exports = class Users {
             band.dataValues.band_id
           );
 
+          // Fetch the next live event for the band
+          const nextLive = await Lives.findOne({
+            where: {
+              band_id: band.dataValues.band_id,
+              date_time: { [Op.gt]: new Date() }, // Only future events
+            },
+            order: [["date_time", "ASC"]], // Get the closest future event
+          });
+
           bandData.dataValues.bandMembers = bandMembers;
+          bandData.dataValues.nextLive = nextLive;
           return bandData;
         })
       );
@@ -261,6 +272,35 @@ module.exports = class Users {
       );
     } catch (error) {
       console.error("Error fetching band members with profiles:", error);
+      throw error;
+    }
+  }
+
+  static async register(email, password) {
+    try {
+      if (!email || !password) {
+        throw new Error("Username, email, and password are required");
+      }
+      // Check if the email already exists
+      const existingEmail = await UsersModel.findOne({
+        where: { email },
+      });
+      if (existingEmail) {
+        throw new Error("Email already exists");
+      }
+
+      const hashedPassword = await this.hash(password);
+
+      const newUser = await UsersModel.create({
+        email,
+        password: hashedPassword,
+        username: randomUsername(email),
+      });
+      // Remove password from the response
+      delete newUser.dataValues.password;
+      return newUser;
+    } catch (error) {
+      console.error("Error creating user:", error);
       throw error;
     }
   }
