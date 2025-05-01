@@ -28,7 +28,7 @@ export const initialStore = () => {
                 username: "blazingsession_user1",
                 email: "user1@example.com",
                 admin: false,
-                role: "user",
+                role: "Guitarist",
                 avatar:
                   "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ffreepngimg.com%2Fthumb%2Fband%2F26223-1-band-photos.png&f=1&nofb=1&ipt=4d20faa39f989336905b6721f7dba99b693a340d1df470aed77958d3f02a72ef",
                 createdAt: "2025-04-27T19:22:37.000Z",
@@ -53,7 +53,7 @@ export const initialStore = () => {
                 username: "thunderousanthem_user2",
                 email: "user2@example.com",
                 admin: false,
-                role: "user",
+                role: "Drummer",
                 avatar:
                   "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ffreepngimg.com%2Fthumb%2Fband%2F26223-1-band-photos.png&f=1&nofb=1&ipt=4d20faa39f989336905b6721f7dba99b693a340d1df470aed77958d3f02a72ef",
                 createdAt: "2025-04-27T19:22:37.000Z",
@@ -106,7 +106,7 @@ export const initialStore = () => {
         },
       },
       token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzQ1OTMxMzY3fQ.MFfI8J1llKDMMUDCtjveHr2mFdzQlxL3wuVCnJBsPO8",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzQ2MTI5MjI1fQ.8n_OT3l2-Ymcc1s9l0besstQN6kBivQr69oL68AKy80",
     },
     auth: !!localStorage.getItem("token"),
     token: localStorage.getItem("token") || null,

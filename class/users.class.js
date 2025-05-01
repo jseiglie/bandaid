@@ -248,33 +248,35 @@ module.exports = class Users {
   }
 
   // get band members and their profiles
-  static async getBandMembersWithProfiles(bandId) {
-    try {
-      const bandMembersQuery = await BandMembers.getBandMembersByBandId(bandId);
+static async getBandMembersWithProfiles(bandId) {
+  try {
+    const bandMembersQuery = await BandMembers.getBandMembersByBandId(bandId);
 
-      return await Promise.all(
-        bandMembersQuery.map(async (member) => {
-          const user = await Users.getUserById(member.dataValues.user_id);
+    return await Promise.all(
+      bandMembersQuery.map(async (member) => {
+        // Fetch user details
+        const user = await Users.getUserById(member.dataValues.user_id);
 
-          const musicianProfile = await MusicianProfile.getProfileByUserId(
-            user.id
-          );
-          if (musicianProfile && musicianProfile.social_links) {
-            musicianProfile.social_links = JSON.parse(
-              musicianProfile.social_links
-            );
-          }
+        // Fetch musician profile for the user
+        const musicianProfile = await MusicianProfile.getProfileByUserId(user.id);
+        if (musicianProfile && musicianProfile.social_links) {
+          musicianProfile.social_links = JSON.parse(musicianProfile.social_links);
+        }
 
-          // Add profile to the user object
-          user.dataValues.profile = musicianProfile;
-          return user;
-        })
-      );
-    } catch (error) {
-      console.error("Error fetching band members with profiles:", error);
-      throw error;
-    }
+        // Add profile to the user object
+        user.dataValues.profile = musicianProfile;
+
+        // Add band member role to the user object
+        user.dataValues.role = member.dataValues.role;
+
+        return user;
+      })
+    );
+  } catch (error) {
+    console.error("Error fetching band members with profiles:", error);
+    throw error;
   }
+}
 
   static async register(email, password) {
     try {
