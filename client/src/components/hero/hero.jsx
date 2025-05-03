@@ -1,5 +1,5 @@
 import "./hero.css";
-
+import { Link } from "react-router-dom";
 import React from "react";
 
 export const Hero = () => {
@@ -14,12 +14,12 @@ export const Hero = () => {
         </p>
       </div>
       <p className="lead">
-        <a
-          href="/login"
+        <Link
+          to="/login"
           className="btn btn-lg btn-light fw-bold border-white bg-white"
         >
           Hey ho, let's go!
-        </a>
+        </Link>
       </p>
     </section>
   );
