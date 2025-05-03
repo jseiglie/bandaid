@@ -4,7 +4,7 @@ import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const BandManagerDashboard = () => {
   const { store, dispatch } = useGlobalReducer();
-  console.log(store.user?.user?.bands);
+  console.log(store.user);
   
   return (
     <section
@@ -13,7 +13,7 @@ export const BandManagerDashboard = () => {
     >
       <h2 className="bandManagerDashboard__title mt-5">Band Manager Dashboard</h2>
       <div className="bandManagerDashboard__cardsContainer">
-        {store.user?.user?.bands?.map((band) => (
+        {store.user?.bands?.map((band) => (
           <BandManagerCard key={band.id} bandName={band.name} img={band.logo} upcomingLives={band.nextLive} />
         ))}
       </div>

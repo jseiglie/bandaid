@@ -22,11 +22,53 @@ const seedDatabase = async () => {
 
     // Seed Bands
     const bands = await Bands.bulkCreate([
-      { name: 'Band A', description: 'Rock band', genre: 'Rock', location: 'NYC' },
-      { name: 'Band B', description: 'Jazz band', genre: 'Jazz', location: 'LA' },
-      { name: 'Band C', description: 'Pop band', genre: 'Pop', location: 'Chicago' },
-      { name: 'Band D', description: 'Metal band', genre: 'Metal', location: 'Seattle' },
-      { name: 'Band E', description: 'Indie band', genre: 'Indie', location: 'Austin' },
+      {
+        name: 'Band A',
+        description: 'Rock band',
+        genre: 'Rock',
+        location: 'NYC',
+        social_media: JSON.stringify([
+          { id: 1, name: 'Instagram', link: 'https://instagram.com/bandA' },
+          { id: 2, name: 'Twitter', link: 'https://twitter.com/bandA' },
+        ]),
+      },
+      {
+        name: 'Band B',
+        description: 'Jazz band',
+        genre: 'Jazz',
+        location: 'LA',
+        social_media: JSON.stringify([
+          { id: 1, name: 'Facebook', link: 'https://facebook.com/bandB' },
+        ]),
+      },
+      {
+        name: 'Band C',
+        description: 'Pop band',
+        genre: 'Pop',
+        location: 'Chicago',
+        social_media: JSON.stringify([
+          { id: 1, name: 'YouTube', link: 'https://youtube.com/bandC' },
+        ]),
+      },
+      {
+        name: 'Band D',
+        description: 'Metal band',
+        genre: 'Metal',
+        location: 'Seattle',
+        social_media: JSON.stringify([
+          { id: 1, name: 'LinkedIn', link: 'https://linkedin.com/in/bandD' },
+        ]),
+      },
+      {
+        name: 'Band E',
+        description: 'Indie band',
+        genre: 'Indie',
+        location: 'Austin',
+        social_media: JSON.stringify([
+          { id: 1, name: 'Instagram', link: 'https://instagram.com/bandE' },
+          { id: 2, name: 'Twitter', link: 'https://twitter.com/bandE' },
+        ]),
+      },
     ], { returning: true });
 
     // Seed Songs
