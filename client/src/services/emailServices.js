@@ -17,4 +17,5 @@ emailServices.sendEmailNotification = async (emailData) => {
   }
 };
 
+
 export default emailServices;
