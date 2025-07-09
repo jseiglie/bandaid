@@ -16,6 +16,8 @@ const songRoute = require('./routes/song.routes');
 const liveRoute = require('./routes/live.routes');
 const bandMemberRoute = require('./routes/bandMembers.routes');
 const musicianProfileRoute = require('./routes/musicianProfile.routes');
+const rehearsalLocalRoute = require('./routes/rehearsal_locals.routes');
+const rehearsalRoute = require('./routes/rehearsals.routes');
 
 const app = express();
 const server = createServer(app);
@@ -40,6 +42,8 @@ app.use('/api/songs', songRoute);
 app.use('/api/lives', liveRoute);
 app.use('/api/band_members', bandMemberRoute);
 app.use('/api/musician_profiles', musicianProfileRoute);
+app.use('/api/rehearsal_locals', rehearsalLocalRoute);
+app.use('/api/rehearsals', rehearsalRoute);
 
 
 
