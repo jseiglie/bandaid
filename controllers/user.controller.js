@@ -141,4 +141,20 @@ userController.register = async (req, res) => {
   }
 };
 
+// get user by name
+userController.getUserByUsername = async (req, res) => {
+  try {
+    const username = req.params.username;
+    const user = await userClass.getUserByUsername(username);
+    res
+      .status(200)
+      .send(responseObject(200, true, "User fetched successfully", user));
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send(responseObject(500, false, "Internal server error", null));
+  }
+};
+
 module.exports = userController;
