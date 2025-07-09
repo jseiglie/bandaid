@@ -1,6 +1,7 @@
 const express = require("express");
 const liveController = require("../controllers/live.controller");
 const router = express.Router();
+const {tokenMiddleware} = require("../middleware/auth.middleware");
 
 router.get("/lives", liveController.getLives);
 router.get("/lives/:id", liveController.getLiveById);

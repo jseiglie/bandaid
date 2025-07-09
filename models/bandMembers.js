@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       {
         tableName: "BandMembers",
-        timeStamp: true,
+        timestamps: true,
         freezeTableName: true,
       }
     );

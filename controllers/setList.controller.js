@@ -16,7 +16,20 @@ setListController.getSetLists = async (req, res) => {
       .send(responseObject(500, false, "Internal server error", null));
   }
 };
-
+setListController.getSetListsByBandId = async (req, res) => {
+  try {
+    const bandId = req.params.bandId;
+    const setLists = await SetListsClass.getSetListsByBandId(bandId);
+    res
+      .status(200)
+      .send(responseObject(200, true, "setLists fetched successfully", setLists));
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send(responseObject(500, false, "Internal server error", null));
+  }
+};
 setListController.getSetListById = async (req, res) => {
   try {
     const setListId = req.params.id;

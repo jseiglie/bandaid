@@ -171,7 +171,7 @@ module.exports = class Users {
   }
   static async login({ username, email, password }) {
     try {
-      const user =
+      let user =
         (await UsersModel.findOne({
           where: { email },
         })) ||
@@ -187,27 +187,26 @@ module.exports = class Users {
       if (!passwordMatch) {
         throw new Error("Wrong password and/or email");
       }
-
+      
       // Remove password from user object
-      delete user.dataValues.password;
-
-      const userBands = await this.getUserBandsWithMembers(user.dataValues.id);
+      user = user.toJSON();
+      console.log(user);
+      const userBands = await this.getUserBandsWithMembers(user.id);
 
       if (userBands) {
         const musicianProfile = await MusicianProfile.getProfileByUserId(
-          user.dataValues.id
+          user.id
         );
         if (musicianProfile && musicianProfile.social_links) {
           musicianProfile.social_links = JSON.parse(
             musicianProfile.social_links
           );
         }
-
-        user.dataValues.bands = userBands;
-        user.dataValues.profile = musicianProfile;
+        user.bands = userBands;
+        user.profile = musicianProfile;
       }
 
-      return { user, token: this.generateToken(user.dataValues.id, "1d") };
+      return { user, token: this.generateToken(user.id, "1d") };
     } catch (error) {
       console.error("Error logging in:", error);
       throw error;
@@ -278,7 +277,7 @@ static async getBandMembersWithProfiles(bandId) {
   }
 }
 
-  static async register(email, password) {
+  static async register(email, password, username = null, role = 'user', admin = false, avatar = null) {
     try {
       if (!email || !password) {
         throw new Error("Username, email, and password are required");
@@ -297,10 +296,13 @@ static async getBandMembersWithProfiles(bandId) {
         email,
         password: hashedPassword,
         username: randomUsername(email),
+        role,
+        admin,
+        avatar
       });
-      // Remove password from the response
-      delete newUser.dataValues.password;
-      return newUser;
+      // return the created user object without the password
+      const user = newUser.toJSON();
+      return user;
     } catch (error) {
       console.error("Error creating user:", error);
       throw error;

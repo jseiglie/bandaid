@@ -7,12 +7,47 @@ const seedDatabase = async () => {
 
     //Seed Users using the register method
     const users = [];
-    const userData = [
-      { email: 'user1@example.com', password: 'User123!' },
-      { email: 'user2@example.com', password: 'User223!' },
-      { email: 'user3@example.com', password: 'User323!' },
-      { email: 'user4@example.com', password: 'User423!' },
-      { email: 'user5@example.com', password: 'User523!' },
+const userData = [
+      {
+        email: 'user1@example.com',
+        password: 'User123!',
+        username: 'rockstar1',
+        role: 'user',
+        admin: false,
+        avatar: null
+      },
+      {
+        email: 'user2@example.com',
+        password: 'User223!',
+        username: 'drumking2',
+        role: 'user',
+        admin: false,
+        avatar: null
+      },
+      {
+        email: 'user3@example.com',
+        password: 'User323!',
+        username: 'popvoice3',
+        role: 'user',
+        admin: false,
+        avatar: null
+      },
+      {
+        email: 'user4@example.com',
+        password: 'User423!',
+        username: 'bassboss4',
+        role: 'user',
+        admin: false,
+        avatar: null
+      },
+      {
+        email: 'user5@example.com',
+        password: 'User523!',
+        username: 'keyboarder5',
+        role: 'admin',
+        admin: true,
+        avatar: null
+      }
     ];
 
     for (const user of userData) {
@@ -72,13 +107,14 @@ const seedDatabase = async () => {
     ], { returning: true });
 
     // Seed Songs
-    const songs = await Songs.bulkCreate([
-      { title: 'Song 1', key: 'C', isSingle: true },
-      { title: 'Song 2', key: 'D', isSingle: false },
-      { title: 'Song 3', key: 'E', isSingle: true },
-      { title: 'Song 4', key: 'F', isSingle: false },
-      { title: 'Song 5', key: 'G', isSingle: true },
-    ], { returning: true });
+const songs = await Songs.bulkCreate([
+  { title: 'Song 1', key: 'C', isSingle: true, band_id: bands[0].id, proposed_by: users[0].id },
+  { title: 'Song 2', key: 'D', isSingle: false, band_id: bands[1].id, proposed_by: users[1].id },
+  { title: 'Song 3', key: 'E', isSingle: true, band_id: bands[2].id, proposed_by: users[2].id },
+  { title: 'Song 4', key: 'F', isSingle: false, band_id: bands[3].id, proposed_by: users[3].id },
+  { title: 'Song 5', key: 'G', isSingle: true, band_id: bands[4].id, proposed_by: users[4].id },
+], { returning: true });
+
 
     // Seed SetLists
     const setLists = await SetLists.bulkCreate([
@@ -91,11 +127,11 @@ const seedDatabase = async () => {
 
     // Seed Lives
     await Lives.bulkCreate([
-      { date_time: new Date(), city: 'NYC', location: 'Central Park', venue: 'Main Stage' },
-      { date_time: new Date(), city: 'LA', location: 'Hollywood Bowl', venue: 'Stage A' },
-      { date_time: new Date(), city: 'Chicago', location: 'Millennium Park', venue: 'Stage B' },
-      { date_time: new Date(), city: 'Seattle', location: 'Space Needle', venue: 'Stage C' },
-      { date_time: new Date(), city: 'Austin', location: 'Zilker Park', venue: 'Stage D' },
+      { date_time: new Date(), city: 'NYC', location: 'Central Park', venue: 'Main Stage', band_id: bands[0].id, setlist_id: setLists[0].id },
+      { date_time: new Date(), city: 'LA', location: 'Hollywood Bowl', venue: 'Stage A', band_id: bands[1].id, setlist_id: setLists[1].id },
+      { date_time: new Date(), city: 'Chicago', location: 'Millennium Park', venue: 'Stage B', band_id: bands[2].id, setlist_id: setLists[2].id },
+      { date_time: new Date(), city: 'Seattle', location: 'Space Needle', venue: 'Stage C', band_id: bands[3].id, setlist_id: setLists[3].id },
+      { date_time: new Date(), city: 'Austin', location: 'Zilker Park', venue: 'Stage D', band_id: bands[4].id, setlist_id: setLists[4].id },
     ]);
 
     // Seed SetListSongs

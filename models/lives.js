@@ -41,10 +41,26 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: false,
       },
+      band_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Bands",
+          key: "id",
+        },
+      },
+      setlist_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: "SetLists",
+          key: "id",
+        },
+      },
     },
     {
       tableName: "Lives",
-      timeStamp: true,
+      timestamps: true,
       freezeTableName: true,
     }
   );

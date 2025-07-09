@@ -28,11 +28,6 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: false,
         allowNull: false,
       },
-      role: {
-        type: DataTypes.ENUM,
-        values: ["user", "admin"],
-        defaultValue: "user",
-      },
       avatar: {
         type: DataTypes.TEXT(),
         defaultValue:
@@ -41,12 +36,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: "Users",
-      timeStamp: true,
+      timestamps: true,
       freezeTableName: true,
     }
   );
 
   Users.associate = function (models) {
+    Users.hasOne(models.MusicianProfile, { foreignKey: "user_id" });
+    Users.hasMany(models.SetLists, { foreignKey: "proposed_by" });
+    Users.hasMany(models.Songs, { foreignKey: "proposed_by" });
+    Users.hasMany(models.BandMembers, { foreignKey: "user_id" });
+
     Users.belongsToMany(models.Bands, {
       through: "UserBands",
       foreignKey: "user_id",
@@ -54,21 +54,27 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  // existing username and email check
   Users.beforeCreate(async (user) => {
-    //check if email is registered
     const existingUser = await Users.findOne({ where: { email: user.email } });
     const existingUsername = await Users.findOne({
       where: { username: user.username },
     });
-    if (existingUser) {
-      throw new Error("Email already registered");
-    }
-    if (existingUsername) {
-      throw new Error("Username already registered");
+
+    if (existingUser) throw new Error("Email already registered");
+    if (existingUsername) throw new Error("Username already registered");
+
+    // Encriptar contraseña
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(user.password, salt);
+  });
+
+  Users.beforeUpdate(async (user) => {
+    if (user.changed("password")) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(user.password, salt);
     }
   });
-  
+
   Users.prototype.toJSON = function () {
     const user = this.get();
     delete user.password;

@@ -32,6 +32,21 @@ bandController.getBandById = async (req, res) => {
   }
 };
 
+bandController.getBandByBandName = async (req, res) => {
+  try {
+    const bandName = req.params.band_name;
+    const band = await bandClass.getBandByBandName(bandName);
+    res
+      .status(200)
+      .send(responseObject(200, true, "Band fetched successfully", band));
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send(responseObject(500, false, "Internal server error", null));
+  }
+};
+
 bandController.createBand = async (req, res) => {
   try {
     const bandData = req.body;

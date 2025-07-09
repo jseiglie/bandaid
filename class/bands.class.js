@@ -16,7 +16,23 @@ module.exports = class Bands {
       throw error;
     }
   }
-
+  static async getBandByBandName(band_name) {
+    try {
+      if (!band_name) {
+        throw new Error("Band name is required");
+      }
+      const response = await BandsModel.findAll({
+        where: { name: band_name },
+      });
+      if (!response) {
+        throw new Error("No band found with this name");
+      }
+      return response;
+    } catch (error) {
+      console.error("Error fetching band by name:", error);
+      throw error;
+    }
+  }
   static async getBandById(id) {
     try {
       if (!id) {

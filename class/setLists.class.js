@@ -1,5 +1,7 @@
 require("dotenv").config();
 SetListsModel = require("../models").SetLists;
+SetListSongs = require("../models").SetListSongs;
+Songs = require("../models").Songs; // Ensure this is the correct model import
 
 module.exports = class SetLists {
   constructor() {}
@@ -17,6 +19,37 @@ module.exports = class SetLists {
     }
   }
 
+  static async getSetListsByBandId(bandId) {
+    try {
+      if (!bandId) {
+        throw new Error("Band ID is required");
+      }
+      const setlists = await SetListsModel.findAll({
+        where: { band_id: bandId },
+        include: [
+          {
+            model: SetListSongs,
+            as: 'setlist_songs', 
+            include: [
+              {
+                model: Songs, 
+                as: 'song', 
+              },
+            ],
+          },
+        ],
+      });
+      if (!setlists || setlists.length === 0) {
+        throw new Error("No setlists found for this band");
+      }
+
+      return setlists;
+    } catch (error) {
+      console.error("Error fetching setlists by band ID:", error);
+      throw error;
+    }
+  }
+
   static async getSetListById(id) {
     try {
       if (!id) {
@@ -24,10 +57,23 @@ module.exports = class SetLists {
       }
       const response = await SetListsModel.findOne({
         where: { id },
+        include: [
+    {
+      model: SetListSongs,
+      as: 'setlist_songs', // Debe coincidir con el alias del hasMany
+      include: [
+        {
+          model: Songs,
+          as: 'song', // Debe coincidir con el alias del belongsTo
+        },
+      ],
+    },
+  ],
       });
       if (!response) {
         throw new Error("No setlist found with this ID");
       }
+
       return response;
     } catch (error) {
       console.error("Error fetching setlist by ID:", error);

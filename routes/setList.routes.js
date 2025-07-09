@@ -1,12 +1,13 @@
 const express = require("express");
 const setListController = require("../controllers/setList.controller");
 const router = express.Router();
+const {tokenMiddleware} = require("../middleware/auth.middleware");
 
-router.get("/set_lists/:id", setListController.getSetListById);
-router.post("/set_lists", setListController.createSetList);
-router.put("/set_lists/:id", setListController.updateSetList);
-router.delete("/set_lists/:id", setListController.deleteSetList);
-router.get("/set_lists/band/:bandId", setListController.getSetListsByBandId);
+router.get("/:id", setListController.getSetListById);
+router.post("/", setListController.createSetList);
+router.put("/:id", setListController.updateSetList);
+router.delete("/:id", setListController.deleteSetList);
+router.get("/band/:bandId", setListController.getSetListsByBandId);
 
 
 

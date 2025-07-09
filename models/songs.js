@@ -102,10 +102,27 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: false,
         allowNull: false,
       },
+      band_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Bands",
+          key: "id",
+        },
+      },
+      
+      proposed_by: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Users",
+          key: "id",
+        },
+      },
     },
     {
       tableName: "Songs",
-      timeStamp: true,
+      timestamps: true,
       freezeTableName: true,
     }
   );
@@ -115,8 +132,14 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "song_id",
       onDelete: "CASCADE",
     });
-    Songs.belongsTo(models.Bands, { foreignKey: "band_id", onDelete: "CASCADE" });
-    Songs.belongsTo(models.Users, { foreignKey: "proposed_by", onDelete: "CASCADE" });
+    Songs.belongsTo(models.Bands, {
+      foreignKey: "band_id",
+      onDelete: "CASCADE",
+    });
+    Songs.belongsTo(models.Users, {
+      foreignKey: "proposed_by",
+      onDelete: "CASCADE",
+    });
   };
 
   return Songs;

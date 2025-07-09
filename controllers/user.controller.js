@@ -1,7 +1,7 @@
 const userClass = require("../class/users.class.js");
 const responseObject = require("../utils/response.js");
 const userController = {};
-const { tokenGenerator } = require("../middleware/auth.js");
+const { tokenGenerator } = require("../middleware/auth.middleware.js");
 userController.getUsers = async (req, res) => {
   try {
     console.log("Fetching bands...");
@@ -104,7 +104,7 @@ userController.login = async (req, res) => {
 
     
     if ((!credentials.email || !credentials.username) && !credentials.password) {
-      throw new Error("All fields are required");
+      throw new Error("Missing credentials: Password is required. Must provide an username or valid email address ");
     }
     const user = await userClass.login(credentials);
     if (user) {

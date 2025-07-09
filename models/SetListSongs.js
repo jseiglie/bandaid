@@ -27,16 +27,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: "SetListSongs",
-      timeStamp: true,
+      timestamps: true, // ← corregido
       freezeTableName: true,
     }
   );
 
   SetListSongs.associate = function (models) {
-    // Define the relationship between SetListSongs and SetLists
     SetListSongs.belongsTo(models.SetLists, { foreignKey: "setlist_id" });
-    // Define the relationship between SetListSongs and Songs
-    SetListSongs.belongsTo(models.Songs, { foreignKey: "song_id" });
+    SetListSongs.belongsTo(models.Songs, { foreignKey: "song_id", as: "song" });
   };
 
   return SetListSongs;

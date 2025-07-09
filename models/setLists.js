@@ -16,11 +16,18 @@ module.exports = (sequelize, DataTypes) => {
           key: "id",
         },
       },
+      proposed_by: { 
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Users",
+          key: "id",
+        },
+      },
       name: {
         type: DataTypes.STRING(50),
         allowNull: true,
       },
-     
       accepted: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
@@ -29,24 +36,25 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: "SetLists",
-      timeStamp: true,
+      timestamps: true, // ← corregido
       freezeTableName: true,
     }
   );
+
   SetLists.associate = function (models) {
-    // Define the relationship between SetLists and Bands
     SetLists.belongsTo(models.Bands, { foreignKey: "band_id" });
-    // Define the relationship between SetLists and Users
     SetLists.belongsTo(models.Users, { foreignKey: "proposed_by" });
-    // Define the relationship between SetLists and Lives
     SetLists.hasMany(models.Lives, { foreignKey: "setlist_id" });
-    // Define the relationship between SetLists and Songs
+    SetLists.hasMany(models.SetListSongs, {
+    foreignKey: 'setlist_id',
+    as: 'setlist_songs',
+  });
     SetLists.belongsToMany(models.Songs, {
       through: "SetListSongs",
       foreignKey: "setlist_id",
       onDelete: "CASCADE",
     });
-   };
+  };
 
   return SetLists;
 };
