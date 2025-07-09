@@ -62,7 +62,7 @@ module.exports = class Bands {
                 as: "local",
               },
             ],
-          }
+          },
         ],
       });
       if (!response) {
@@ -219,7 +219,7 @@ module.exports = class Bands {
       const response = await UsersBands.findAll({
         where: { user_id },
       });
-      
+
       if (!response) {
         throw new Error("No bands found with this user ID");
       }
@@ -228,6 +228,5 @@ module.exports = class Bands {
       console.error("Error fetching band by user ID:", error);
       throw error;
     }
-  }
-
+  };
 };

@@ -37,7 +37,12 @@ module.exports = class Lives {
 
   static async createLive(liveData) {
     try {
-      if (!liveData || !liveData.date_time || !liveData.city || !liveData.venue) {
+      if (
+        !liveData ||
+        !liveData.date_time ||
+        !liveData.city ||
+        !liveData.venue
+      ) {
         throw new Error("Date, city, and venue are required");
       }
       const response = await LivesModel.create(liveData);
