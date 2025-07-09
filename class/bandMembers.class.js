@@ -55,8 +55,8 @@ module.exports = class BandMembers {
 
   static async createBandMember(bandMemberData) {
     try {
-      if (!bandMemberData || !bandMemberData.band_id || !bandMemberData.user_id) {
-        throw new Error("Band ID and User ID are required");
+      if (!bandMemberData || !bandMemberData.band_id || !bandMemberData.musician_id) {
+        throw new Error("Band ID and Musician ID are required");
       }
       const response = await BandMembersModel.create(bandMemberData);
       return response;

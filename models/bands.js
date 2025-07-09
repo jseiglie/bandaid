@@ -67,7 +67,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.JSON,
         allowNull: true,
       },
-
     },
     {
       tableName: "Bands",
@@ -88,10 +87,10 @@ module.exports = (sequelize, DataTypes) => {
     Bands.hasMany(models.Songs, { foreignKey: "band_id" });
     Bands.hasMany(models.Rehearsals, { foreignKey: "band_id" });
     Bands.hasMany(models.BandDefaultSchedules, {
-  foreignKey: 'band_id',
-  as: 'defaultSchedules',
-  onDelete: 'CASCADE',
-});
+      foreignKey: "band_id",
+      as: "defaultSchedules",
+      onDelete: "CASCADE",
+    });
   };
 
   return Bands;

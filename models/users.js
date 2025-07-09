@@ -45,13 +45,13 @@ module.exports = (sequelize, DataTypes) => {
     Users.hasOne(models.MusicianProfile, { foreignKey: "user_id", nullable: true });
     Users.hasMany(models.SetLists, { foreignKey: "proposed_by" });
     Users.hasMany(models.Songs, { foreignKey: "proposed_by" });
-    Users.hasMany(models.BandMembers, { foreignKey: "user_id" });
+    // Users.hasMany(models.BandMembers, { foreignKey: "user_id" });
 
-    Users.belongsToMany(models.Bands, {
-      through: "UserBands",
-      foreignKey: "user_id",
-      onDelete: "CASCADE",
-    });
+    // Users.belongsToMany(models.Bands, {
+    //   through: "UserBands",
+    //   foreignKey: "user_id",
+    //   onDelete: "CASCADE",
+    // });
   };
 
   Users.beforeCreate(async (user) => {

@@ -16,11 +16,11 @@ module.exports = (sequelize, DataTypes) => {
             key: "id",
           },
         },
-        user_id: {
+        musician_id: {
           type: DataTypes.INTEGER,
           allowNull: false,
           references: {
-            model: "Users",
+            model: "MusicianProfiles",
             key: "id",
           },
         },
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
   
     BandMembers.associate = function (models) {
       BandMembers.belongsTo(models.Bands, { foreignKey: "band_id" });
-      BandMembers.belongsTo(models.Users, { foreignKey: "user_id" });
+      BandMembers.belongsTo(models.MusicianProfile, { foreignKey: "musician_id" });
     };
   
     return BandMembers;
