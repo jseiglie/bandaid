@@ -1,6 +1,8 @@
 require("dotenv").config();
 BandsModel = require("../models").Bands;
 UsersBands = require("../models").UserBands;
+Rehearsals = require("../models").Rehearsals;
+Rehearsal_locals = require("../models").Rehearsal_Locals;
 module.exports = class Bands {
   constructor() {}
 
@@ -40,6 +42,28 @@ module.exports = class Bands {
       }
       const response = await BandsModel.findOne({
         where: { id },
+        include: [
+          // {
+          //   model: UsersBands,
+          //   as: "users_bands",
+          //   include: [
+          //     {
+          //       model: require("../models").Users,
+          //       as: "user",
+          //     },
+          //   ],
+          // },
+          {
+            model: Rehearsals,
+            as: "Rehearsals",
+            include: [
+              {
+                model: Rehearsal_locals,
+                as: "local",
+              },
+            ],
+          }
+        ],
       });
       if (!response) {
         throw new Error("No band found with this ID");

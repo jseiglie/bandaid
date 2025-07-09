@@ -1,55 +1,32 @@
-const { Bands, Songs, SetLists, Lives, SetListSongs, UserBands, BandMembers, MusicianProfile } = require('../models');
-const Users = require('../class/users.class.js'); // Import the Users class
+const {
+  Bands,
+  Songs,
+  SetLists,
+  Lives,
+  SetListSongs,
+  UserBands,
+  BandMembers,
+  MusicianProfile,
+  Rehearsals,
+  Rehearsal_Locals,
+  BandDefaultSchedules,
+  
+} = require('../models');
+const Users = require('../class/users.class.js');
 
 const seedDatabase = async () => {
   try {
     console.log('Seeding database...');
 
-    //Seed Users using the register method
+    // Seed Users
     const users = [];
-const userData = [
-      {
-        email: 'user1@example.com',
-        password: 'User123!',
-        username: 'rockstar1',
-        role: 'user',
-        admin: false,
-        avatar: null
-      },
-      {
-        email: 'user2@example.com',
-        password: 'User223!',
-        username: 'drumking2',
-        role: 'user',
-        admin: false,
-        avatar: null
-      },
-      {
-        email: 'user3@example.com',
-        password: 'User323!',
-        username: 'popvoice3',
-        role: 'user',
-        admin: false,
-        avatar: null
-      },
-      {
-        email: 'user4@example.com',
-        password: 'User423!',
-        username: 'bassboss4',
-        role: 'user',
-        admin: false,
-        avatar: null
-      },
-      {
-        email: 'user5@example.com',
-        password: 'User523!',
-        username: 'keyboarder5',
-        role: 'admin',
-        admin: true,
-        avatar: null
-      }
+    const userData = [
+      { email: 'user1@example.com', password: 'User123!', username: 'rockstar1', role: 'user', admin: false, avatar: null },
+      { email: 'user2@example.com', password: 'User223!', username: 'drumking2', role: 'user', admin: false, avatar: null },
+      { email: 'user3@example.com', password: 'User323!', username: 'popvoice3', role: 'user', admin: false, avatar: null },
+      { email: 'user4@example.com', password: 'User423!', username: 'bassboss4', role: 'user', admin: false, avatar: null },
+      { email: 'user5@example.com', password: 'User523!', username: 'keyboarder5', role: 'admin', admin: true, avatar: null },
     ];
-
     for (const user of userData) {
       const registeredUser = await Users.register(user.email, user.password);
       users.push(registeredUser);
@@ -62,59 +39,73 @@ const userData = [
         description: 'Rock band',
         genre: 'Rock',
         location: 'NYC',
-        social_media: JSON.stringify([
-          { id: 1, name: 'Instagram', link: 'https://instagram.com/bandA' },
-          { id: 2, name: 'Twitter', link: 'https://twitter.com/bandA' },
-        ]),
+        social_media: JSON.stringify([{ id: 1, name: 'Instagram', link: 'https://instagram.com/bandA' }]),
       },
       {
         name: 'Band B',
         description: 'Jazz band',
         genre: 'Jazz',
         location: 'LA',
-        social_media: JSON.stringify([
-          { id: 1, name: 'Facebook', link: 'https://facebook.com/bandB' },
-        ]),
+        social_media: JSON.stringify([{ id: 1, name: 'Facebook', link: 'https://facebook.com/bandB' }]),
       },
       {
         name: 'Band C',
         description: 'Pop band',
         genre: 'Pop',
         location: 'Chicago',
-        social_media: JSON.stringify([
-          { id: 1, name: 'YouTube', link: 'https://youtube.com/bandC' },
-        ]),
+        social_media: JSON.stringify([{ id: 1, name: 'YouTube', link: 'https://youtube.com/bandC' }]),
       },
       {
         name: 'Band D',
         description: 'Metal band',
         genre: 'Metal',
         location: 'Seattle',
-        social_media: JSON.stringify([
-          { id: 1, name: 'LinkedIn', link: 'https://linkedin.com/in/bandD' },
-        ]),
+        social_media: JSON.stringify([{ id: 1, name: 'LinkedIn', link: 'https://linkedin.com/in/bandD' }]),
       },
       {
         name: 'Band E',
         description: 'Indie band',
         genre: 'Indie',
         location: 'Austin',
-        social_media: JSON.stringify([
-          { id: 1, name: 'Instagram', link: 'https://instagram.com/bandE' },
-          { id: 2, name: 'Twitter', link: 'https://twitter.com/bandE' },
-        ]),
+        social_media: JSON.stringify([{ id: 1, name: 'Instagram', link: 'https://instagram.com/bandE' }]),
       },
     ], { returning: true });
 
-    // Seed Songs
-const songs = await Songs.bulkCreate([
-  { title: 'Song 1', key: 'C', isSingle: true, band_id: bands[0].id, proposed_by: users[0].id },
-  { title: 'Song 2', key: 'D', isSingle: false, band_id: bands[1].id, proposed_by: users[1].id },
-  { title: 'Song 3', key: 'E', isSingle: true, band_id: bands[2].id, proposed_by: users[2].id },
-  { title: 'Song 4', key: 'F', isSingle: false, band_id: bands[3].id, proposed_by: users[3].id },
-  { title: 'Song 5', key: 'G', isSingle: true, band_id: bands[4].id, proposed_by: users[4].id },
-], { returning: true });
+    // Seed Rehearsal Locals
+    const locals = await Rehearsal_Locals.bulkCreate([
+      { name: 101, address: '123 Main St', city: 'NYC', state: 'NY', zip_code: '10001', phone: '123-456-7890', email: 'local1@example.com' },
+      { name: 202, address: '456 Maple Ave', city: 'LA', state: 'CA', zip_code: '90001', phone: '234-567-8901', email: 'local2@example.com' },
+      { name: 303, address: '789 Oak Blvd', city: 'Chicago', state: 'IL', zip_code: '60601', phone: '345-678-9012', email: 'local3@example.com' },
+    ], { returning: true });
 
+    // Seed Rehearsals
+    await Rehearsals.bulkCreate([
+      {
+        band_id: bands[0].id,
+        local_id: locals[0].id,
+        date: '2025-07-15',
+        time: '18:00:00',
+        location: 'Studio A - NYC',
+        notes: 'Warm-up rehearsal for upcoming gig.',
+      },
+      {
+        band_id: bands[1].id,
+        local_id: locals[1].id,
+        date: '2025-07-18',
+        time: '20:00:00',
+        location: 'Jazz Room - LA',
+        notes: 'Focus on improvisation pieces.',
+      },
+    ]);
+
+    // Seed Songs
+    const songs = await Songs.bulkCreate([
+      { title: 'Song 1', key: 'C', isSingle: true, band_id: bands[0].id, proposed_by: users[0].id },
+      { title: 'Song 2', key: 'D', isSingle: false, band_id: bands[1].id, proposed_by: users[1].id },
+      { title: 'Song 3', key: 'E', isSingle: true, band_id: bands[2].id, proposed_by: users[2].id },
+      { title: 'Song 4', key: 'F', isSingle: false, band_id: bands[3].id, proposed_by: users[3].id },
+      { title: 'Song 5', key: 'G', isSingle: true, band_id: bands[4].id, proposed_by: users[4].id },
+    ], { returning: true });
 
     // Seed SetLists
     const setLists = await SetLists.bulkCreate([
@@ -129,9 +120,6 @@ const songs = await Songs.bulkCreate([
     await Lives.bulkCreate([
       { date_time: new Date(), city: 'NYC', location: 'Central Park', venue: 'Main Stage', band_id: bands[0].id, setlist_id: setLists[0].id },
       { date_time: new Date(), city: 'LA', location: 'Hollywood Bowl', venue: 'Stage A', band_id: bands[1].id, setlist_id: setLists[1].id },
-      { date_time: new Date(), city: 'Chicago', location: 'Millennium Park', venue: 'Stage B', band_id: bands[2].id, setlist_id: setLists[2].id },
-      { date_time: new Date(), city: 'Seattle', location: 'Space Needle', venue: 'Stage C', band_id: bands[3].id, setlist_id: setLists[3].id },
-      { date_time: new Date(), city: 'Austin', location: 'Zilker Park', venue: 'Stage D', band_id: bands[4].id, setlist_id: setLists[4].id },
     ]);
 
     // Seed SetListSongs
@@ -139,82 +127,54 @@ const songs = await Songs.bulkCreate([
       { setlist_id: setLists[0].id, song_id: songs[0].id },
       { setlist_id: setLists[0].id, song_id: songs[1].id },
       { setlist_id: setLists[1].id, song_id: songs[2].id },
-      { setlist_id: setLists[2].id, song_id: songs[3].id },
-      { setlist_id: setLists[3].id, song_id: songs[4].id },
     ]);
 
     // Seed UserBands
     await UserBands.bulkCreate([
-      { user_id: users[0].id || 1, band_id: bands[0].id },
-      { user_id: users[1].id || 2, band_id: bands[1].id },
-      { user_id: users[2].id || 3, band_id: bands[2].id },
-      { user_id: users[3].id || 4, band_id: bands[3].id },
-      { user_id: users[4].id || 1, band_id: bands[4].id },
+      { user_id: users[0].id, band_id: bands[0].id },
+      { user_id: users[1].id, band_id: bands[1].id },
     ]);
 
     // Seed BandMembers
     await BandMembers.bulkCreate([
-      { user_id: users[0].id || 1, band_id: bands[0].id, role: 'Guitarist' },
-      { user_id: users[1].id || 2, band_id: bands[0].id, role: 'Drummer' },
-      { user_id: users[2].id || 3, band_id: bands[1].id, role: 'Vocalist' },
-      { user_id: users[3].id || 2, band_id: bands[2].id, role: 'Bassist' },
-      { user_id: users[4].id || 1, band_id: bands[3].id, role: 'Keyboardist' },
-      { user_id: users[0].id || 1, band_id: bands[4].id, role: 'Producer' },
+      { user_id: users[0].id, band_id: bands[0].id, role: 'Guitarist' },
+      { user_id: users[1].id, band_id: bands[0].id, role: 'Drummer' },
     ]);
 
+    // Seed MusicianProfiles
+    await MusicianProfile.bulkCreate([
+      {
+        user_id: users[0].id,
+        bio: 'Experienced guitarist.',
+        instruments: 'Guitar',
+        genres: 'Rock',
+        experience: '10 years',
+        social_links: JSON.stringify({ instagram: 'https://instagram.com/user1' }),
+      },
+      {
+        user_id: users[1].id,
+        bio: 'Jazz drummer.',
+        instruments: 'Drums',
+        genres: 'Jazz',
+        experience: '8 years',
+        social_links: JSON.stringify({ twitter: 'https://twitter.com/user2' }),
+      },
+    ]);
 
-// Seed MusicianProfiles
-await MusicianProfile.bulkCreate([
+await BandDefaultSchedules.bulkCreate([
   {
-    user_id: users[0]?.id || 1,
-    bio: 'Experienced guitarist with 10 years of experience.',
-    instruments: 'Guitar, Bass',
-    genres: 'Rock, Jazz',
-    experience: '10 years',
-    social_links: JSON.stringify({
-      instagram: 'https://instagram.com/user1',
-      youtube: 'https://youtube.com/user1',
-    }),
+    band_id: bands[0].id,
+    local_id: locals[0].id,
+    day: 'Tuesday',
+    start_time: '18:30:00',
+    end_time: '21:30:00',
   },
   {
-    user_id: users[1]?.id || 2,
-    bio: 'Drummer with a passion for jazz and rock.',
-    instruments: 'Drums',
-    genres: 'Jazz, Rock',
-    experience: '8 years',
-    social_links: JSON.stringify({
-      instagram: 'https://instagram.com/user2',
-    }),
-  },
-  {
-    user_id: users[2]?.id  || 3,
-    bio: 'Pop vocalist with a love for live performances.',
-    instruments: 'Vocals',
-    genres: 'Pop',
-    experience: '5 years',
-    social_links: JSON.stringify({
-      twitter: 'https://twitter.com/user3',
-    }),
-  },
-  {
-    user_id: users[3]?.id  || 4,
-    bio: 'Metal bassist with a unique playing style.',
-    instruments: 'Bass',
-    genres: 'Metal',
-    experience: '7 years',
-    social_links: JSON.stringify({
-      facebook: 'https://facebook.com/user4',
-    }),
-  },
-  {
-    user_id: users[4]?.id  || 5,
-    bio: 'Keyboardist and producer for indie bands.',
-    instruments: 'Keyboard',
-    genres: 'Indie',
-    experience: '6 years',
-    social_links: JSON.stringify({
-      linkedin: 'https://linkedin.com/in/user5',
-    }),
+    band_id: bands[0].id,
+    local_id: locals[0].id,
+    day: 'Thursday',
+    start_time: '18:30:00',
+    end_time: '21:30:00',
   },
 ]);
 

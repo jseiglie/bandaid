@@ -34,10 +34,40 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue:
           "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ffreepngimg.com%2Fthumb%2Fband%2F26223-1-band-photos.png&f=1&nofb=1&ipt=4d20faa39f989336905b6721f7dba99b693a340d1df470aed77958d3f02a72ef",
       },
+      cover_photo: {
+        type: DataTypes.TEXT(),
+        allowNull: true,
+      },
+      contact_email: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+      },
+      contact_phone: {
+        type: DataTypes.STRING(20),
+        allowNull: true,
+      },
+      contact_person: {
+        type: DataTypes.STRING(50),
+        allowNull: true,
+      },
+      established_year: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      members_count: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      is_active: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
       social_media: {
         type: DataTypes.JSON,
         allowNull: true,
       },
+
     },
     {
       tableName: "Bands",
@@ -56,6 +86,12 @@ module.exports = (sequelize, DataTypes) => {
     Bands.hasMany(models.SetLists, { foreignKey: "band_id" });
     Bands.hasMany(models.Lives, { foreignKey: "band_id" });
     Bands.hasMany(models.Songs, { foreignKey: "band_id" });
+    Bands.hasMany(models.Rehearsals, { foreignKey: "band_id" });
+    Bands.hasMany(models.BandDefaultSchedules, {
+  foreignKey: 'band_id',
+  as: 'defaultSchedules',
+  onDelete: 'CASCADE',
+});
   };
 
   return Bands;
