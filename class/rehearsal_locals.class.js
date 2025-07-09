@@ -1,4 +1,4 @@
-require('dot_env').config();
+require("dotenv").config();
 const RehearsalLocals = require("../models").Rehearsal_Locals;
 
 module.exports = class RehearsalLocals {

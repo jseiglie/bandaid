@@ -3,12 +3,12 @@ const bandController = require("../controllers/band.controller");
 const router = express.Router();
 const {tokenMiddleware} = require("../middleware/auth.middleware");
 
-router.get("/bands", bandController.getBands);
-router.get("/bands/:id", bandController.getBandById);
-router.get("/bands/name/:band_name", bandController.getBandByBandName);
-router.post("/bands", tokenMiddleware, bandController.createBand);
-router.put("/bands/:id", tokenMiddleware, bandController.updateBand);
-router.delete("/bands/:id", tokenMiddleware, bandController.deleteBand);
+router.get("/", bandController.getBands);
+router.get("/:id", bandController.getBandById);
+router.get("/name/:band_name", bandController.getBandByBandName);
+router.post("/", tokenMiddleware, bandController.createBand);
+router.put("/:id", tokenMiddleware, bandController.updateBand);
+router.delete("/:id", tokenMiddleware, bandController.deleteBand);
 
 
 

@@ -17,14 +17,12 @@ imports
     const model = require(path.join(__dirname, file))(sequelize, DataTypes);
     models[model.name] = model;
   });
-console.log("Models loaded:", models);
-console.log(Object.values(models));
-const aux = Object.values(models).filter((m, i) => i!==0)
-aux.push(Object.values(models)[0])
+
+// const aux = Object.values(models).filter((m, i) => i!==0)
+// aux.push(Object.values(models)[0])
 
 // Setup model associations
-aux.forEach((model) => {  
-  console.log(model)
+Object.values(models).forEach((model) => {  
   if (model.associate) {
     model.associate(models);
   }
@@ -35,8 +33,8 @@ console.log("Syncing database...");
 
 sequelize
   .sync({
-    force: process.env.ENV === "dev" ? true : false,
-    //alter: process.env.ENV === "dev" ? true : false,
+    //force: process.env.ENV === "dev" ? true : false,
+    alter: process.env.ENV === "dev" ? true : false,
   }
   )
   .then(async () => {

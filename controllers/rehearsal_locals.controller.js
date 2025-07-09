@@ -1,4 +1,4 @@
-const rehearsalClass = require('./rehearsalClass');
+const rehearsalClass = require('../class/rehearsal_locals.class.js');
 const responseObject = require('../utils/response.js');
 const rehearsal_localController = {};
 

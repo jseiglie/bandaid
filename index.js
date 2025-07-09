@@ -9,7 +9,7 @@ const cors = require('cors');
 const sequelize = require('./config/index');
 
 //routes import
-const bandRoute = require('./routes/band.routes');
+const bandRoute = require('./routes/band.routes'); 
 const setListRoute = require('./routes/setList.routes');
 const userRoute = require('./routes/user.routes');
 const songRoute = require('./routes/song.routes');
@@ -35,9 +35,9 @@ app.use('/api', router);
 app.use('/api/test', (req, res) => {
   res.json({ message: 'Hello from the server!' });
 });
-app.use('/api/band', bandRoute);
-app.use('/api/set_list', setListRoute);
-app.use('/api/user', userRoute);
+app.use('/api/bands', bandRoute);
+app.use('/api/set_lists', setListRoute);
+app.use('/api/users', userRoute);
 app.use('/api/songs', songRoute);
 app.use('/api/lives', liveRoute);
 app.use('/api/band_members', bandMemberRoute);

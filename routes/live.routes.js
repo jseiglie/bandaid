@@ -3,11 +3,11 @@ const liveController = require("../controllers/live.controller");
 const router = express.Router();
 const {tokenMiddleware} = require("../middleware/auth.middleware");
 
-router.get("/lives", liveController.getLives);
-router.get("/lives/:id", liveController.getLiveById);
-router.post("/lives", liveController.createLive);
-router.put("/lives/:id", liveController.updateLive);
-router.delete("/lives/:id", liveController.deleteLive);
+router.get("/", liveController.getLives);
+router.get("/:id", liveController.getLiveById);
+router.post("/", liveController.createLive);
+router.put("/:id", liveController.updateLive);
+router.delete("/:id", liveController.deleteLive);
 
 
 module.exports = router;

@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Users.associate = function (models) {
-    Users.hasOne(models.MusicianProfile, { foreignKey: "user_id" });
+    Users.hasOne(models.MusicianProfile, { foreignKey: "user_id", nullable: true });
     Users.hasMany(models.SetLists, { foreignKey: "proposed_by" });
     Users.hasMany(models.Songs, { foreignKey: "proposed_by" });
     Users.hasMany(models.BandMembers, { foreignKey: "user_id" });
