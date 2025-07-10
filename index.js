@@ -18,6 +18,7 @@ const bandMemberRoute = require('./routes/bandMembers.routes');
 const musicianProfileRoute = require('./routes/musicianProfile.routes');
 const rehearsalLocalRoute = require('./routes/rehearsal_locals.routes');
 const rehearsalRoute = require('./routes/rehearsals.routes');
+const mailerRoute = require('./routes/email.routes'); // Import the email route
 
 const app = express();
 const server = createServer(app);
@@ -44,7 +45,7 @@ app.use('/api/band_members', bandMemberRoute);
 app.use('/api/musician_profiles', musicianProfileRoute);
 app.use('/api/rehearsal_locals', rehearsalLocalRoute);
 app.use('/api/rehearsals', rehearsalRoute);
-
+app.use('/api/mailer', mailerRoute); 
 
 
 app.get('*', (req, res) => {

@@ -13,7 +13,6 @@ const { Op } = require("sequelize");
 const { tokenGenerator } = require("../middleware/auth.middleware.js");
 const bandMembers = require("../models/bandMembers.js");
 
-
 module.exports = class Users {
   constructor() {}
 
@@ -91,12 +90,20 @@ module.exports = class Users {
         where: { email },
       });
       if (!user) {
-        throw new Error("No user found with this email");
+        return {
+          success: false,
+          message: "No user found with this email",
+          status: 404,
+        };
       }
       return user;
     } catch (error) {
       console.error("Error fetching user by email:", error);
-      throw error;
+      return {
+        success: false,
+        error: error.message,
+        status: error.status || 500,
+      };
     }
   }
   static async getUserByUsername(username) {
@@ -159,9 +166,10 @@ module.exports = class Users {
       if (!musicianProfile) {
         user.profile = null;
       } else {
-
         if (musicianProfile && musicianProfile.social_links) {
-          musicianProfile.social_links = JSON.parse(musicianProfile.social_links);
+          musicianProfile.social_links = JSON.parse(
+            musicianProfile.social_links
+          );
         }
         user.profile = musicianProfile.toJSON();
       }
@@ -192,7 +200,7 @@ module.exports = class Users {
         throw new Error("User ID is required");
       }
       const userBands = await BandMembers.getAllUserBands(musician_id);
-      
+
       return userBands || []; // Return an empty array if no bands found
     } catch (error) {
       console.error("Error fetching musician bands:", error);
@@ -200,11 +208,9 @@ module.exports = class Users {
     }
   }
 
-
   // get bands and their members
   static async getUserBandsWithMembers(userId) {
     try {
-      
       const userBandsQuery = await Bands.getBandsByUserId(userId);
 
       return await Promise.all(

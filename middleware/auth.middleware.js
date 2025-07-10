@@ -4,6 +4,7 @@ const { JWT_SECRET } =
 const { JWT_EXPIRATION } = process.env || "24h";
 const cron = require("node-cron");
 const tokenBlacklistModel = require("../models/tokenBlackList.js");
+const { Op } = require("sequelize");
 
 const tokenGenerator = (user) => {
   const payload = {

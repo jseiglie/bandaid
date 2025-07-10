@@ -167,3 +167,118 @@ File: `d:\bandaid\class\bands.class.js`
 const Bands = require('./bands.class');
 const allBands = await Bands.getBands();
 ```
+
+
+### 3.2 Users Class
+File: `d:\bandaid\class\users.class.js`
+
+**Key Methods:**
+
+- getUsers(): Fetch all users.
+- getUserById(id): Fetch a user by ID.
+- register(email, password): Register a new user.
+- updateUser(id, userData): Update user details.
+- deleteUser(id): Delete a user.
+
+**Example:**
+
+```javascript
+const Users = require('./users.class');
+const user = await Users.register('email@example.com', 'password123');
+```
+
+### 3.3 Lives Class
+File: `d:\bandaid\class\lives.class.js`
+
+**Key Methods:**
+
+- getLives(): Fetch all live performances.
+- getLiveById(id): Fetch a live performance by ID.
+- createLive(liveData): Create a new live performance.
+- updateLive(id, liveData): Update a live performance.
+- deleteLive(id): Delete a live performance.
+
+
+### 3.4 SetLists Class
+File: `d:\bandaid\class\setLists.class.js`
+
+**Key Methods:**
+
+- getSetLists(): Fetch all setlists.
+- getSetListById(id): Fetch a setlist by ID.
+- createSetList(setListData): Create a new setlist.
+- updateSetList(id, setListData): Update a setlist.
+- deleteSetList(id): Delete a setlist.
+
+## 4. Controllers
+
+Controllers handle API requests and use the classes to perform operations.
+
+### 4.1 Band Controller
+File: `d:\bandaid\controllers\band.controller.js`
+
+**Key Endpoints:**
+
+- GET /bands: Fetch all bands.
+- GET /bands/:id: Fetch a band by ID.
+- POST /bands: Create a new band.
+- PUT /bands/:id: Update a band's details.
+- DELETE /bands/:id: Delete a band.
+
+**Example:**
+
+```javascript
+const bandController = require('./band.controller');
+app.get('/bands', bandController.getBands);
+```
+
+### 4.2 User Controller
+File: `d:\bandaid\controllers\user.controller.js`
+
+**Key Endpoints:**
+
+- GET /users: Fetch all users
+- GET /users/:id: Fetch a user by ID.
+- POST /users/register: Register a new user.
+- PUT /users/:id: Update a user's details.
+- DELETE /users/:id: Delete a user.
+
+
+### 4.3 Lives Controller
+File: `d:\bandaid\controllers\live.controller.js`
+
+**Key Endpoints:**
+
+- GET /lives: Fetch all live performances.
+- GET /lives/:id: Fetch a live performance by ID.
+- POST /lives: Create a new live performance.
+- PUT /lives/:id: Update a live performance.
+- DELETE /lives/:id: Delete a live performance.
+
+## 5. How to Start Working
+ - Understand the Models: Review the models and their relationships in the d:\bandaid\models folder. For s visual representation, check [Bandaid DBDiagram](https://dbdiagram.io/d/bandaid-66954ff99939893daefad05b)
+ - Use Classes for Logic: Use the classes in the d:\bandaid\class folder for CRUD operations.
+ - Use Controllers for APIs: Use the controllers in the d:\bandaid\controllers folder to handle API requests.
+ - Run the Seeder: Populate the database with initial data using the seeder in d:\bandaid\utils\seeder.js.
+
+## 6. Example Workflow
+Create a New Band
+
+Use the Bands class:
+
+```javascript
+const Bands = require('./class/bands.class');
+const newBand = await Bands.createBand({
+  name: 'New Band',
+  genre: 'Rock',
+  location: 'NYC',
+});
+```
+
+Use the Band Controller to expose an API:
+
+```javascript
+app.post('/bands', bandController.createBand);
+```
+
+This documentation should provide a clear understanding of the project's structure and how to work with it.

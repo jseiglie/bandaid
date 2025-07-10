@@ -13,7 +13,7 @@
 /build
 /client/build
 client/dist
-/config
+/config/db.config.js
 /client/config
 # misc
 /client/.env
