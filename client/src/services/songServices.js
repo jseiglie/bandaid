@@ -3,7 +3,7 @@ const songServices = {};
 
 songServices.getSongs = async () => {
   try {
-    const data = await fetcher("/songs/songs", {
+    const data = await fetcher("/songs", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

@@ -11,7 +11,7 @@ import useGlobalReducer from "../../hooks/useGlobalReducer";
 export const Authenticate = (props) => {
   const { store, dispatch } = useGlobalReducer();
   const [formData, setFormData] = useState({
-    email: "",
+    identifier: "",
     password: "",
   });
   const [error, setError] = useState({
@@ -37,6 +37,12 @@ export const Authenticate = (props) => {
     }, 3000);
   }, [error.error]);
 
+  useEffect(() => {
+    if (store.auth) {
+      navigate("/band_manager");
+    }
+  }, [store.auth, navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError({
@@ -44,9 +50,9 @@ export const Authenticate = (props) => {
       message: null,
     });
     setLoading(true);
-    if (!validationUtils.validateEmail(formData.email)) {
+    if (!validationUtils.validateEmail(formData.identifier)) {
       setError({
-        error: "email",
+        error: "Identifier",
         message: "Missing email or invalid email format",
       });
       setLoading(false);
@@ -82,17 +88,19 @@ export const Authenticate = (props) => {
         });
         localStorage.setItem("token", data.data.token);
         localStorage.setItem("user", JSON.stringify(data.data.user));
+        console.log("data", data);
         dispatch({
           type: "store",
-          payload: { key: "user", data: data.data.user },
+          payload: { key: "user", result: data.data.user },
+        });
+        console.log("data", data);
+        dispatch({
+          type: "store",
+          payload: { key: "token", result: data.data.token },
         });
         dispatch({
           type: "store",
-          payload: { key: "token", data: data.data.token },
-        });
-        dispatch({
-          type: "store",
-          payload: { key: "auth", data: true },
+          payload: { key: "auth", result: true },
         });
         if (data.success) navigate("/band_manager");
       });
@@ -105,17 +113,17 @@ export const Authenticate = (props) => {
           <input
             className={`form-control ${
               error.error &&
-              error.error == "email" &&
+              error.error == "identifier" &&
               "border border-2 border-danger"
             }`}
-            type="email"
-            name="email"
-            id="email"
+            type="text"
+            name="identifier"
+            id="identifier"
             onChange={handleChange}
-            value={formData.email}
-            placeholder="user@example.com"
+            value={formData.identifier}
+            placeholder="email or username"
           />
-          <label htmlFor="floatingInput">Email</label>
+          <label htmlFor="floatingInput">Email or Username</label>
         </div>
         <div className="form-floating mb-3">
           <input

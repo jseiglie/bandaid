@@ -7,6 +7,7 @@ export const fetcher = async (endpoint, options = {}) => {
       ...options,
       headers: {
         "Content-Type": "application/json",
+        Authorization: ['POST', 'PUT', 'DELETE'].includes(options.method)? `Bearer ${localStorage.getItem("token")}` : null,
         ...options.headers,
       },
     });

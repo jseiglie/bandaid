@@ -2,7 +2,7 @@ import { fetcher } from "../utils/fetcher";
 const liveServices = {};
 liveServices.getLives = async () => {
   try {
-    const data = await fetcher("/lives/lives", {
+    const data = await fetcher("/lives", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

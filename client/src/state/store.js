@@ -35,10 +35,21 @@ export const initialStore = () => {
 //  NO PUEDE SER ASYNC!!!!
 export default function storeReducer(store, action = {}) {
   switch (action.type) {
+    case 'logout':
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+      return {
+       ...store,
+        user: null,
+        auth: false,
+        token: null,
+      };
+    case 'login':
     case "store":
+      console.log("storeReducer", action.payload);
       return {
         ...store,
-        [action.payload.key]: action.payload.data,
+        [action.payload.key]: action.payload.result,
       };
     case "test":
       console.log("test ok", action.payload);

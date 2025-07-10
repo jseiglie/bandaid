@@ -15,20 +15,39 @@ export const Card = (props) => {
       } `}
     >
       <article className="card feature-card bg-dark text-white d-flex flex-column justify-content-between">
-        <div className="card-body p-0">
-          <h5 className="feature-card-title">{props.feature}</h5>
-          <figure>
-            <img className="img-fluid" src={defaultImg} />
-          </figure>
-          <p className="card-text">{props.description}</p>
-          {props.use !== "band" && (
-            <div className="feature-card-footer">
-              <Link to={props.link} className="btn btn-primary mt-auto">
-                {props.buttonText}
-              </Link>
+        {props.use == "band" ? (
+          <Link className="text-white nav-link" to={props.link}>
+            <div className="card-body p-0">
+              <h5 className="feature-card-title">{props.feature}</h5>
+              <figure>
+                <img className="img-fluid" src={defaultImg} />
+              </figure>
+              <p className="card-text">{props.description}</p>
+              {props.use !== "band" && (
+                <div className="feature-card-footer">
+                  <Link to={props.link} className="btn btn-primary mt-auto">
+                    {props.buttonText}
+                  </Link>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </Link>
+        ) : (
+          <div className="card-body p-0">
+            <h5 className="feature-card-title">{props.feature}</h5>
+            <figure>
+              <img className="img-fluid" src={defaultImg} />
+            </figure>
+            <p className="card-text">{props.description}</p>
+            {props.use !== "band" && (
+              <div className="feature-card-footer">
+                <Link to={props.link} className="btn btn-primary mt-auto">
+                  {props.buttonText}
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
       </article>
     </div>
   );

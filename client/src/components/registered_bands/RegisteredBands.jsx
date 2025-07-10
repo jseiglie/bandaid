@@ -4,7 +4,7 @@ import { Card } from "../card/Card";
 
 export const RegisteredBands = () => {
   const { store } = useGlobalReducer();
-  const randomBands = store.bands?.data.sort(() => Math.random() - 0.5).slice(0, 5);
+  const randomBands = store.bands?.sort(() => Math.random() - 0.5).slice(0, 5);
   return (
     <article className="container-fluid text-white">
       <h1 className="text-center">Join our bands and start managing like a pro</h1>

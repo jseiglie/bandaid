@@ -1,9 +1,9 @@
 import { fetcher } from "../utils/fetcher";
 const setListServices = {};
 
-setListServices.getSetLists = async () => {
+setListServices.getSetLists = async (id) => {
   try {
-    const data = await fetcher("/set_list/set_lists", {
+    const data = await fetcher("/set_lists/"+id, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

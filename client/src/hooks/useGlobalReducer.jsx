@@ -19,22 +19,29 @@ export function StoreProvider({ children }) {
     }
 
     bandServices.getBands().then((data) => {
-      dispatch({ type: "store", payload: { key: "bands", data } });
+      const result = data.data;
+      dispatch({ type: "store", payload: { key: "bands", result } });
     });
 
-    setListServices.getSetLists().then((data) => {
-      dispatch({ type: "store", payload: { key: "setLists", data } });
-    });
+    store.user?.bands?.map((el) =>
+      setListServices.getSetLists(el.id).then((data) => {
+        const result = data.data;
+        dispatch({ type: "store", payload: { key: "setLists", result } });
+      })
+    );
+
     liveServices.getLives().then((data) => {
-      dispatch({ type: "store", payload: { key: "lives", data } });
+      const result = data.data;
+      dispatch({ type: "store", payload: { key: "lives", result } });
     });
     songServices.getSongs().then((data) => {
-      dispatch({ type: "store", payload: { key: "songs", data } });
+      const result = data.data;
+      dispatch({ type: "store", payload: { key: "songs", result } });
     });
     userServices.getUsers().then((data) => {
-      dispatch({ type: "store", payload: { key: "users", data } });
+      const result = data.data;
+      dispatch({ type: "store", payload: { key: "users", result } });
     });
-
   }, []);
   return (
     <StoreContext.Provider value={{ store, dispatch }}>
