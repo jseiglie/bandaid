@@ -9,6 +9,7 @@ router.post('/auth/register', userController.register);
 router.get("/:id", userController.getUserById);
 router.put("/:id", userController.updateUser);
 router.delete("/:id", userController.deleteUser);
+router.post("/auth/logout", tokenMiddleware, userController.logout);
 
 
 

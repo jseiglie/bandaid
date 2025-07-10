@@ -1,8 +1,24 @@
 const userClass = require("../class/users.class.js");
 const responseObject = require("../utils/response.js");
 const userController = {};
-const { tokenGenerator } = require("../middleware/auth.middleware.js");
+const { tokenGenerator, tokenExtractor } = require("../middleware/auth.middleware.js");
 const { default: validationUtils } = require("../client/src/utils/validationUtils.js");
+
+userController.logout = async (req, res) => {
+  try {
+    const token = tokenExtractor(req);
+    const response = await userClass.logout(token);
+      return res
+        .status(200)
+        .send(responseObject(200, true, "Logout successful"));
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send(responseObject(500, false, "Internal server error", error));
+  }
+};  
+
 userController.getUsers = async (req, res) => {
   try {
     console.log("Fetching bands...");

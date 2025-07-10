@@ -25,9 +25,9 @@ const tokenVerifier = async (token) => {
   }
 };
 
-const invalidateToken = async (token) => {
+const invalidateToken = async (token, logout=false) => {
   const decoded = jwt.decode(token);
-  if (decoded?.exp) {
+  if (decoded?.exp || logout===true) {
     await tokenBlacklistModel.create({
       token,
       expiration: decoded.exp * 1000,

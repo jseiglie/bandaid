@@ -10,11 +10,21 @@ const BandMembers = require("../class/bandMembers.class.js");
 const MusicianProfile = require("../class/musicianProfile.class.js");
 const { Lives } = require("../models");
 const { Op } = require("sequelize");
-const { tokenGenerator } = require("../middleware/auth.middleware.js");
+const { tokenGenerator, invalidateToken } = require("../middleware/auth.middleware.js");
 const bandMembers = require("../models/bandMembers.js");
 
 module.exports = class Users {
   constructor() {}
+
+  static async logout(token) {
+    try {
+      invalidateToken(token, true);
+      return { success: true, message: "Logout successful" };
+    } catch (error) {
+      console.error("Error during logout:", error);
+      return { success: false, error: error.message };
+    }
+  }
 
   static async avatarUpdate(data) {
     try {
