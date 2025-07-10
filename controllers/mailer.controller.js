@@ -51,7 +51,7 @@ mailerController.sendPasswordResetLink = async (req, res) => {
           200,
           true,
           "Password reset link sent successfully",
-          response
+          "Email sent to " + to
         )
       );
   } catch (error) {

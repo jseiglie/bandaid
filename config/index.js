@@ -9,8 +9,7 @@ module.exports = new Sequelize(config.database, config.user, config.pass,  {
     dialect: config.dialect,
     logging: process.env.PRODUCTION == 0 ? console.log : false,
     
-    
-    
+
     dialectOptions:{
         //timezone: "UTC"
     },
