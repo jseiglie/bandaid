@@ -1,3 +1,5 @@
+const BandMembers = require("./bandMembers.class");
+
 require("dotenv").config();
 BandsModel = require("../models").Bands;
 UsersBands = require("../models").UserBands;
@@ -176,6 +178,10 @@ module.exports = class Bands {
       throw error;
     }
   }
+
+
+  
+
   static async getBandsByYear(year) {
     try {
       if (!year) {
@@ -216,10 +222,9 @@ module.exports = class Bands {
       if (!user_id) {
         throw new Error("User ID is required");
       }
-      const response = await UsersBands.findAll({
-        where: { user_id },
-      });
-
+      const response = await BandMembers.getBandMemberById(user_id);
+      console.log("Response from getBandsByUserId:", response);
+      
       if (!response) {
         throw new Error("No bands found with this user ID");
       }

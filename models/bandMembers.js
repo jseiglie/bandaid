@@ -40,6 +40,11 @@ module.exports = (sequelize, DataTypes) => {
       BandMembers.belongsTo(models.Bands, { foreignKey: "band_id" });
       BandMembers.belongsTo(models.MusicianProfile, { foreignKey: "musician_id" });
     };
-  
+      BandMembers.prototype.toJSON = function () {
+      const values = this.get();
+      delete values.band_id; // Exclude band_id from the JSON representation
+      delete values.musician_id; // Exclude musician_id from the JSON representation
+      return values;
+    };
     return BandMembers;
   };

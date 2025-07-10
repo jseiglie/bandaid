@@ -8,48 +8,14 @@ const bandController = require("../controllers/band.controller.js");
 const Bands = require("./bands.class");
 const BandMembers = require("../class/bandMembers.class.js");
 const MusicianProfile = require("../class/musicianProfile.class.js");
-const { Lives } = require("../models"); 
+const { Lives } = require("../models");
 const { Op } = require("sequelize");
-const JWT_SECRET =
-  process.env.JWT_SECRET ||
-  "Pw#u=z>y9Cq@s7+Fk3LZGVe<}&-AdBW?./h!;%8$nx]H~*S6rv";
+const { tokenGenerator } = require("../middleware/auth.middleware.js");
+const bandMembers = require("../models/bandMembers.js");
+
 
 module.exports = class Users {
   constructor() {}
-
-  static generateToken(userId, expires) {
-    try {
-      const expirationDate = {};
-      if (!expires) {
-        expirationDate.expiresIn = "1d";
-      }
-      return jwt.sign({ id: userId }, JWT_SECRET, expirationDate); // Customize expiration as needed
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
-  }
-
-  // Verify JWT Token
-  static verifyToken(token) {
-    try {
-      return jwt.verify(token, JWT_SECRET);
-    } catch (error) {
-      console.error(error);
-      return { success: false, error: error.message };
-    }
-  }
-
-  static getId(token) {
-    try {
-      if (this.verifyToken(token)) {
-        const { id } = jwt.verify(token, JWT_SECRET);
-        return id;
-      }
-    } catch (error) {
-      console.error("Error getting ID from token:", error);
-      return { success: false, error: error.message };
-    }
-  }
 
   static async getUsers() {
     try {
@@ -187,35 +153,58 @@ module.exports = class Users {
       if (!passwordMatch) {
         throw new Error("Wrong password and/or email");
       }
-      
       // Remove password from user object
       user = user.toJSON();
-      console.log(user);
-      const userBands = await this.getUserBandsWithMembers(user.id);
+      const musicianProfile = await MusicianProfile.getProfileByUserId(user.id);
+      if (!musicianProfile) {
+        user.profile = null;
+      } else {
 
-      if (userBands) {
-        const musicianProfile = await MusicianProfile.getProfileByUserId(
-          user.id
-        );
         if (musicianProfile && musicianProfile.social_links) {
-          musicianProfile.social_links = JSON.parse(
-            musicianProfile.social_links
-          );
+          musicianProfile.social_links = JSON.parse(musicianProfile.social_links);
         }
-        user.bands = userBands;
-        user.profile = musicianProfile;
+        user.profile = musicianProfile.toJSON();
       }
+      const userBands = await this.getMusicianBands(musicianProfile.id);
+      user.bands = userBands;
 
-      return { user, token: this.generateToken(user.id, "1d") };
+      return {
+        user,
+        token: tokenGenerator(
+          {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            role: user.role,
+          },
+          "2d"
+        ),
+      };
     } catch (error) {
       console.error("Error logging in:", error);
       throw error;
     }
   }
 
+  static async getMusicianBands(musician_id) {
+    try {
+      if (!musician_id) {
+        throw new Error("User ID is required");
+      }
+      const userBands = await BandMembers.getAllUserBands(musician_id);
+      
+      return userBands || []; // Return an empty array if no bands found
+    } catch (error) {
+      console.error("Error fetching musician bands:", error);
+      throw error;
+    }
+  }
+
+
   // get bands and their members
   static async getUserBandsWithMembers(userId) {
     try {
+      
       const userBandsQuery = await Bands.getBandsByUserId(userId);
 
       return await Promise.all(
@@ -247,58 +236,69 @@ module.exports = class Users {
   }
 
   // get band members and their profiles
-static async getBandMembersWithProfiles(bandId) {
-  try {
-    const bandMembersQuery = await BandMembers.getBandMembersByBandId(bandId);
+  static async getBandMembersWithProfiles(bandId) {
+    try {
+      const bandMembersQuery = await BandMembers.getBandMembersByBandId(bandId);
 
-    return await Promise.all(
-      bandMembersQuery.map(async (member) => {
-        // Fetch user details
-        const user = await Users.getUserById(member.dataValues.user_id);
+      return await Promise.all(
+        bandMembersQuery.map(async (member) => {
+          // Fetch user details
+          const user = await Users.getUserById(member.dataValues.user_id);
 
-        // Fetch musician profile for the user
-        const musicianProfile = await MusicianProfile.getProfileByUserId(user.id);
-        if (musicianProfile && musicianProfile.social_links) {
-          musicianProfile.social_links = JSON.parse(musicianProfile.social_links);
-        }
+          // Fetch musician profile for the user
+          const musicianProfile = await MusicianProfile.getProfileByUserId(
+            user.id
+          );
+          if (musicianProfile && musicianProfile.social_links) {
+            musicianProfile.social_links = JSON.parse(
+              musicianProfile.social_links
+            );
+          }
 
-        // Add profile to the user object
-        user.dataValues.profile = musicianProfile;
+          // Add profile to the user object
+          user.dataValues.profile = musicianProfile;
 
-        // Add band member role to the user object
-        user.dataValues.role = member.dataValues.role;
+          // Add band member role to the user object
+          user.dataValues.role = member.dataValues.role;
 
-        return user;
-      })
-    );
-  } catch (error) {
-    console.error("Error fetching band members with profiles:", error);
-    throw error;
+          return user;
+        })
+      );
+    } catch (error) {
+      console.error("Error fetching band members with profiles:", error);
+      throw error;
+    }
   }
-}
 
-  static async register(email, password, username = null, role = 'user', admin = false, avatar = null) {
+  static async register(
+    email,
+    password,
+    username = null,
+    role = "user",
+    admin = false,
+    avatar = null
+  ) {
     try {
       if (!email || !password) {
         throw new Error("Username, email, and password are required");
       }
       // Check if the email already exists
-      const existingEmail = await UsersModel.findOne({
-        where: { email },
-      });
-      if (existingEmail) {
-        throw new Error("Email already exists");
-      }
+      // const existingEmail = await UsersModel.findOne({
+      //   where: { email },
+      // });
+      // if (existingEmail) {
+      //   throw new Error("Email already exists");
+      // }
 
-      const hashedPassword = await this.hash(password);
+      //const hashedPassword = await this.hash(password);
 
       const newUser = await UsersModel.create({
         email,
-        password: hashedPassword,
+        password,
         username: randomUsername(email),
         role,
         admin,
-        avatar
+        avatar,
       });
       // return the created user object without the password
       const user = newUser.toJSON();

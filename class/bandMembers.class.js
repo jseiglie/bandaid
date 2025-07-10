@@ -4,6 +4,7 @@ BandMembersModel = require("../models").BandMembers;
 module.exports = class BandMembers {
   constructor() {}
 
+
   static async getBandMembers() {
     try {
       const response = await BandMembersModel.findAll();
@@ -24,6 +25,12 @@ module.exports = class BandMembers {
       }
       const response = await BandMembersModel.findOne({
         where: { id },
+        include: [
+          {
+            model: require("../models").Bands,
+            as: "Band",
+          },
+        ],
       });
       if (!response) {
         throw new Error("No band member found with this ID");
@@ -31,6 +38,31 @@ module.exports = class BandMembers {
       return response;
     } catch (error) {
       console.error("Error fetching band member by ID:", error);
+      throw error;
+    }
+  }
+
+static async getAllUserBands(musician_id) {
+    try {
+      if (!musician_id) {
+        throw new Error("Musician ID is required");
+      }
+      
+      const response = await BandMembersModel.findAll({
+        where: { musician_id },
+        include: [
+          {
+            model: require("../models").Bands,
+            as: "Band",
+          },
+        ],
+      });
+      if (!response) {
+        throw new Error("No bands found for this musician");
+      }      
+      return response;
+    } catch (error) {
+      console.error("Error fetching user's bands:", error);
       throw error;
     }
   }

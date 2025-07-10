@@ -2,6 +2,7 @@ const userClass = require("../class/users.class.js");
 const responseObject = require("../utils/response.js");
 const userController = {};
 const { tokenGenerator } = require("../middleware/auth.middleware.js");
+const { default: validationUtils } = require("../client/src/utils/validationUtils.js");
 userController.getUsers = async (req, res) => {
   try {
     console.log("Fetching bands...");
@@ -95,14 +96,17 @@ userController.getUserByUsername = async (req, res) => {
 
 userController.login = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const {  identifier, password } = req.body;
     const credentials = {
-      username: username || null,
-      email: email || null,
+     
+      username:null,
+      email:  null,
       password: password || null,
     }
 
     
+    validationUtils.validateEmail(identifier)? credentials.email = identifier: credentials.username = identifier
+
     if ((!credentials.email || !credentials.username) && !credentials.password) {
       throw new Error("Missing credentials: Password is required. Must provide an username or valid email address ");
     }

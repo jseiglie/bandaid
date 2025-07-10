@@ -93,5 +93,13 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
+  Bands.prototype.toJSON = function () {
+    const values = this.get();
+    
+    delete values.createdAt;
+    delete values.updatedAt;
+    return values;
+  };
+
   return Bands;
 };
