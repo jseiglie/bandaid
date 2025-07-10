@@ -16,6 +16,25 @@ const bandMembers = require("../models/bandMembers.js");
 module.exports = class Users {
   constructor() {}
 
+  static async avatarUpdate(data) {
+    try {
+      if (!data) {
+        throw new Error("missing information to update avatar");
+      }
+      const user = await UsersModel.update(
+        { avatar: data.avatar, avatar_public_id: data.avatar_public_id },
+        {
+          where: { id: data.id },
+        }
+      );
+      return user;
+    } catch (error) {
+      console.error("Error updating user avatar:", error);
+      throw error;
+    }
+  }
+
+
   static async getUsers() {
     try {
       const users = await UsersModel.findAll();

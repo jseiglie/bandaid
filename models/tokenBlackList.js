@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
       },
       expiration: {
-        type: DataTypes.DATE,
+        type: DataTypes.BIGINT,
         allowNull: false,
       },
     },

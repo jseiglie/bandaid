@@ -38,6 +38,16 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT(),
         allowNull: true,
       },
+      logo_public_id: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+        unique: true,
+      },
+      cover_photo_public_id: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+        unique: true,
+      },
       contact_email: {
         type: DataTypes.STRING(100),
         allowNull: true,

@@ -34,7 +34,7 @@ console.log("Syncing database...");
 sequelize
   .sync({
     //force: process.env.ENV === "dev" ? true : false,
-    alter: process.env.ENV === "dev" ? true : false,
+    //alter: process.env.ENV === "dev" ? true : false,
   }
   )
   .then(async () => {

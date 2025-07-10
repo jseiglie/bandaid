@@ -8,6 +8,45 @@ Rehearsal_locals = require("../models").Rehearsal_Locals;
 module.exports = class Bands {
   constructor() {}
 
+  static async updateBandLogo(data) {
+    try {
+      if (!data.id ) {
+        throw new Error("Missing data to update logo");
+      }
+      const band = await BandsModel.findByPk(data.band_id);
+      if (!band) {
+        throw new Error("No band found with this ID");
+      }
+      band.logo = data.logo;
+      band.logo_public_id = data.logo_public_id;
+      await band.save();
+      return band;
+    } catch (error) {
+      console.error("Error updating band logo:", error);
+      throw error;
+    }
+  }
+
+  static async updateBandCoverPhoto(data) {
+    try {
+      if (!data) {
+        throw new Error("Missing data to update cover photo");
+      }
+      const band = await BandsModel.findByPk(data.band_id);
+      if (!band) {
+        throw new Error("No band found with this ID");
+      }
+      band.cover_photo = data.cover_photo;
+      band.cover_photo_public_id = data.cover_photo_public_id;
+      await band.save();
+      return band;
+    } catch (error) {
+      console.error("Error updating band cover photo:", error);
+      throw error;
+    }
+  }
+
+
   static async getBands() {
     try {
       const response = await BandsModel.findAll();

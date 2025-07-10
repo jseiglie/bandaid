@@ -7,6 +7,7 @@ const { join } = require('node:path');
 const path = require('path');
 const cors = require('cors');
 const sequelize = require('./config/index');
+const cloudinary = require('cloudinary').v2;
 
 //routes import
 const bandRoute = require('./routes/band.routes'); 
@@ -19,6 +20,8 @@ const musicianProfileRoute = require('./routes/musicianProfile.routes');
 const rehearsalLocalRoute = require('./routes/rehearsal_locals.routes');
 const rehearsalRoute = require('./routes/rehearsals.routes');
 const mailerRoute = require('./routes/email.routes'); // Import the email route
+const cloudinaryRoute = require('./routes/cloudinary.routes'); // Import the Cloudinary route
+
 
 const app = express();
 const server = createServer(app);
@@ -27,7 +30,7 @@ const router = express.Router();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 app.use(express.static(path.join(__dirname, './client/dist')));
 
 
@@ -46,6 +49,7 @@ app.use('/api/musician_profiles', musicianProfileRoute);
 app.use('/api/rehearsal_locals', rehearsalLocalRoute);
 app.use('/api/rehearsals', rehearsalRoute);
 app.use('/api/mailer', mailerRoute); 
+app.use('/api/cloudinary', cloudinaryRoute);
 
 
 app.get('*', (req, res) => {

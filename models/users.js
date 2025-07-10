@@ -33,6 +33,18 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue:
           "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ffreepngimg.com%2Fthumb%2Fband%2F26223-1-band-photos.png&f=1&nofb=1&ipt=4d20faa39f989336905b6721f7dba99b693a340d1df470aed77958d3f02a72ef",
       },
+      avatar_public_id: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+        unique: true,
+      },
+
+      // last_login: {
+      //   type: DataTypes.DATE,
+      //   allowNull: true,
+      //   defaultValue: DataTypes.NOW,
+      // },
+
     },
     {
       tableName: "Users",
@@ -42,7 +54,10 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Users.associate = function (models) {
-    Users.hasOne(models.MusicianProfile, { foreignKey: "user_id", nullable: true });
+    Users.hasOne(models.MusicianProfile, {
+      foreignKey: "user_id",
+      nullable: true,
+    });
     Users.hasMany(models.SetLists, { foreignKey: "proposed_by" });
     Users.hasMany(models.Songs, { foreignKey: "proposed_by" });
     // Users.hasMany(models.BandMembers, { foreignKey: "user_id" });

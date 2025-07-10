@@ -15,6 +15,7 @@
 client/dist
 /config/db.config.js
 /client/config
+/uploads
 # misc
 /client/.env
 .DS_Store
