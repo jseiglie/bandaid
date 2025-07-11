@@ -3,6 +3,15 @@ require("dotenv").config();
 const mailer = require("nodemailer");
 const Users = require("./users.class");
 const { tokenGenerator } = require("../middleware/auth.middleware");
+const fs = require("fs");
+const path = require("path");
+const mjml = require("mjml");
+const Mustache = require("mustache");
+
+
+const templatesPath = path.join(__dirname, "..", "utils", "email_messages.json");
+const templates = JSON.parse(fs.readFileSync(templatesPath, "utf8"));
+
 
 class Mailer {
   constructor() {
@@ -17,39 +26,86 @@ class Mailer {
     });
   }
 
-  async sendMail(to, subject, text) {
-    const mailOptions = {
-      from: process.env.MAIL_FROM,
-      to: to,
-      subject: subject,
-      text: text,
-    };
+async sendMail(to, templateKey, variables) {
+  const { subject, html } = this.renderEmail(templateKey, variables);
 
-    try {
-      const info = await this.transporter.sendMail(mailOptions);
-      console.log("Email sent:", info.response);
-      return info;
-    } catch (error) {
-      console.error("Error sending email:", error);
-      throw error;
-    }
-  }
+  const mailOptions = {
+    from: process.env.MAIL_FROM,
+    to,
+    subject,
+    html, 
+    //text: "", // opcional, de necesitar version sin formato
+  };
 
-  async sendPasswordResetLink(to) {
-    const user = await Users.getUserByEmail(to);
-    if (!user.success && !user.dataValues) {
-        return {
-          success: false,
-          message: "No user found with this email",
-          status: 404,
-        };
-    }
-    const token = tokenGenerator(user);
-    const subject = "Password Reset Request";
-    const text = `You have requested a password reset. Click the following link to reset 
-        your password: ${process.env.FRONT_APP}/reset-password/${token}`;
-    return this.sendMail(to, subject, text);
+  try {
+    const info = await this.transporter.sendMail(mailOptions);
+    console.log("Email sent:", info.response);
+    return info;
+  } catch (error) {
+    console.error("Error sending email:", error);
+    throw error;
   }
 }
+
+
+async sendPasswordResetLink(to) {
+  const user = await Users.getUserByEmail(to);
+  if (!user.success || !user.dataValues) {
+    return {
+      success: false,
+      message: "No user found with this email",
+      status: 404,
+    };
+  }
+
+  const token = tokenGenerator(user);
+  const resetLink = `${process.env.FRONT_APP}/reset-password/${token}`;
+
+  return await this.sendMail(to, "reset", {
+    nombre: user.dataValues.nombre || "Usuario",
+    link_restablecimiento: resetLink,
+  });
+}
+
+
+
+
+/**
+ * Renderiza un template MJML con datos y lo compila a HTML.
+ * @param {string} templateKey - Clave del template (ej: 'bienvenida') del archivo JSON.
+ * @param {object} variables - Datos para reemplazar (ej: { nombre: 'Pepe' })
+ * @returns {{ subject: string, html: string }}
+ */
+ renderEmail(templateKey, variables = {}) {
+  const template = templates[templateKey];
+
+  if (!template) {
+    throw new Error(`Template no encontrado: '${templateKey}'`);
+  }
+
+  const mjmlRaw = Mustache.render(template.mjml, variables);
+  const { html, errors } = mjml(mjmlRaw, { validationLevel: "strict" });
+
+  if (errors.length) {
+    console.error("Errores al compilar MJML:", errors);
+    throw new Error("Error al compilar el MJML.");
+  }
+
+  return {
+    subject: Mustache.render(template.subject, variables),
+    html,
+  };
+}
+
+
+
+}
+
+
+
+
+
+
+
 
 module.exports = new Mailer(); // Ensure this is exporting an instance

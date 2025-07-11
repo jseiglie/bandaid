@@ -1,0 +1,26 @@
+{
+  "bienvenida": {
+    "subject": "🎶 ¡Bienvenido a BandAid!",
+    "mjml": "<mjml><mj-body><mj-section><mj-column><mj-text font-size='20px' color='#333'>🎶 ¡Bienvenido a BandAid!</mj-text><mj-text>Hola {{nombre}},<br/>Gracias por unirte a nuestra comunidad musical. Estamos emocionados de tenerte a bordo.</mj-text><mj-button href='https://bandaid.app/login'>Ir a la plataforma</mj-button></mj-column></mj-section></mj-body></mjml>"
+  },
+  "reset": {
+    "subject": "🔐 Restablece tu contraseña",
+    "mjml": "<mjml><mj-body><mj-section><mj-column><mj-text font-size='20px'>🔐 Restablece tu contraseña</mj-text><mj-text>Hola {{nombre}},<br/>Haz clic en el botón para continuar.</mj-text><mj-button href='{{link_restablecimiento}}'>Restablecer contraseña</mj-button></mj-column></mj-section></mj-body></mjml>"
+  },
+  "resumen_semanal_admin": {
+    "subject": "📊 Resumen Semanal de Actividad",
+    "mjml": "<mjml><mj-body><mj-section><mj-column><mj-text font-size='20px'>📊 Resumen Semanal</mj-text><mj-text>Hola {{nombre}},<br/>Resumen de esta semana:</mj-text><mj-text>- Nuevos usuarios: {{nuevos_usuarios}}<br/>- Nuevas bandas: {{nuevas_bandas}}<br/>- Ensayos programados: {{ensayos}}</mj-text><mj-button href='https://bandaid.app/admin'>Ver Panel</mj-button></mj-column></mj-section></mj-body></mjml>"
+  },
+  "evento_aceptado": {
+    "subject": "🎤 ¡Tu evento ha sido confirmado!",
+    "mjml": "<mjml><mj-body><mj-section><mj-column><mj-text font-size='20px'>🎤 ¡Evento confirmado!</mj-text><mj-text>Hola {{nombre}},<br/>El evento <strong>{{nombre_evento}}</strong> ha sido aceptado. ¡Prepárate!</mj-text><mj-button href='{{link_evento}}'>Ver evento</mj-button></mj-column></mj-section></mj-body></mjml>"
+  },
+  "union_banda": {
+    "subject": "🎸 ¡Te uniste a una banda!",
+    "mjml": "<mjml><mj-body><mj-section><mj-column><mj-text font-size='20px'>🎸 ¡Bienvenido a la banda!</mj-text><mj-text>Hola {{nombre}},<br/>Ya eres miembro de <strong>{{nombre_banda}}</strong>.</mj-text><mj-button href='{{link_banda}}'>Ver banda</mj-button></mj-column></mj-section></mj-body></mjml>"
+  },
+  "setlist_enviado": {
+    "subject": "📄 Nuevo Set List disponible",
+    "mjml": "<mjml><mj-body><mj-section><mj-column><mj-text font-size='20px'>📄 Set List enviado</mj-text><mj-text>Hola {{nombre}},<br/>Revisa el nuevo set list para <strong>{{nombre_evento}}</strong>.</mj-text><mj-button href='{{link_setlist}}'>Ver Set List</mj-button></mj-column></mj-section></mj-body></mjml>"
+  }
+}

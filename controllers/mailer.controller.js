@@ -5,20 +5,20 @@ const mailerController = {};
 
 mailerController.sendMail = async (req, res) => {
   try {
-    const { to, subject, text } = req.body;
-    if (!to || !subject || !text) {
+    const { to, template, data } = req.body;
+    if (!to || !template || !data) {
       return res
         .status(400)
         .send(
           responseObject(
             400,
             false,
-            "Missing required fields: to, subject, text"
+            "Missing required fields: to, template, data"
           )
         );
     }
 
-    const response = await Mailer.sendMail(to, subject, text);
+    const response = await Mailer.sendMail(to, template, data);
     return res
       .status(200)
       .send(responseObject(200, true, "Email sent successfully", response));
@@ -36,7 +36,7 @@ mailerController.sendPasswordResetLink = async (req, res) => {
     if (!to) {
       return res
         .status(400)
-        .send(responseObject(400, false, "Missing email address"));
+        .send(responseObject(400, false, "Missing email address" ));
     }
     const response = await Mailer.sendPasswordResetLink(to);
     if (!response.accepted) {
