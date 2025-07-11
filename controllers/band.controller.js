@@ -17,6 +17,28 @@ bandController.getBands = async (req, res) => {
   }
 };
 
+bandController.changeBandAdmin = async (req, res) => {
+  try {
+    const { bandId, newAdminId } = req.body;
+    const updatedBand = await bandClass.changeBandAdmin(bandId, newAdminId);
+    res
+      .status(200)
+      .send(
+        responseObject(
+          200,
+          true,
+          "Band admin changed successfully",
+          updatedBand
+        )
+      );
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send(responseObject(500, false, "Internal server error", null));
+  }
+};
+
 bandController.getBandById = async (req, res) => {
   try {
     const bandId = req.params.id;
@@ -50,6 +72,8 @@ bandController.getBandByBandName = async (req, res) => {
 bandController.createBand = async (req, res) => {
   try {
     const bandData = req.body;
+    const user = req.user;
+    bandData.band_admin = user.id;
     const band = await bandClass.createBand(bandData);
     res
       .status(201)

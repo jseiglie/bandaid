@@ -13,6 +13,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         unique: true,
       },
+      band_admin: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: "Users",
+          key: "id",
+        },
+        onDelete: "SET NULL",
+      },
       description: {
         type: DataTypes.STRING(255),
         allowNull: true,
@@ -100,6 +109,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "band_id",
       as: "defaultSchedules",
       onDelete: "CASCADE",
+    });
+    Bands.belongsTo(models.Users, {
+      foreignKey: "band_admin",
+      as: "admin",
+      onDelete: "SET NULL",
     });
   };
 

@@ -111,6 +111,7 @@ const seedDatabase = async () => {
         {
           name: "Band A",
           description: "Rock band",
+          band_admin: users[0].id,
           genre: "Rock",
           location: "NYC",
           social_media: JSON.stringify([
@@ -120,6 +121,7 @@ const seedDatabase = async () => {
         {
           name: "Band B",
           description: "Jazz band",
+          band_admin: users[1].id,
           genre: "Jazz",
           location: "LA",
           social_media: JSON.stringify([
@@ -129,6 +131,8 @@ const seedDatabase = async () => {
         {
           name: "Band C",
           description: "Pop band",
+          band_admin: users[2].id,
+
           genre: "Pop",
           location: "Chicago",
           social_media: JSON.stringify([
@@ -138,6 +142,7 @@ const seedDatabase = async () => {
         {
           name: "Band D",
           description: "Metal band",
+          band_admin: users[3].id,
           genre: "Metal",
           location: "Seattle",
           social_media: JSON.stringify([
@@ -147,6 +152,7 @@ const seedDatabase = async () => {
         {
           name: "Band E",
           description: "Indie band",
+          band_admin: users[4].id,
           genre: "Indie",
           location: "Austin",
           social_media: JSON.stringify([
@@ -156,6 +162,7 @@ const seedDatabase = async () => {
         {
           name: "Band F",
           description: "Alternative rock band",
+          band_admin: users[5].id,
           genre: "Alternative",
           location: "Portland",
           social_media: JSON.stringify([
@@ -165,6 +172,7 @@ const seedDatabase = async () => {
         {
           name: "Band G",
           description: "Latin fusion band",
+          band_admin: users[6].id,
           genre: "Latin",
           location: "Miami",
           social_media: JSON.stringify([

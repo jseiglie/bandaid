@@ -8,6 +8,24 @@ Rehearsal_locals = require("../models").Rehearsal_Locals;
 module.exports = class Bands {
   constructor() {}
 
+  static async changeBandAdmin(bandId, newAdminId) {
+    try {
+      if (!bandId || !newAdminId) {
+        throw new Error("Band ID and new admin ID are required");
+      }
+      const band = await BandsModel.findByPk(bandId);
+      if (!band) {
+        throw new Error("No band found with this ID");
+      }
+      band.band_admin = newAdminId;
+      await band.save();
+      return band;
+    } catch (error) {
+      console.error("Error changing band admin:", error);
+      throw error;
+    } 
+  }
+
   static async updateBandLogo(data) {
     try {
       if (!data.id ) {
@@ -84,16 +102,6 @@ module.exports = class Bands {
       const response = await BandsModel.findOne({
         where: { id },
         include: [
-          // {
-          //   model: UsersBands,
-          //   as: "users_bands",
-          //   include: [
-          //     {
-          //       model: require("../models").Users,
-          //       as: "user",
-          //     },
-          //   ],
-          // },
           {
             model: Rehearsals,
             as: "Rehearsals",
