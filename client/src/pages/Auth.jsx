@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Authenticate } from "../components/authenticate/authenticate";
 
 export const Auth = () => {

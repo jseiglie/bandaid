@@ -6,7 +6,6 @@ export const Home = () => {
   return (
     <main className=" d-flex w-100 h-100 mx-auto flex-column  justify-content-center">
      
-
       <Hero />
       <Features/>
 
