@@ -12,6 +12,7 @@ const { Lives } = require("../models");
 const { Op } = require("sequelize");
 const { tokenGenerator, invalidateToken } = require("../middleware/auth.middleware.js");
 const bandMembers = require("../models/bandMembers.js");
+const UserSubscriptions = require("../models/userSubscriptions.js");
 
 module.exports = class Users {
   constructor() {}
@@ -178,7 +179,7 @@ module.exports = class Users {
           where: { email },
         })) ||
         (await UsersModel.findOne({
-          where: { username },
+          where: { username }, include: UserSubscriptions 
         }));
 
       if (!user) {

@@ -13,8 +13,12 @@ const imports = fs.readdirSync("./models");
 
 imports
   .filter((name) => name !== "index.js")
-  .forEach((file) => {    
+ .forEach((file) => {    
     const model = require(path.join(__dirname, file))(sequelize, DataTypes);
+    if (!model || !model.name) {
+      console.error(`El modelo cargado de ${file} es inválido:`, model);
+      throw new Error(`Error cargando modelo desde archivo ${file}`);
+    }
     models[model.name] = model;
   });
 

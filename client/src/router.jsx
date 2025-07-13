@@ -14,7 +14,10 @@ import { Register } from "./pages/Register";
 import { BandPrivate } from "./pages/BandPrivate";
 import { BandPublic } from "./pages/BandPublic";
 import { BandManagerDashboard } from "./pages/BandManagerDashboard";
-import { Auth } from "./pages/auth";
+import { Auth } from "./pages/Auth";
+import { Checkout } from "./pages/checkout";
+import { CompletedPayment } from "./pages/CompletedPayment";
+import { SubscriptionPage } from "./pages/SubscriptionPage";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,7 +33,9 @@ export const router = createBrowserRouter(
       <Route path="/band_manager" element={<BandManagerDashboard />} />
       <Route path="/band_manager/:band_name" element={<BandPrivate />} />
       <Route path="/band/:band_name" element={<BandPublic />} />
-      <Route path="/test" element={<Test />} />
+      <Route path="/test" element={<Checkout />} />
+      <Route path="/complete" element={<CompletedPayment/>} />
+      <Route path="/subscribe" element={<SubscriptionPage />} />
       <Route path="*" element={<h1>Not found!</h1>} />
     </Route>
   )

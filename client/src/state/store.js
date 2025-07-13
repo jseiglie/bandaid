@@ -1,9 +1,11 @@
 export const initialStore = () => {
   return {
-    user: JSON.parse(localStorage.getItem("user")) ,
+    user: JSON.parse(localStorage.getItem("user")),
     auth: !!localStorage.getItem("token"),
     token: localStorage.getItem("token") || null,
     ok: false,
+    stripePriceId: "price_1RkPQ9A9wzTLXCekb76QAwvk", // Example price ID, replace with actual
+    cart: [{ id: 1 }],
     features: [
       {
         feature: "Set List",
@@ -35,16 +37,16 @@ export const initialStore = () => {
 //  NO PUEDE SER ASYNC!!!!
 export default function storeReducer(store, action = {}) {
   switch (action.type) {
-    case 'logout':
-      localStorage.removeItem('user');
-      localStorage.removeItem('token');
+    case "logout":
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
       return {
-       ...store,
+        ...store,
         user: null,
         auth: false,
         token: null,
       };
-    case 'login':
+    case "login":
     case "store":
       console.log("storeReducer", action.payload);
       return {

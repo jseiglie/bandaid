@@ -19,9 +19,10 @@ const bandMemberRoute = require('./routes/bandMembers.routes');
 const musicianProfileRoute = require('./routes/musicianProfile.routes');
 const rehearsalLocalRoute = require('./routes/rehearsal_locals.routes');
 const rehearsalRoute = require('./routes/rehearsals.routes');
-const mailerRoute = require('./routes/email.routes'); // Import the email route
-const cloudinaryRoute = require('./routes/cloudinary.routes'); // Import the Cloudinary route
-
+const mailerRoute = require('./routes/email.routes'); 
+const cloudinaryRoute = require('./routes/cloudinary.routes');
+const stripeRoute = require('./routes/stripe.routes'); 
+const webhookRoute = require('./routes/webhook.routes');
 
 const app = express();
 const server = createServer(app);
@@ -29,9 +30,15 @@ const router = express.Router();
 
 
 app.use(cors());
-app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 app.use(express.static(path.join(__dirname, './client/dist')));
+
+//before express.json middleware we call webhooks
+app.use('/api/webhook', webhookRoute);
+
+//after webhooks we can use express.json middleware
+app.use(express.json());
+
 
 
 //router config
@@ -50,7 +57,7 @@ app.use('/api/rehearsal_locals', rehearsalLocalRoute);
 app.use('/api/rehearsals', rehearsalRoute);
 app.use('/api/mailer', mailerRoute); 
 app.use('/api/cloudinary', cloudinaryRoute);
-
+app.use('/api/stripe', stripeRoute);
 
 app.get('*', (req, res) => {
   res.sendFile(join(__dirname, './client/dist/index.html'));

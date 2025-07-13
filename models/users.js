@@ -38,13 +38,21 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         unique: true,
       },
+      has_subscription: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+      },
+      active_subscription_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true, // puede no tener ninguna activa
+      },
 
       // last_login: {
       //   type: DataTypes.DATE,
       //   allowNull: true,
       //   defaultValue: DataTypes.NOW,
       // },
-
     },
     {
       tableName: "Users",
@@ -60,6 +68,10 @@ module.exports = (sequelize, DataTypes) => {
     });
     Users.hasMany(models.SetLists, { foreignKey: "proposed_by" });
     Users.hasMany(models.Songs, { foreignKey: "proposed_by" });
+    Users.hasMany(models.UserSubscriptions, {
+      foreignKey: "user_id",
+      onDelete: "CASCADE",
+    });
     // Users.hasMany(models.BandMembers, { foreignKey: "user_id" });
 
     // Users.belongsToMany(models.Bands, {
