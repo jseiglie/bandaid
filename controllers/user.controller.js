@@ -2,7 +2,6 @@ const userClass = require("../class/users.class.js");
 const responseObject = require("../utils/response.js");
 const userController = {};
 const { tokenGenerator, tokenExtractor } = require("../middleware/auth.middleware.js");
-const { default: validationUtils } = require("../client/src/utils/validationUtils.js");
 
 userController.logout = async (req, res) => {
   try {
