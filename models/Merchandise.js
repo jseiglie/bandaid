@@ -50,6 +50,7 @@ module.exports = (sequelize, DataTypes) => {
   Merchandise.associate = (models) => {
     Merchandise.belongsTo(models.Bands, { foreignKey: "owner" });
     Merchandise.hasMany(models.CartItems, { foreignKey: "merchandise_id" });
+    Merchandise.belongsTo(models.Categories, { foreignKey: "category_id" });
   }
 
   return Merchandise;

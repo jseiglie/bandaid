@@ -208,6 +208,19 @@ const seedDatabase = async () => {
       { returning: true }
     );
 
+    // Seed Categories
+    const categories = await Categories.bulkCreate(
+      [
+        { category: "Apparel" },
+        { category: "Accessories" },
+        { category: "Posters" },
+        { category: "Music" },
+        { category: "Collectibles" },
+      ],
+      { returning: true }
+    );
+
+
 // Seed Merchandise
     const merchandise = await Merchandise.bulkCreate(
       [
@@ -218,6 +231,7 @@ const seedDatabase = async () => {
           stock: 100,
           imageUrl: "https://example.com/tshirt.jpg",
           owner: bands[0].id,
+          category: categories[0].id,
         },
         {
           name: "Cap",
@@ -226,6 +240,7 @@ const seedDatabase = async () => {
           stock: 50,
           imageUrl: "https://example.com/cap.jpg",
           owner: bands[1].id,
+          category: categories[1].id,
         },
         {
           name: "Poster",
@@ -234,6 +249,7 @@ const seedDatabase = async () => {
           stock: 200,
           imageUrl: "https://example.com/poster.jpg",
           owner: bands[0].id,
+          category: categories[2].id,
         },
         {
           name: "Vinyl Record",
@@ -242,6 +258,7 @@ const seedDatabase = async () => {
           stock: 30,
           imageUrl: "https://example.com/vinyl.jpg",
           owner: bands[1].id,
+          category: categories[3].id,
         },
         {
           name: "Hoodie",
@@ -250,6 +267,7 @@ const seedDatabase = async () => {
           stock: 80,
           imageUrl: "https://example.com/hoodie.jpg",
           owner: bands[4].id,
+          category: categories[0].id,
         },
         {
           name: "Stickers",
@@ -258,6 +276,7 @@ const seedDatabase = async () => {
           stock: 500,
           imageUrl: "https://example.com/stickers.jpg",
           owner: bands[0].id,
+          category: categories[1].id,
         },
         {
           name: "CD Album",
@@ -266,6 +285,7 @@ const seedDatabase = async () => {
           stock: 100,
           imageUrl: "https://example.com/cd.jpg",
           owner: bands[1].id,
+          category: categories[3].id,
         },
         {
           name: "Keychain",
@@ -274,6 +294,7 @@ const seedDatabase = async () => {
           stock: 300,
           imageUrl: "https://example.com/keychain.jpg",
           owner: bands[0].id,
+          category: categories[0].id,
         },
         {
           name: "Wristband",
@@ -282,6 +303,7 @@ const seedDatabase = async () => {
           stock: 400,
           imageUrl: "https://example.com/wristband.jpg",
           owner: bands[1].id,
+          category: categories[1].id,
         },
         {
           name: "Poster Set",
@@ -290,6 +312,7 @@ const seedDatabase = async () => {
           stock: 150,
           imageUrl: "https://example.com/posterset.jpg",
           owner: bands[0].id,
+          category: categories[2].id,
         },
       ],
       { returning: true }
