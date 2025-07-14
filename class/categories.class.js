@@ -1,5 +1,5 @@
 
-const CategoriesModel = require("../models/categories.model");
+const CategoriesModel = require("../models/categories");
 
 module.exports = class Categories {
   static async getAllCategories() {

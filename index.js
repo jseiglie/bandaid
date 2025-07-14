@@ -25,7 +25,7 @@ const stripeRoute = require('./routes/stripe.routes');
 const webhookRoute = require('./routes/webhook.routes');
 const cartsRoute = require('./routes/carts.routes');
 const purchaseHistoryRoute = require('./routes/purchaseHistory.routes.js'); 
-const categoryRoute = require('./routes/category.routes'); 
+const categoryRoute = require('./routes/categories.routes'); 
 
 const app = express();
 const server = createServer(app);
