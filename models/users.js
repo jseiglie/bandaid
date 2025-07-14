@@ -47,6 +47,30 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true, // puede no tener ninguna activa
       },
+      address: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
+      phone: {
+        type: DataTypes.STRING(20),
+        allowNull: true,
+      },
+      city: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+      },
+      country: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+      },
+      state: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+      },
+      zip_code: {
+        type: DataTypes.STRING(20),
+        allowNull: true,
+      },
 
       // last_login: {
       //   type: DataTypes.DATE,

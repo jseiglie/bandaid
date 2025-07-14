@@ -13,6 +13,7 @@ const {
   Merchandise,
   Carts,
   CartItems,
+  PurchaseHistory,
 } = require("../models");
 const Users = require("../class/users.class.js");
 
@@ -28,6 +29,8 @@ const seedDatabase = async () => {
         role: "user",
         admin: false,
         avatar: null,
+        phoneNumber: "123-456-7890",
+        address: "123 Rock St, NYC",
       },
       {
         email: "user2@ex.com",
@@ -36,6 +39,8 @@ const seedDatabase = async () => {
         role: "user",
         admin: false,
         avatar: null,
+        phoneNumber: "123-456-7891",
+        address: "124 Rock St, NYC",
       },
       {
         email: "user3@ex.com",
@@ -44,6 +49,8 @@ const seedDatabase = async () => {
         role: "user",
         admin: false,
         avatar: null,
+        phoneNumber: "123-456-7892",
+        address: "125 Rock St, NYC",
       },
       {
         email: "user4@ex.com",
@@ -52,6 +59,8 @@ const seedDatabase = async () => {
         role: "user",
         admin: false,
         avatar: null,
+        phoneNumber: "123-456-7893",
+        address: "1230 Rock St, NYC",
       },
       {
         email: "user5@ex.com",
@@ -60,6 +69,8 @@ const seedDatabase = async () => {
         role: "admin",
         admin: true,
         avatar: null,
+        phoneNumber: "123-456-7895",
+        address: "1238 Rock St, NYC",
       },
       {
         email: "user6@ex.com",
@@ -68,6 +79,8 @@ const seedDatabase = async () => {
         role: "user",
         admin: false,
         avatar: null,
+        phoneNumber: "123-456-7896",
+        address: "1231 Rock St, NYC",
       },
       {
         email: "user7@ex.com",
@@ -76,6 +89,8 @@ const seedDatabase = async () => {
         role: "user",
         admin: false,
         avatar: null,
+        phoneNumber: "123-456-7899",
+        address: "1234 Rock St, NYC",
       },
       {
         email: "user8@ex.com",
@@ -84,6 +99,8 @@ const seedDatabase = async () => {
         role: "user",
         admin: false,
         avatar: null,
+        phoneNumber: "123-456-7870",
+        address: "113 Rock St, NYC",
       },
       {
         email: "user9@ex.com",
@@ -92,6 +109,8 @@ const seedDatabase = async () => {
         role: "user",
         admin: false,
         avatar: null,
+        phoneNumber: "123-456-6890",
+        address: "23 Rock St, NYC",
       },
       {
         email: "user10@ex.com",
@@ -100,6 +119,8 @@ const seedDatabase = async () => {
         role: "admin",
         admin: true,
         avatar: null,
+        phoneNumber: "123-456-5890",
+        address: "723 Rock St, NYC",
       },
     ];
 
@@ -196,6 +217,7 @@ const seedDatabase = async () => {
           price: 20.0,
           stock: 100,
           imageUrl: "https://example.com/tshirt.jpg",
+          owner: bands[0].id,
         },
         {
           name: "Cap",
@@ -203,6 +225,7 @@ const seedDatabase = async () => {
           price: 15.0,
           stock: 50,
           imageUrl: "https://example.com/cap.jpg",
+          owner: bands[1].id,
         },
         {
           name: "Poster",
@@ -210,6 +233,63 @@ const seedDatabase = async () => {
           price: 10.0,
           stock: 200,
           imageUrl: "https://example.com/poster.jpg",
+          owner: bands[0].id,
+        },
+        {
+          name: "Vinyl Record",
+          description: "Band Vinyl Record",
+          price: 25.0,
+          stock: 30,
+          imageUrl: "https://example.com/vinyl.jpg",
+          owner: bands[1].id,
+        },
+        {
+          name: "Hoodie",
+          description: "Band Hoodie",
+          price: 40.0,
+          stock: 80,
+          imageUrl: "https://example.com/hoodie.jpg",
+          owner: bands[4].id,
+        },
+        {
+          name: "Stickers",
+          description: "Band Stickers",
+          price: 5.0,
+          stock: 500,
+          imageUrl: "https://example.com/stickers.jpg",
+          owner: bands[0].id,
+        },
+        {
+          name: "CD Album",
+          description: "Band CD Album",
+          price: 15.0,
+          stock: 100,
+          imageUrl: "https://example.com/cd.jpg",
+          owner: bands[1].id,
+        },
+        {
+          name: "Keychain",
+          description: "Band Keychain",
+          price: 8.0,
+          stock: 300,
+          imageUrl: "https://example.com/keychain.jpg",
+          owner: bands[0].id,
+        },
+        {
+          name: "Wristband",
+          description: "Band Wristband",
+          price: 3.0,
+          stock: 400,
+          imageUrl: "https://example.com/wristband.jpg",
+          owner: bands[1].id,
+        },
+        {
+          name: "Poster Set",
+          description: "Set of Band Posters",
+          price: 12.0,
+          stock: 150,
+          imageUrl: "https://example.com/posterset.jpg",
+          owner: bands[0].id,
         },
       ],
       { returning: true }
@@ -220,6 +300,9 @@ const seedDatabase = async () => {
       [
         { userId: users[0].id },
         { userId: users[1].id },
+        { userId: users[2].id },
+        { userId: users[3].id },
+        
       ],
       { returning: true }
     );
@@ -230,6 +313,9 @@ const seedDatabase = async () => {
         { cartId: carts[0].id, merchandiseId: merchandise[0].id, quantity: 2 },
         { cartId: carts[0].id, merchandiseId: merchandise[1].id, quantity: 1 },
         { cartId: carts[1].id, merchandiseId: merchandise[2].id, quantity: 3 },
+        { cartId: carts[1].id, merchandiseId: merchandise[3].id, quantity: 1 },
+        { cartId: carts[0].id, merchandiseId: merchandise[4].id, quantity: 2 },
+        { cartId: carts[1].id, merchandiseId: merchandise[5].id, quantity: 1 },
       ],
       { returning: true }
     );
@@ -553,6 +639,73 @@ const seedDatabase = async () => {
         setlist_id: setLists[1].id,
       },
     ]);
+
+  await PurchaseHistory.bulkCreate(
+      [
+        {
+          userId: users[0].id,
+          merchandiseId: merchandise[0].id,
+          quantity: 2,
+          purchaseDate: new Date(),
+        },
+        {
+          userId: users[1].id,
+          merchandiseId: merchandise[1].id,
+          quantity: 1,
+          purchaseDate: new Date(),
+        },
+        {
+          userId: users[2].id,
+          merchandiseId: merchandise[2].id,
+          quantity: 3,
+          purchaseDate: new Date(),
+        },
+        {
+          userId: users[3].id,
+          merchandiseId: merchandise[0].id,
+          quantity: 1,
+          purchaseDate: new Date(),
+        },
+        {
+          userId: users[0].id,
+          merchandiseId: merchandise[1].id,
+          quantity: 2,
+          purchaseDate: new Date(),
+        },
+        {
+          userId: users[2].id,
+          merchandiseId: merchandise[2].id,
+          quantity: 1,
+          purchaseDate: new Date(),
+        },
+        {
+          userId: users[2].id,
+          merchandiseId: merchandise[3].id,
+          quantity: 4,
+          purchaseDate: new Date(),
+        },
+        {
+          userId: users[0].id,
+          merchandiseId: merchandise[4].id,
+          quantity: 5,
+          purchaseDate: new Date(),
+        },
+        {
+          userId: users[0].id,
+          merchandiseId: merchandise[5].id,
+          quantity: 1,
+          purchaseDate: new Date(),
+        },
+        {
+          userId: users[1].id,
+          merchandiseId: merchandise[6].id,
+          quantity: 2,
+          purchaseDate: new Date(),
+        },
+      ],
+      { returning: true }
+    );
+
 
     console.log("Database seeded successfully!");
   } catch (error) {
