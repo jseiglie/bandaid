@@ -24,7 +24,7 @@ const cloudinaryRoute = require('./routes/cloudinary.routes');
 const stripeRoute = require('./routes/stripe.routes'); 
 const webhookRoute = require('./routes/webhook.routes');
 const cartsRoute = require('./routes/carts.routes');
-
+const purchaseHistoryRoute = require('./routes/purchaseHistory.routes.js'); // Import the purchase history route
 
 
 const app = express();
@@ -62,7 +62,7 @@ app.use('/api/mailer', mailerRoute);
 app.use('/api/cloudinary', cloudinaryRoute);
 app.use('/api/stripe', stripeRoute);
 app.use('/api/carts', cartsRoute ); 
-
+app.use('/api/purchase_history', purchaseHistoryRoute);
 
 
 app.get('*', (req, res) => {
