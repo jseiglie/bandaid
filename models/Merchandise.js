@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      owner: { // The owner of the merchandise should be the user or the band?
+      owner: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
@@ -43,10 +43,18 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
+      category_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: "categories", 
+          key: "id",
+        },
+      },
     },
     {
       tableName: "merchandise",
-      timestamps: true, 
+      timestamps: true,
       freezeTableName: true,
     }
   );
@@ -55,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
     Merchandise.belongsTo(models.Bands, { foreignKey: "owner" });
     Merchandise.hasMany(models.CartItems, { foreignKey: "merchandise_id" });
     Merchandise.belongsTo(models.Categories, { foreignKey: "category_id" });
-  }
+  };
 
   return Merchandise;
 };

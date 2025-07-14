@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "Carts",
+          model: "carts",
           key: "id",
         },
       },
@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "Merchandise",
+          model: "merchandise",
           key: "id",
         },
       },
@@ -37,8 +37,8 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   CartItems.associate = (models) => {
-    CartItems.belongsTo(models.Carts, { foreignKey: "cart_id" });
-    CartItems.belongsTo(models.Merchandise, { foreignKey: "merchandise_id" });
+  CartItems.belongsTo(models.Carts, { foreignKey: "cart_id" });
+  CartItems.belongsTo(models.Merchandise, { foreignKey: "merchandise_id" });
   };
 
   return CartItems;

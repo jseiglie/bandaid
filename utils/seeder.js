@@ -14,6 +14,7 @@ const {
   Carts,
   CartItems,
   PurchaseHistory,
+  Categories
 } = require("../models");
 const Users = require("../class/users.class.js");
 
@@ -331,10 +332,10 @@ const seedDatabase = async () => {
  // Create Carts for some users
     const carts = await Carts.bulkCreate(
       [
-        { userId: users[0].id },
-        { userId: users[1].id },
-        { userId: users[2].id },
-        { userId: users[3].id },
+        { user_id: users[0].id },
+        { user_id: users[1].id },
+        { user_id: users[2].id },
+        { user_id: users[3].id },
         
       ],
       { returning: true }
@@ -343,12 +344,12 @@ const seedDatabase = async () => {
     // Add Cart Items
     await CartItems.bulkCreate(
       [
-        { cartId: carts[0].id, merchandiseId: merchandise[0].id, quantity: 2 },
-        { cartId: carts[0].id, merchandiseId: merchandise[1].id, quantity: 1 },
-        { cartId: carts[1].id, merchandiseId: merchandise[2].id, quantity: 3 },
-        { cartId: carts[1].id, merchandiseId: merchandise[3].id, quantity: 1 },
-        { cartId: carts[0].id, merchandiseId: merchandise[4].id, quantity: 2 },
-        { cartId: carts[1].id, merchandiseId: merchandise[5].id, quantity: 1 },
+        { cart_id: carts[0].id, merchandise_id: merchandise[0].id, quantity: 2 },
+        { cart_id: carts[0].id, merchandise_id: merchandise[1].id, quantity: 1 },
+        { cart_id: carts[1].id, merchandise_id: merchandise[2].id, quantity: 3 },
+        { cart_id: carts[1].id, merchandise_id: merchandise[3].id, quantity: 1 },
+        { cart_id: carts[0].id, merchandise_id: merchandise[4].id, quantity: 2 },
+        { cart_id: carts[1].id, merchandise_id: merchandise[5].id, quantity: 1 },
       ],
       { returning: true }
     );
@@ -676,64 +677,74 @@ const seedDatabase = async () => {
   await PurchaseHistory.bulkCreate(
       [
         {
-          userId: users[0].id,
-          merchandiseId: merchandise[0].id,
+          user_id: users[0].id,
+          merchandise_id: merchandise[0].id,
           quantity: 2,
           purchaseDate: new Date(),
+          totalPrice: merchandise[0].price * 2,
         },
         {
-          userId: users[1].id,
-          merchandiseId: merchandise[1].id,
+          user_id: users[1].id,
+          merchandise_id: merchandise[1].id,
           quantity: 1,
           purchaseDate: new Date(),
+          totalPrice: merchandise[1].price * 1,
         },
         {
-          userId: users[2].id,
-          merchandiseId: merchandise[2].id,
+          user_id: users[2].id,
+          merchandise_id: merchandise[2].id,
           quantity: 3,
           purchaseDate: new Date(),
+          totalPrice: merchandise[2].price * 3,
         },
         {
-          userId: users[3].id,
-          merchandiseId: merchandise[0].id,
+          user_id: users[3].id,
+          merchandise_id: merchandise[0].id,
           quantity: 1,
           purchaseDate: new Date(),
+          totalPrice: merchandise[0].price * 1,
         },
         {
-          userId: users[0].id,
-          merchandiseId: merchandise[1].id,
+          user_id: users[0].id,
+          merchandise_id: merchandise[1].id,
           quantity: 2,
           purchaseDate: new Date(),
+          totalPrice: merchandise[1].price * 2,
         },
         {
-          userId: users[2].id,
-          merchandiseId: merchandise[2].id,
+          user_id: users[2].id,
+          merchandise_id: merchandise[2].id,
           quantity: 1,
           purchaseDate: new Date(),
+          totalPrice: merchandise[2].price * 1,
         },
         {
-          userId: users[2].id,
-          merchandiseId: merchandise[3].id,
+          user_id: users[2].id,
+          merchandise_id: merchandise[3].id,
           quantity: 4,
           purchaseDate: new Date(),
+          totalPrice: merchandise[3].price * 4,
         },
         {
-          userId: users[0].id,
-          merchandiseId: merchandise[4].id,
+          user_id: users[0].id,
+          merchandise_id: merchandise[4].id,
           quantity: 5,
           purchaseDate: new Date(),
+          totalPrice: merchandise[4].price * 5,
         },
         {
-          userId: users[0].id,
-          merchandiseId: merchandise[5].id,
+          user_id: users[0].id,
+          merchandise_id: merchandise[5].id,
           quantity: 1,
           purchaseDate: new Date(),
+          totalPrice: merchandise[5].price * 1,
         },
         {
-          userId: users[1].id,
-          merchandiseId: merchandise[6].id,
+          user_id: users[1].id,
+          merchandise_id: merchandise[6].id,
           quantity: 2,
           purchaseDate: new Date(),
+          totalPrice: merchandise[6].price * 2,
         },
       ],
       { returning: true }
