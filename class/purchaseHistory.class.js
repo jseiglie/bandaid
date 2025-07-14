@@ -30,6 +30,18 @@ module.exports = class PurchaseClass {
         throw new Error("User ID, Merchandise ID, and Quantity are required");
       }
       const purchase = await PurchaseHistory.create(purchaseData);
+      if (!purchase) {
+        throw new Error("Failed to complete purchase");
+      }
+      // Optionally, update the merchandise stock and timesSold
+      const merchandise = await Merchandise.findByPk(purchaseData.merchandiseId);
+      if (!merchandise) {
+        throw new Error("No merchandise found with this ID");
+      }
+      merchandise.stock -= purchaseData.quantity;
+      merchandise.timesSold += purchaseData.quantity;
+      await merchandise.save();
+      
       return purchase;
     } catch (error) {
       throw error;

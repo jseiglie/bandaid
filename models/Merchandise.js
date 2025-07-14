@@ -35,6 +35,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      timesSold: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
     },
     {
       tableName: "merchandise",
