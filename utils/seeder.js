@@ -10,6 +10,9 @@ const {
   Rehearsals,
   Rehearsal_Locals,
   BandDefaultSchedules,
+  Merchandise,
+  Carts,
+  CartItems,
 } = require("../models");
 const Users = require("../class/users.class.js");
 
@@ -106,6 +109,7 @@ const seedDatabase = async () => {
       users.push(registeredUser);
     }
 
+
     const bands = await Bands.bulkCreate(
       [
         {
@@ -182,6 +186,54 @@ const seedDatabase = async () => {
       ],
       { returning: true }
     );
+
+// Seed Merchandise
+    const merchandise = await Merchandise.bulkCreate(
+      [
+        {
+          name: "T-Shirt",
+          description: "Band T-Shirt",
+          price: 20.0,
+          stock: 100,
+          imageUrl: "https://example.com/tshirt.jpg",
+        },
+        {
+          name: "Cap",
+          description: "Band Cap",
+          price: 15.0,
+          stock: 50,
+          imageUrl: "https://example.com/cap.jpg",
+        },
+        {
+          name: "Poster",
+          description: "Band Poster",
+          price: 10.0,
+          stock: 200,
+          imageUrl: "https://example.com/poster.jpg",
+        },
+      ],
+      { returning: true }
+    );
+
+ // Create Carts for some users
+    const carts = await Carts.bulkCreate(
+      [
+        { userId: users[0].id },
+        { userId: users[1].id },
+      ],
+      { returning: true }
+    );
+
+    // Add Cart Items
+    await CartItems.bulkCreate(
+      [
+        { cartId: carts[0].id, merchandiseId: merchandise[0].id, quantity: 2 },
+        { cartId: carts[0].id, merchandiseId: merchandise[1].id, quantity: 1 },
+        { cartId: carts[1].id, merchandiseId: merchandise[2].id, quantity: 3 },
+      ],
+      { returning: true }
+    );
+
 
     const locals = await Rehearsal_Locals.bulkCreate(
       [

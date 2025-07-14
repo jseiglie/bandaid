@@ -115,6 +115,7 @@ module.exports = (sequelize, DataTypes) => {
       as: "admin",
       onDelete: "SET NULL",
     });
+    Bands.hasMany(models.Merchandise, { foreignKey: "owner" });
   };
 
   Bands.prototype.toJSON = function () {

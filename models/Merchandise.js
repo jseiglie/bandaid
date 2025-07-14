@@ -7,14 +7,14 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-    //   owner: { // The owner of the merchandise should be the user or the band?
-    //     type: DataTypes.INTEGER,
-    //     allowNull: false,
-    //     references: {
-    //       model: "Users",
-    //       key: "id",
-    //     },
-    //   },
+      owner: { // The owner of the merchandise should be the user or the band?
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Bands",
+          key: "id",
+        },
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -42,6 +42,11 @@ module.exports = (sequelize, DataTypes) => {
       freezeTableName: true,
     }
   );
+
+  Merchandise.associate = (models) => {
+    Merchandise.belongsTo(models.Bands, { foreignKey: "owner" });
+    Merchandise.hasMany(models.CartItems, { foreignKey: "merchandise_id" });
+  }
 
   return Merchandise;
 };

@@ -13,7 +13,7 @@ const { Op } = require("sequelize");
 const { tokenGenerator, invalidateToken } = require("../middleware/auth.middleware.js");
 const bandMembers = require("../models/bandMembers.js");
 const UserSubscriptions = require("../models/userSubscriptions.js");
-
+const Carts = require("./carts.class.js");
 module.exports = class Users {
   constructor() {}
 
@@ -179,7 +179,7 @@ module.exports = class Users {
           where: { email },
         })) ||
         (await UsersModel.findOne({
-          where: { username }, include: UserSubscriptions 
+          where: { username }, include: ["MusicianProfile", "Carts", "UserSubscriptions"] 
         }));
 
       if (!user) {
@@ -205,6 +205,9 @@ module.exports = class Users {
       }
       const userBands = await this.getMusicianBands(musicianProfile.id);
       user.bands = userBands;
+
+      const userCarts = await Carts.getUserCarts(user.id);
+      user.cart = userCarts;
 
       return {
         user,
