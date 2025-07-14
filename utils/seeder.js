@@ -232,6 +232,7 @@ const seedDatabase = async () => {
           imageUrl: "https://example.com/tshirt.jpg",
           owner: bands[0].id,
           category: categories[0].id,
+          isAvailable: true,
         },
         {
           name: "Cap",
@@ -241,6 +242,7 @@ const seedDatabase = async () => {
           imageUrl: "https://example.com/cap.jpg",
           owner: bands[1].id,
           category: categories[1].id,
+          isAvailable: true,
         },
         {
           name: "Poster",
@@ -250,6 +252,7 @@ const seedDatabase = async () => {
           imageUrl: "https://example.com/poster.jpg",
           owner: bands[0].id,
           category: categories[2].id,
+          isAvailable: true,
         },
         {
           name: "Vinyl Record",
@@ -259,6 +262,7 @@ const seedDatabase = async () => {
           imageUrl: "https://example.com/vinyl.jpg",
           owner: bands[1].id,
           category: categories[3].id,
+          isAvailable: true,
         },
         {
           name: "Hoodie",
@@ -268,6 +272,7 @@ const seedDatabase = async () => {
           imageUrl: "https://example.com/hoodie.jpg",
           owner: bands[4].id,
           category: categories[0].id,
+          isAvailable: true,
         },
         {
           name: "Stickers",
@@ -277,6 +282,7 @@ const seedDatabase = async () => {
           imageUrl: "https://example.com/stickers.jpg",
           owner: bands[0].id,
           category: categories[1].id,
+          isAvailable: true,
         },
         {
           name: "CD Album",
@@ -286,6 +292,7 @@ const seedDatabase = async () => {
           imageUrl: "https://example.com/cd.jpg",
           owner: bands[1].id,
           category: categories[3].id,
+          isAvailable: false,
         },
         {
           name: "Keychain",
@@ -295,6 +302,7 @@ const seedDatabase = async () => {
           imageUrl: "https://example.com/keychain.jpg",
           owner: bands[0].id,
           category: categories[0].id,
+          isAvailable: false,
         },
         {
           name: "Wristband",
@@ -304,6 +312,7 @@ const seedDatabase = async () => {
           imageUrl: "https://example.com/wristband.jpg",
           owner: bands[1].id,
           category: categories[1].id,
+          isAvailable: true,
         },
         {
           name: "Poster Set",
@@ -313,6 +322,7 @@ const seedDatabase = async () => {
           imageUrl: "https://example.com/posterset.jpg",
           owner: bands[0].id,
           category: categories[2].id,
+          isAvailable: false,
         },
       ],
       { returning: true }

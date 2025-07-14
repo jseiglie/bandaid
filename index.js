@@ -26,6 +26,8 @@ const webhookRoute = require('./routes/webhook.routes');
 const cartsRoute = require('./routes/carts.routes');
 const purchaseHistoryRoute = require('./routes/purchaseHistory.routes.js'); 
 const categoryRoute = require('./routes/categories.routes'); 
+const merchandiseRoute = require('./routes/merchandise.routes');
+
 
 const app = express();
 const server = createServer(app);
@@ -64,6 +66,7 @@ app.use('/api/stripe', stripeRoute);
 app.use('/api/carts', cartsRoute ); 
 app.use('/api/purchase_history', purchaseHistoryRoute);
 app.use('/api/category', categoryRoute);
+app.use('/api/merchandise', merchandiseRoute);
 
 app.get('*', (req, res) => {
   res.sendFile(join(__dirname, './client/dist/index.html'));
