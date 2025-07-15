@@ -27,7 +27,7 @@ const cartsRoute = require('./routes/carts.routes');
 const purchaseHistoryRoute = require('./routes/purchaseHistory.routes.js'); 
 const categoryRoute = require('./routes/categories.routes'); 
 const merchandiseRoute = require('./routes/merchandise.routes');
-
+const bandFollowersRoute = require('./routes/bandFollowers.routes');
 
 const app = express();
 const server = createServer(app);
@@ -67,6 +67,7 @@ app.use('/api/carts', cartsRoute );
 app.use('/api/purchase_history', purchaseHistoryRoute);
 app.use('/api/category', categoryRoute);
 app.use('/api/merchandise', merchandiseRoute);
+app.use('/api/band_followers', bandFollowersRoute);
 
 app.get('*', (req, res) => {
   res.sendFile(join(__dirname, './client/dist/index.html'));
