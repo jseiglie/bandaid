@@ -60,3 +60,5 @@ bandFollowersController.getBandsUserFollows = async (req, res) => {
         res.status(500).send(responseObject(500, false, 'Internal server error', null));
     }
 }
+
+module.exports = bandFollowersController;
