@@ -1,4 +1,4 @@
-const MerchandiseController = require('../classes/merchandiseFavorites.class.js');
+const MerchandiseController = require('../class/merchandiseFavorites.class.js');
 const responseObject = require('../utils/response.js');
 const { tokenMiddleware } = require('../middleware/auth.middleware');
 const merchandiseFavoritesController = {};
