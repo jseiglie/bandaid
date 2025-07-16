@@ -5,4 +5,8 @@ const router = express.Router();
 router.post("/send_mail", mailerController.sendMail);
 router.post("/send_password_reset", mailerController.sendPasswordResetLink);
 
-module.exports = router;
+
+module.exports = {
+    router,
+    path: "/email"
+}

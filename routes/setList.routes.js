@@ -4,11 +4,15 @@ const router = express.Router();
 const {tokenMiddleware} = require("../middleware/auth.middleware");
 
 router.get("/:id", setListController.getSetListById);
-router.post("/", setListController.createSetList);
-router.put("/:id", setListController.updateSetList);
-router.delete("/:id", setListController.deleteSetList);
-router.get("/band/:bandId", setListController.getSetListsByBandId);
+router.post("/", tokenMiddleware, setListController.createSetList);
+router.put("/:id", tokenMiddleware, setListController.updateSetList);
+router.delete("/:id", tokenMiddleware, setListController.deleteSetList);
+router.get("/band/:bandId", tokenMiddleware, setListController.getSetListsByBandId);
 
 
 
-module.exports = router;
+
+module.exports = {
+    router,
+    path: "/set_list"
+}

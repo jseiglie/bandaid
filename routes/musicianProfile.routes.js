@@ -8,4 +8,8 @@ router.post("/", musicianProfileController.createProfile);
 router.put("/:user_id", musicianProfileController.updateProfile);
 router.delete("/:user_id", musicianProfileController.deleteProfile);
 
-module.exports = router;
+
+module.exports = {
+    router,
+    path: "/musician_profile"
+}

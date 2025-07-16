@@ -9,4 +9,7 @@ router.delete("/:band_id", tokenMiddleware, bandFollowersController.removeFollow
 router.get("/:band_id/count",  bandFollowersController.getBandsFollowersCount);
 router.get("/:band_id/user_follows", tokenMiddleware, bandFollowersController.getBandsUserFollows);
 
-module.exports = router;
+module.exports = {
+    router,
+    path: "/band_followers"
+}

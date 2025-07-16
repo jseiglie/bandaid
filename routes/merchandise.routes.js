@@ -14,4 +14,8 @@ router.get('/price_range', merchandiseController.getMerchandiseByPriceRange);
 router.get('/category/:categoryId', merchandiseController.getMerchandiseByCategory);
 router.get('/band/:bandId', merchandiseController.getMerchandiseByBand);
 
-module.exports = router;
+
+module.exports = {
+    router,
+    path: "/mercandise"
+}

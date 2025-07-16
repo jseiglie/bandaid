@@ -11,8 +11,11 @@ class Cloudinary {
     });
   }
   async uploadImage(file) {
+     if (!file || !file.path) {
+    throw new Error("File path is missing");
+  }
     return await cloudinary.uploader.upload(file, {
-      folder: "bandaid",
+      folder: `${process.env.APP_NAME}/images`,
       use_filename: true,
       unique_filename: true,
     });
@@ -20,6 +23,45 @@ class Cloudinary {
   async deleteImage(publicId) {
     return await cloudinary.uploader.destroy(publicId);
   }
+
+  
+  async uploadAudio(file) {
+     if (!file || !file.path) {
+    throw new Error("File path is missing");
+  }
+    return await cloudinary.uploader.upload(file, {
+      resource_type: "raw",
+      folder: `${process.env.APP_NAME}/audios`,
+      use_filename: true,
+      unique_filename: true,
+    });
+  }
+  async deleteAudio(publicId) {
+    return await cloudinary.uploader.destroy(publicId, {
+      resource_type: "raw",
+    });
+  }
+async uploadMedia(file, folderName) {
+  if (!file || !file.path) {
+    throw new Error("File path is missing");
+  }
+
+  // Detectar tipo de recurso (image o video)
+  const resourceType = file.mimetype.startsWith("video/")
+    ? "video"
+    : "image";
+
+  return await cloudinary.uploader.upload(file.path, {
+    folder: `${process.env.APP_NAME}/${folderName}`,
+    use_filename: true,
+    unique_filename: true,
+    resource_type: resourceType,
+  });
+}
+  async deleteMedia (publicId) {
+    return await cloudinary.uploader.destroy(publicId);
+  }
+
 }
 
 module.exports = new Cloudinary();

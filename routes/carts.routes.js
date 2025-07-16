@@ -7,4 +7,8 @@ const router = express.Router();
 router.post("/add", tokenMiddleware, cartsController.addItem);
 router.delete("/remove/:cartItemId", tokenMiddleware, cartsController.removeItem);
 
-module.exports = router;
+
+module.exports = {
+    router,
+    path: "/carts"
+}

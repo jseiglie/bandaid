@@ -8,27 +8,10 @@ const path = require("path");
 const cors = require("cors");
 const sequelize = require("./config/index");
 const cloudinary = require("cloudinary").v2;
-
+const loadRoutes = require("./utils/loadRoutes");
 //routes import
-const bandRoute = require("./routes/band.routes");
-const setListRoute = require("./routes/setList.routes");
-const userRoute = require("./routes/user.routes");
-const songRoute = require("./routes/song.routes");
-const liveRoute = require("./routes/live.routes");
-const bandMemberRoute = require("./routes/bandMembers.routes");
-const musicianProfileRoute = require("./routes/musicianProfile.routes");
-const rehearsalLocalRoute = require("./routes/rehearsal_locals.routes");
-const rehearsalRoute = require("./routes/rehearsals.routes");
-const mailerRoute = require("./routes/email.routes");
-const cloudinaryRoute = require("./routes/cloudinary.routes");
-const stripeRoute = require("./routes/stripe.routes");
+
 const webhookRoute = require("./routes/webhook.routes");
-const cartsRoute = require("./routes/carts.routes");
-const purchaseHistoryRoute = require("./routes/purchaseHistory.routes.js");
-const categoryRoute = require("./routes/categories.routes");
-const merchandiseRoute = require("./routes/merchandise.routes");
-const bandFollowersRoute = require("./routes/bandFollowers.routes");
-const merchandiseFavRoute = require("./routes/merchandiseFavorites.routes.js");
 
 const app = express();
 const server = createServer(app);
@@ -49,24 +32,7 @@ app.use("/api", router);
 app.use("/api/test", (req, res) => {
   res.json({ message: "Hello from the server!" });
 });
-app.use("/api/bands", bandRoute);
-app.use("/api/set_lists", setListRoute);
-app.use("/api/users", userRoute);
-app.use("/api/songs", songRoute);
-app.use("/api/lives", liveRoute);
-app.use("/api/band_members", bandMemberRoute);
-app.use("/api/musician_profiles", musicianProfileRoute);
-app.use("/api/rehearsal_locals", rehearsalLocalRoute);
-app.use("/api/rehearsals", rehearsalRoute);
-app.use("/api/mailer", mailerRoute);
-app.use("/api/cloudinary", cloudinaryRoute);
-app.use("/api/stripe", stripeRoute);
-app.use("/api/carts", cartsRoute);
-app.use("/api/purchase_history", purchaseHistoryRoute);
-app.use("/api/category", categoryRoute);
-app.use("/api/merchandise", merchandiseRoute);
-app.use("/api/band_followers", bandFollowersRoute);
-app.use("/api/merchandise_favorites", merchandiseFavRoute);
+loadRoutes(app);
 
 app.get("*", (req, res) => {
   res.sendFile(join(__dirname, "./client/dist/index.html"));

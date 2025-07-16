@@ -10,4 +10,8 @@ router.post(
 );
 router.post("/create-subscription", tokenMiddleware, stripeController.createSubscription);
 ///router.post('/webhook', bodyParser.raw({ type: 'application/json' }), stripeController.stripeWebhookHandler);
-module.exports = router;
+
+module.exports = {
+  router,
+  path: "/stripe"
+};

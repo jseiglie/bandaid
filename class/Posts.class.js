@@ -1,19 +1,21 @@
 const PostsModel = require("../models/").Posts;
-
+const { Op } = require("sequelize");
+const cloudinaryClass = require("./cloudinary.class");
 module.exports = class Posts {
-static async getAllPosts(limit = 10, offset = 0) {
-  try {
-    const { rows: posts, count: totalItems } = await PostsModel.findAndCountAll({
-      limit,
-      offset,
-      order: [["createdAt", "DESC"]],
-    });
-    return { posts, totalItems };
-  } catch (error) {
-    console.error("Error fetching posts:", error);
-    throw error;
+  static async getAllPosts(limit = 10, offset = 0) {
+    try {
+      const { rows: posts, count: totalItems } =
+        await PostsModel.findAndCountAll({
+          limit,
+          offset,
+          order: [["createdAt", "DESC"]],
+        });
+      return { posts, totalItems };
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+      throw error;
+    }
   }
-}
 
   static async getPostById(id) {
     try {
@@ -73,19 +75,21 @@ static async getAllPosts(limit = 10, offset = 0) {
       throw error;
     }
   }
-  static async searchPosts(searchTerm) {
+  static async searchPosts(searchTerm, limit = 10, offset = 0) {
     try {
-      if (!searchTerm) {
-        throw new Error("Search term is required");
-      }
-      const posts = await PostsModel.findAll({
-        where: {
-          title: {
-            [Op.like]: `%${searchTerm}%`,
+      if (!searchTerm) throw new Error("Search term is required");
+
+      const { rows: posts, count: totalItems } =
+        await PostsModel.findAndCountAll({
+          where: {
+            title: { [Op.like]: `%${searchTerm}%` },
           },
-        },
-      });
-      return posts;
+          limit,
+          offset,
+          order: [["createdAt", "DESC"]],
+        });
+
+      return { posts, totalItems };
     } catch (error) {
       console.error("Error searching posts:", error);
       throw error;
@@ -107,70 +111,89 @@ static async getAllPosts(limit = 10, offset = 0) {
     }
   }
 
-  static async getPostsByUserId(userId) {
+  static async getPostsByUserId(userId, limit = 10, offset = 0) {
     try {
-      if (!userId) {
-        throw new Error("User ID is required");
-      }
-      const posts = await PostsModel.findAll({
-        where: { author_id: userId },
-      });
-      return posts;
+      if (!userId) throw new Error("User ID is required");
+
+      const { rows: posts, count: totalItems } =
+        await PostsModel.findAndCountAll({
+          where: { author_id: userId },
+          limit,
+          offset,
+          order: [["createdAt", "DESC"]],
+        });
+
+      return { posts, totalItems };
     } catch (error) {
-      console.error("Error fetching user posts:", error);
+      console.error("Error fetching posts by user ID:", error);
       throw error;
     }
   }
-  static async getPostsByTag(tag) {
+  static async getPostsByTag(tag, limit = 10, offset = 0) {
     try {
-      if (!tag) {
-        throw new Error("Tag is required");
-      }
-      const posts = await PostsModel.findAll({
-        where: {
-          tags: {
-            [Op.like]: `%${tag}%`,
+      if (!tag) throw new Error("Tag is required");
+
+      const { rows: posts, count: totalItems } =
+        await PostsModel.findAndCountAll({
+          where: {
+            tags: { [Op.like]: `%${tag}%` },
           },
-        },
-      });
-      return posts;
+          limit,
+          offset,
+          order: [["createdAt", "DESC"]],
+        });
+
+      return { posts, totalItems };
     } catch (error) {
       console.error("Error fetching posts by tag:", error);
       throw error;
     }
   }
-  static async getPostsByDateRange(startDate, endDate) {
+
+  static async getPostsByDateRange(startDate, endDate, limit = 10, offset = 0) {
     try {
       if (!startDate || !endDate) {
         throw new Error("Start date and end date are required");
       }
-      const posts = await PostsModel.findAll({
-        where: {
-          createdAt: {
-            [Op.between]: [new Date(startDate), new Date(endDate)],
+
+      const { rows: posts, count: totalItems } =
+        await PostsModel.findAndCountAll({
+          where: {
+            createdAt: {
+              [Op.between]: [new Date(startDate), new Date(endDate)],
+            },
           },
-        },
-      });
-      return posts;
+          limit,
+          offset,
+          order: [["createdAt", "DESC"]],
+        });
+
+      return { posts, totalItems };
     } catch (error) {
       console.error("Error fetching posts by date range:", error);
       throw error;
     }
   }
-  static async getPostsByCategory(category) {
+
+  static async getPostsByCategory(category, limit = 10, offset = 0) {
     try {
-      if (!category) {
-        throw new Error("Category is required");
-      }
-      const posts = await PostsModel.findAll({
-        where: { category },
-      });
-      return posts;
+      if (!category) throw new Error("Category is required");
+
+      const { rows: posts, count: totalItems } =
+        await PostsModel.findAndCountAll({
+          where: { category },
+          limit,
+          offset,
+          order: [["createdAt", "DESC"]],
+        });
+
+      return { posts, totalItems };
     } catch (error) {
       console.error("Error fetching posts by category:", error);
       throw error;
     }
   }
+
   static async getPostsByPopularity() {
     try {
       const posts = await PostsModel.findAll({
@@ -193,6 +216,22 @@ static async getAllPosts(limit = 10, offset = 0) {
       return posts;
     } catch (error) {
       console.error("Error fetching posts by author:", error);
+      throw error;
+    }
+  }
+  static async uploadPostMedia(mediaData, folderName) {
+    try {
+      if (!mediaData) {
+        throw new Error("Post ID and media data are required");
+      }
+
+      const media = cloudinaryClass.uploadMedia(mediaData, folderName);
+      if (!media) {
+        throw new Error("Media upload failed");
+      }
+      return media;
+    } catch (error) {
+      console.error("Error uploading post media:", error);
       throw error;
     }
   }

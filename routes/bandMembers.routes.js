@@ -9,4 +9,8 @@ router.post("/", bandMemberController.createBandMember);
 router.put("/:id", bandMemberController.updateBandMember);
 router.delete("/:id", bandMemberController.deleteBandMember);
 
-module.exports = router;
+
+module.exports = {
+    router,
+    path: "/band_members"
+}

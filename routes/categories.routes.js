@@ -9,4 +9,10 @@ router.get('/:id', categoriesController.getCategoryById);
 router.post('/', tokenMiddleware, categoriesController.createCategory);
 router.put('/:id', tokenMiddleware, categoriesController.updateCategory);
 router.delete('/:id', tokenMiddleware, categoriesController.deleteCategory);
-module.exports = router;
+
+
+
+module.exports = {
+    router,
+    path: "/categories"
+}

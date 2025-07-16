@@ -13,4 +13,7 @@ router.post('/band_admin', tokenMiddleware, bandController.changeBandAdmin);
 
 
 
-module.exports = router;
+module.exports = {
+    router,
+    path: "/bands"
+};

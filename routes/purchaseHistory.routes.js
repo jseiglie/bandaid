@@ -6,4 +6,8 @@ router.get("/history", purchaseController.getPurchaseHistory);
 router.post("/new", purchaseController.addPurchase);
 
 
-module.exports = router;
+
+module.exports = {
+    router,
+    path: "/purchase_history"
+}

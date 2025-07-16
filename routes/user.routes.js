@@ -14,4 +14,7 @@ router.post("/auth/logout", tokenMiddleware, userController.logout);
 
 
 
-module.exports = router;
+module.exports = {
+    router,
+    path: "/users"
+}

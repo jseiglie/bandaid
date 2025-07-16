@@ -10,4 +10,8 @@ router.delete('/:merchandise_id', tokenMiddleware, merchandiseFavoritesControlle
 router.get('/:merchandise_id/count', merchandiseFavoritesController.getFavoritesCount);
 router.get('/band/:band_id/count', merchandiseFavoritesController.getAllFavoritesCountForBandMerchandise);
 
-module.exports = router;
+
+module.exports = {
+    router,
+    path: "/merchandise_favorites"
+}

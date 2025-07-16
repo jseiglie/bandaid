@@ -10,4 +10,8 @@ router.put("/:id", liveController.updateLive);
 router.delete("/:id", liveController.deleteLive);
 
 
-module.exports = router;
+
+module.exports = {
+    router,
+    path: "/lives"
+}

@@ -4,14 +4,11 @@ const postController = {};
 
 postController.getAllPosts = async (req, res) => {
   try {
-    //--> GET /api/posts?page=2&limit=5
-
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const offset = (page - 1) * limit;
 
     const { posts, totalItems } = await PostClass.getAllPosts(limit, offset);
-
     const totalPages = Math.ceil(totalItems / limit);
 
     res.status(200).send(
@@ -96,32 +93,31 @@ postController.deletePost = async (req, res) => {
   }
 };
 
-postController.getPostsByUser = async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const posts = await PostClass.getPostsByUser(userId);
-    res
-      .status(200)
-      .send(
-        responseObject(200, true, "Posts by user fetched successfully", posts)
-      );
-  } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .send(responseObject(500, false, "Internal server error", null));
-  }
-};
-
 postController.getPostsByUserId = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const posts = await PostClass.getPostsByUserId(userId);
-    res
-      .status(200)
-      .send(
-        responseObject(200, true, "Posts by user fetched successfully", posts)
-      );
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    const { posts, totalItems } = await PostClass.getPostsByUserId(
+      userId,
+      limit,
+      offset
+    );
+    const totalPages = Math.ceil(totalItems / limit);
+
+    res.status(200).send(
+      responseObject(200, true, "Posts by user fetched successfully", {
+        posts,
+        pagination: {
+          totalItems,
+          totalPages,
+          currentPage: page,
+          pageSize: limit,
+        },
+      })
+    );
   } catch (error) {
     console.error(error);
     res
@@ -132,7 +128,7 @@ postController.getPostsByUserId = async (req, res) => {
 
 postController.getMyPosts = async (req, res) => {
   try {
-    const userId = req.user.id; // Assuming user ID is stored in req.user
+    const userId = req.user.id;
     const posts = await PostClass.getMyPosts(userId);
     res
       .status(200)
@@ -144,15 +140,32 @@ postController.getMyPosts = async (req, res) => {
       .send(responseObject(500, false, "Internal server error", null));
   }
 };
+
 postController.getPostsByTag = async (req, res) => {
   try {
-    const tagName = req.params.tagName;
-    const posts = await PostClass.getPostsByTag(tagName);
-    res
-      .status(200)
-      .send(
-        responseObject(200, true, "Posts by tag fetched successfully", posts)
-      );
+    const tagName = req.params.tag;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    const { posts, totalItems } = await PostClass.getPostsByTag(
+      tagName,
+      limit,
+      offset
+    );
+    const totalPages = Math.ceil(totalItems / limit);
+
+    res.status(200).send(
+      responseObject(200, true, "Posts by tag fetched successfully", {
+        posts,
+        pagination: {
+          totalItems,
+          totalPages,
+          currentPage: page,
+          pageSize: limit,
+        },
+      })
+    );
   } catch (error) {
     console.error(error);
     res
@@ -161,21 +174,6 @@ postController.getPostsByTag = async (req, res) => {
   }
 };
 
-postController.getPopularPosts = async (req, res) => {
-  try {
-    const posts = await PostClass.getPopularPosts();
-    res
-      .status(200)
-      .send(
-        responseObject(200, true, "Popular posts fetched successfully", posts)
-      );
-  } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .send(responseObject(500, false, "Internal server error", null));
-  }
-};
 postController.searchPosts = async (req, res) => {
   try {
     const searchTerm = req.query.q;
@@ -184,10 +182,29 @@ postController.searchPosts = async (req, res) => {
         .status(400)
         .send(responseObject(400, false, "Search term is required", null));
     }
-    const posts = await PostClass.searchPosts(searchTerm);
-    res
-      .status(200)
-      .send(responseObject(200, true, "Posts searched successfully", posts));
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    const { posts, totalItems } = await PostClass.searchPosts(
+      searchTerm,
+      limit,
+      offset
+    );
+    const totalPages = Math.ceil(totalItems / limit);
+
+    res.status(200).send(
+      responseObject(200, true, "Posts searched successfully", {
+        posts,
+        pagination: {
+          totalItems,
+          totalPages,
+          currentPage: page,
+          pageSize: limit,
+        },
+      })
+    );
   } catch (error) {
     console.error(error);
     res
@@ -195,20 +212,32 @@ postController.searchPosts = async (req, res) => {
       .send(responseObject(500, false, "Internal server error", null));
   }
 };
+
 postController.getPostsByCategory = async (req, res) => {
   try {
     const categoryId = req.params.categoryId;
-    const posts = await PostClass.getPostsByCategory(categoryId);
-    res
-      .status(200)
-      .send(
-        responseObject(
-          200,
-          true,
-          "Posts by category fetched successfully",
-          posts
-        )
-      );
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    const { posts, totalItems } = await PostClass.getPostsByCategory(
+      categoryId,
+      limit,
+      offset
+    );
+    const totalPages = Math.ceil(totalItems / limit);
+
+    res.status(200).send(
+      responseObject(200, true, "Posts by category fetched successfully", {
+        posts,
+        pagination: {
+          totalItems,
+          totalPages,
+          currentPage: page,
+          pageSize: limit,
+        },
+      })
+    );
   } catch (error) {
     console.error(error);
     res
@@ -227,17 +256,30 @@ postController.getPostsByDateRange = async (req, res) => {
           responseObject(400, false, "Start and end dates are required", null)
         );
     }
-    const posts = await PostClass.getPostsByDateRange(startDate, endDate);
-    res
-      .status(200)
-      .send(
-        responseObject(
-          200,
-          true,
-          "Posts by date range fetched successfully",
-          posts
-        )
-      );
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    const { posts, totalItems } = await PostClass.getPostsByDateRange(
+      startDate,
+      endDate,
+      limit,
+      offset
+    );
+    const totalPages = Math.ceil(totalItems / limit);
+
+    res.status(200).send(
+      responseObject(200, true, "Posts by date range fetched successfully", {
+        posts,
+        pagination: {
+          totalItems,
+          totalPages,
+          currentPage: page,
+          pageSize: limit,
+        },
+      })
+    );
   } catch (error) {
     console.error(error);
     res
@@ -263,7 +305,7 @@ postController.getPostsByAuthor = async (req, res) => {
   }
 };
 
-bandController.getPostsByPopularity = async (req, res) => {
+postController.getPostsByPopularity = async (req, res) => {
   try {
     const posts = await PostClass.getPostsByPopularity();
     res
@@ -275,6 +317,38 @@ bandController.getPostsByPopularity = async (req, res) => {
           "Posts by popularity fetched successfully",
           posts
         )
+      );
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send(responseObject(500, false, "Internal server error", null));
+  }
+};
+postController.uploadPostMedia = async (req, res) => {
+  try {
+    const files = req.files;
+    const folderName = req.body.folder || "posts";
+    if (!files || files.length === 0) {
+      return res
+        .status(400)
+        .send(responseObject(400, false, "No files uploaded", null));
+    }
+
+    const uploadPromises = files.map((file) =>
+      PostClass.uploadPostMedia(file, folderName)
+    );
+
+    const uploadResults = await Promise.all(uploadPromises);
+
+    const mediaUrls = uploadResults.map((result) => result.secure_url);
+
+    res
+      .status(200)
+      .send(
+        responseObject(200, true, "Media uploaded successfully", {
+          mediaUrls,
+        })
       );
   } catch (error) {
     console.error(error);

@@ -9,4 +9,8 @@ const router = express.Router();
 router.post("/upload", tokenMiddleware, multerMiddleware.upload.single("image"), cloudinaryController.uploadImage);
 router.delete("/delete", tokenMiddleware, cloudinaryController.deleteImage);
 
-module.exports = router;
+
+module.exports = {
+    router,
+    path: "/cloudinary"
+}
