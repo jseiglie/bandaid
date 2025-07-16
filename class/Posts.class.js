@@ -1,15 +1,20 @@
 const PostsModel = require("../models/").Posts;
 
 module.exports = class Posts {
-  static async getAllPosts() {
-    try {
-      const posts = await PostsModel.findAll();
-      return posts;
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-      throw error;
-    }
+static async getAllPosts(limit = 10, offset = 0) {
+  try {
+    const { rows: posts, count: totalItems } = await PostsModel.findAndCountAll({
+      limit,
+      offset,
+      order: [["createdAt", "DESC"]],
+    });
+    return { posts, totalItems };
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    throw error;
   }
+}
+
   static async getPostById(id) {
     try {
       if (!id) {
@@ -86,6 +91,22 @@ module.exports = class Posts {
       throw error;
     }
   }
+
+  static async getMyPosts(userId) {
+    try {
+      if (!userId) {
+        throw new Error("User ID is required");
+      }
+      const posts = await PostsModel.findAll({
+        where: { author_id: userId },
+      });
+      return posts;
+    } catch (error) {
+      console.error("Error fetching user posts:", error);
+      throw error;
+    }
+  }
+
   static async getPostsByUserId(userId) {
     try {
       if (!userId) {
