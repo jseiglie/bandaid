@@ -18,9 +18,9 @@ module.exports = (sequelize, DataTypes) => {
         references: {
           model: "Posts",
           key: "id",
-          onDelete: "CASCADE",
-          onUpdate: "CASCADE",
         },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       comment_id: {
         type: DataTypes.INTEGER,
@@ -28,13 +28,19 @@ module.exports = (sequelize, DataTypes) => {
         references: {
           model: "Comments",
           key: "id",
-          onDelete: "CASCADE",
-          onUpdate: "CASCADE",
         },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       author_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: "Users",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       likes_count: {
         type: DataTypes.INTEGER,
@@ -59,28 +65,28 @@ module.exports = (sequelize, DataTypes) => {
     Comments.belongsTo(models.Users, { foreignKey: "author_id" });
     Comments.hasMany(models.Comments, {
       foreignKey: "comment_id",
-      as: "replies",
+      as: "comments",
     });
   };
 
   // Before create hook to ensure post and user exist
-  Comments.beforeCreate(async (comment) => {
-    const post = await models.Posts.findByPk(comment.post_id);
-    if (comment.post_id && !post) {
-      throw new Error("Post not found");
+  Comments.beforeCreate(async (comment, options) => {
+    const { Posts, Users, Comments: CommentsModel } = sequelize.models;
+
+    if (comment.post_id) {
+      const post = await Posts.findByPk(comment.post_id);
+      if (!post) throw new Error("Post not found");
     }
-    const user = await models.Users.findByPk(comment.author_id);
-    if (!user) {
-      throw new Error("User not found");
-    }
-    // If comment_id is provided, ensure the parent comment exists
+
+    const user = await Users.findByPk(comment.author_id);
+    if (!user) throw new Error("User not found");
+
     if (comment.comment_id) {
-      const parentComment = await models.Comments.findByPk(comment.comment_id);
-      if (!parentComment) {
-        throw new Error("Parent comment not found");
-      }
+      const parent = await CommentsModel.findByPk(comment.comment_id);
+      if (!parent) throw new Error("Parent comment not found");
     }
   });
+
   Comments.prototype.toJSON = function () {
     const values = this.get();
     delete values.createdAt;

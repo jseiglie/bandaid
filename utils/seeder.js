@@ -14,7 +14,16 @@ const {
   Carts,
   CartItems,
   PurchaseHistory,
-  Categories
+  Categories,
+  BandFollowers,
+  MerchandiseFavorites,
+  Posts,
+  Comments,
+  PostLikes,
+  CommentLikes,
+  Tags,
+  PostMedia,
+  PostTags,
 } = require("../models");
 const Users = require("../class/users.class.js");
 
@@ -131,7 +140,6 @@ const seedDatabase = async () => {
       users.push(registeredUser);
     }
 
-
     const bands = await Bands.bulkCreate(
       [
         {
@@ -221,8 +229,7 @@ const seedDatabase = async () => {
       { returning: true }
     );
 
-
-// Seed Merchandise
+    // Seed Merchandise
     const merchandise = await Merchandise.bulkCreate(
       [
         {
@@ -329,14 +336,13 @@ const seedDatabase = async () => {
       { returning: true }
     );
 
- // Create Carts for some users
+    // Create Carts for some users
     const carts = await Carts.bulkCreate(
       [
         { user_id: users[0].id },
         { user_id: users[1].id },
         { user_id: users[2].id },
         { user_id: users[3].id },
-        
       ],
       { returning: true }
     );
@@ -344,16 +350,39 @@ const seedDatabase = async () => {
     // Add Cart Items
     await CartItems.bulkCreate(
       [
-        { cart_id: carts[0].id, merchandise_id: merchandise[0].id, quantity: 2 },
-        { cart_id: carts[0].id, merchandise_id: merchandise[1].id, quantity: 1 },
-        { cart_id: carts[1].id, merchandise_id: merchandise[2].id, quantity: 3 },
-        { cart_id: carts[1].id, merchandise_id: merchandise[3].id, quantity: 1 },
-        { cart_id: carts[0].id, merchandise_id: merchandise[4].id, quantity: 2 },
-        { cart_id: carts[1].id, merchandise_id: merchandise[5].id, quantity: 1 },
+        {
+          cart_id: carts[0].id,
+          merchandise_id: merchandise[0].id,
+          quantity: 2,
+        },
+        {
+          cart_id: carts[0].id,
+          merchandise_id: merchandise[1].id,
+          quantity: 1,
+        },
+        {
+          cart_id: carts[1].id,
+          merchandise_id: merchandise[2].id,
+          quantity: 3,
+        },
+        {
+          cart_id: carts[1].id,
+          merchandise_id: merchandise[3].id,
+          quantity: 1,
+        },
+        {
+          cart_id: carts[0].id,
+          merchandise_id: merchandise[4].id,
+          quantity: 2,
+        },
+        {
+          cart_id: carts[1].id,
+          merchandise_id: merchandise[5].id,
+          quantity: 1,
+        },
       ],
       { returning: true }
     );
-
 
     const locals = await Rehearsal_Locals.bulkCreate(
       [
@@ -674,7 +703,7 @@ const seedDatabase = async () => {
       },
     ]);
 
-  await PurchaseHistory.bulkCreate(
+    await PurchaseHistory.bulkCreate(
       [
         {
           user_id: users[0].id,
@@ -749,7 +778,688 @@ const seedDatabase = async () => {
       ],
       { returning: true }
     );
+    // Seed BandFollowers
+    await BandFollowers.bulkCreate([
+      { band_id: bands[0].id, follower_id: users[1].id },
+      { band_id: bands[1].id, follower_id: users[2].id },
+      { band_id: bands[2].id, follower_id: users[3].id },
+      { band_id: bands[3].id, follower_id: users[4].id },
+    ]);
 
+    // Seed MerchandiseFavorites
+    await MerchandiseFavorites.bulkCreate([
+      { user_id: users[0].id, merchandise_id: merchandise[0].id },
+      { user_id: users[1].id, merchandise_id: merchandise[1].id },
+      { user_id: users[2].id, merchandise_id: merchandise[2].id },
+      { user_id: users[3].id, merchandise_id: merchandise[3].id },
+    ]);
+
+    //seed tags
+    // const tags = await BandTags.bulkCreate(
+    //   [
+    //     { name: "Pop" },
+    //     { name: "Rock" },
+    //     { name: "Country" },
+    //     { name: "Jazz" },
+    //     { name: "R&B" },
+    //     { name: "Hip-Hop" },
+    //     { name: "Electronic" },
+    //     { name: "Indie" },
+    //     { name: "Metal" },
+    //     { name: "Alternative" },
+    //     { name: "Folk" },
+    //     { name: "Classical" },
+    //     { name: "Blues" },
+    //     { name: "Soul" },
+    //     { name: "Funk" },
+    //     { name: "Reggae" },
+    //     { name: "Latin" },
+    //     { name: "World" },
+    //     { name: "Experimental" },
+    //     { name: "Punk" },
+    //     { name: "Gospel" },
+    //     { name: "Ska" },
+    //     { name: "Rap" },
+    //     { name: "Hip-Hop" },
+    //     { name: "Dance" },
+    //     { name: "Techno" },
+    //     { name: "House" },
+    //     { name: "Trance" },
+    //     { name: "Dubstep" },
+    //     { name: "Ambient" },
+    //     { name: "Chillout" },
+    //     { name: "Synthwave" },
+    //     { name: "Lo-fi" },
+    //     { name: "Acoustic" },
+    //     { name: "Experimental Rock" },
+    //     { name: "Post-Rock" },
+    //     { name: "Progressive Rock" },
+    //     { name: "Hard Rock" },
+    //     { name: "Soft Rock" },
+    //     { name: "Classic Rock" },
+    //     { name: "Grunge" },
+    //     { name: "Psychedelic Rock" },
+    //     { name: "Garage Rock" },
+    //     { name: "Surf Rock" },
+    //     { name: "Death Metal" },
+    //     { name: "Black Metal" },
+    //     { name: "Power Metal" },
+    //     { name: "Thrash Metal" },
+    //     { name: "Deathcore" },
+    //     { name: "Metalcore" },
+    //     { name: "Djent" },
+    //     { name: "Post-Hardcore" },
+    //     { name: "Screamo" },
+    //     { name: "Emo" },
+    //     { name: "Pop Punk" },
+    //     { name: "Skate Punk" },
+    //     { name: "Synth Punk" },
+    //     { name: "Techno Punk" },
+    //     { name: "Dubstep Punk" },
+    //     { name: "Minimal Punk" },
+    //     { name: "Alternative Rock Punk" },
+    //     { name: "Grunge Punk" },
+    //     { name: "Post-Grunge Punk" },
+    //     { name: "Alternative Grunge Punk" },
+    //     { name: "Post-Alternative Grunge Punk" },
+    //     { name: "Psychedelic Grunge Punk" },
+    //     { name: "Gangsta Punk" },
+    //     { name: "Punk Rock" },
+    //     { name: "Hardcore Punk" },
+    //     { name: "Deathcore Punk" },
+    //     { name: "Post-Deathcore Punk" },
+    //     { name: "Punk Rock Punk" },
+    //     { name: "Hardcore Punk Punk" },
+    //     { name: "Deathcore Punk Punk" },
+    //     { name: "Post-Deathcore Punk Punk" },
+    //     { name: "Alternative Rock Punk Punk" },
+    //     { name: "Grunge Punk Punk" },
+    //     { name: "Post-Grunge Punk Punk" },
+    //     { name: "Psychedelic Grunge Punk Punk" },
+    //   ],
+    //   { returning: true }
+    // );
+
+    //post Tags
+    const tagsData = [
+      { tag_name: "Lives" },
+      { tag_name: "Rehearsals" },
+      { tag_name: "Merchandise" },
+      { tag_name: "Music" },
+      { tag_name: "Band News" },
+      { tag_name: "Events" },
+      { tag_name: "Announcements" },
+      { tag_name: "Collaborations" },
+      { tag_name: "Releases" },
+      { tag_name: "Behind the Scenes" },
+      { tag_name: "Updates" },
+      { tag_name: "Music Videos" },
+      { tag_name: "Newsletters" },
+      { tag_name: "Press Releases" },
+      { tag_name: "Podcasts" },
+      { tag_name: "Social Media" },
+      { tag_name: "YouTube" },
+      { tag_name: "Facebook" },
+      { tag_name: "Instagram" },
+      { tag_name: "Twitter" },
+      { tag_name: "Snapchat" },
+      { tag_name: "TikTok" },
+      { tag_name: "LinkedIn" },
+      { tag_name: "Pinterest" },
+      { tag_name: "Reddit" },
+      { tag_name: "YouTube Music" },
+      { tag_name: "SoundCloud" },
+      { tag_name: "Bandcamp" },
+      { tag_name: "Spotify" },
+      { tag_name: "Apple Music" },
+      { tag_name: "Amazon Music" },
+      { tag_name: "Tidal" },
+      { tag_name: "Deezer" },
+      { tag_name: "Gear" },
+      { tag_name: "Cassette Tape" },
+      { tag_name: "CD" },
+      { tag_name: "Vinyl" },
+      { tag_name: "LP" },
+      { tag_name: "Magazine" },
+      { tag_name: "Newspaper" },
+      { tag_name: "Billboard" },
+      { tag_name: "Billboard Top 40" },
+      { tag_name: "Billboard Hot 100" },
+      { tag_name: "Billboard 200" },
+      { tag_name: "Billboard Rock" },
+      { tag_name: "Billboard Pop" },
+      { tag_name: "Billboard Country" },
+      { tag_name: "Billboard Hip-Hop" },
+      { tag_name: "Billboard R&B" },
+      { tag_name: "Billboard Dance" },
+      { tag_name: "Billboard Electronic" },
+      { tag_name: "Billboard Indie" },
+      { tag_name: "Billboard Alternative" },
+      { tag_name: "Billboard Rock & Roll" },
+      { tag_name: "Billboard Grunge" },
+      { tag_name: "Billboard Punk" },
+      { tag_name: "Billboard Hardcore" },
+      { tag_name: "Billboard Ska" },
+      { tag_name: "Billboard Disco" },
+      { tag_name: "Billboard Funk" },
+      { tag_name: "Billboard Jazz" },
+      { tag_name: "Billboard Blues" },
+      { tag_name: "Billboard Rhythm & Blues" },
+      { tag_name: "Billboard Latin" },
+      { tag_name: "Billboard Reggae" },
+      { tag_name: "Billboard Classical" },
+      { tag_name: "Billboard Easy Listening" },
+      { tag_name: "Billboard Pop Rock" },
+      { tag_name: "Billboard Punk Rock" },
+      { tag_name: "Billboard Hardcore Punk" },
+      { tag_name: "Billboard Deathcore Punk" },
+      { tag_name: "Billboard Post-Deathcore Punk" },
+      { tag_name: "Billboard Punk Rock Punk" },
+      { tag_name: "Billboard Hardcore Punk Punk" },
+      { tag_name: "Billboard Deathcore Punk Punk" },
+      { tag_name: "Billboard Post-Deathcore Punk Punk" },
+      { tag_name: "Billboard Alternative Rock Punk Punk" },
+      { tag_name: "Billboard Grunge Punk Punk" },
+      { tag_name: "Billboard Post-Grunge Punk Punk" },
+      { tag_name: "Billboard Psychedelic Grunge Punk Punk" },
+      { tag_name: "Billboard Gangsta Punk" },
+      { tag_name: "Billboard Punk Rock" },
+      { tag_name: "Billboard Hardcore Punk" },
+      { tag_name: "Billboard Deathcore Punk" },
+      { tag_name: "Billboard Post-Deathcore Punk" },
+      { tag_name: "Billboard Alternative Rock Punk" },
+      { tag_name: "Billboard Grunge Punk" },
+      { tag_name: "Billboard Post-Grunge Punk" },
+      { tag_name: "Billboard Psychedelic Grunge Punk" },
+      { tag_name: "Billboard Experimental" },
+      { tag_name: "Billboard Post-Rock" },
+      { tag_name: "Billboard Progressive Rock" },
+      { tag_name: "Billboard Hard Rock" },
+      { tag_name: "Billboard Soft Rock" },
+      { tag_name: "Billboard Classic Rock" },
+      { tag_name: "Billboard Grunge" },
+      { tag_name: "Billboard Psychedelic Rock" },
+      { tag_name: "Billboard Garage Rock" },
+      { tag_name: "Billboard Surf Rock" },
+    ];
+
+    const tags = [];
+    for (const tag of tagsData) {
+      const createdTag = await Tags.create(tag);
+      tags.push(createdTag);
+    }
+
+    // Seed Posts
+    const posts = await Posts.bulkCreate(
+      [
+        {
+          title: "First Post",
+          content: "This is the first post",
+          author_id: users[0].id,
+        },
+        {
+          title: "Second Post",
+          content: "This is the second post",
+          author_id: users[1].id,
+        },
+        {
+          title: "Third Post",
+          content: "This is the third post",
+          author_id: users[2].id,
+        },
+        {
+          title: "Fourth Post",
+          content: "This is the fourth post",
+          author_id: users[3].id,
+        },
+        {
+          title: "Fifth Post",
+          content: "This is the fifth post",
+          author_id: users[4].id,
+        },
+        {
+          title: "Sixth Post",
+          content: "This is the sixth post",
+          author_id: users[5].id,
+        },
+        {
+          title: "Seventh Post",
+          content: "This is the seventh post",
+          author_id: users[6].id,
+        },
+        {
+          title: "Eighth Post",
+          content: "This is the eighth post",
+          author_id: users[7].id,
+        },
+        {
+          title: "Ninth Post",
+          content: "This is the ninth post",
+          author_id: users[8].id,
+        },
+        {
+          title: "Tenth Post",
+          content: "This is the tenth post",
+          author_id: users[9].id,
+        },
+        {
+          title: "Eleventh Post",
+          content: "This is the eleventh post",
+          author_id: users[0].id,
+        },
+        {
+          title: "Twelfth Post",
+          content: "This is the twelfth post",
+          author_id: users[1].id,
+        },
+        {
+          title: "Thirteenth Post",
+          content: "This is the thirteenth post",
+          author_id: users[2].id,
+        },
+        {
+          title: "Fourteenth Post",
+          content: "This is the fourteenth post",
+          author_id: users[3].id,
+        },
+        {
+          title: "Fifteenth Post",
+          content: "This is the fifteenth post",
+          author_id: users[4].id,
+        },
+        {
+          title: "Sixteenth Post",
+          content: "This is the sixteenth post",
+          author_id: users[5].id,
+        },
+        {
+          title: "Seventeenth Post",
+          content: "This is the seventeenth post",
+          author_id: users[6].id,
+        },
+        {
+          title: "Eighteenth Post",
+          content: "This is the eighteenth post",
+          author_id: users[7].id,
+        },
+        {
+          title: "Nineteenth Post",
+          content: "This is the nineteenth post",
+          author_id: users[8].id,
+        },
+        {
+          title: "Twentieth Post",
+          content: "This is the twentieth post",
+          author_id: users[9].id,
+        },
+        {
+          title: "Twenty-First Post",
+          content: "This is the twenty-first post",
+          author_id: users[0].id,
+        },
+        {
+          title: "Twenty-Second Post",
+          content: "This is the twenty-second post",
+          author_id: users[1].id,
+        },
+        {
+          title: "Twenty-Third Post",
+          content: "This is the twenty-third post",
+          author_id: users[2].id,
+        },
+        {
+          title: "Twenty-Fourth Post",
+          content: "This is the twenty-fourth post",
+          author_id: users[3].id,
+        },
+        {
+          title: "Twenty-Fifth Post",
+          content: "This is the twenty-fifth post",
+          author_id: users[4].id,
+        },
+      ],
+      { returning: true }
+    );
+
+    //seed post tags
+    await PostTags.bulkCreate(
+      [
+        { post_id: posts[0].id, tag_id: tags[0].id },
+        { post_id: posts[0].id, tag_id: tags[1].id },
+        { post_id: posts[1].id, tag_id: tags[2].id },
+        { post_id: posts[1].id, tag_id: tags[3].id },
+        { post_id: posts[2].id, tag_id: tags[4].id },
+        { post_id: posts[2].id, tag_id: tags[5].id },
+        { post_id: posts[3].id, tag_id: tags[6].id },
+        { post_id: posts[3].id, tag_id: tags[7].id },
+        { post_id: posts[4].id, tag_id: tags[8].id },
+        { post_id: posts[4].id, tag_id: tags[9].id },
+        { post_id: posts[5].id, tag_id: tags[10].id },
+        { post_id: posts[5].id, tag_id: tags[11].id },
+        { post_id: posts[6].id, tag_id: tags[12].id },
+        { post_id: posts[6].id, tag_id: tags[13].id },
+        { post_id: posts[7].id, tag_id: tags[14].id },
+        { post_id: posts[7].id, tag_id: tags[15].id },
+        { post_id: posts[8].id, tag_id: tags[16].id },
+        { post_id: posts[8].id, tag_id: tags[17].id },
+        { post_id: posts[9].id, tag_id: tags[18].id },
+        { post_id: posts[9].id, tag_id: tags[19].id },
+        { post_id: posts[10].id, tag_id: tags[20].id },
+        { post_id: posts[10].id, tag_id: tags[21].id },
+        { post_id: posts[11].id, tag_id: tags[22].id },
+        { post_id: posts[11].id, tag_id: tags[23].id },
+        { post_id: posts[12].id, tag_id: tags[24].id },
+        { post_id: posts[12].id, tag_id: tags[25].id },
+        { post_id: posts[13].id, tag_id: tags[26].id },
+        { post_id: posts[13].id, tag_id: tags[27].id },
+        { post_id: posts[14].id, tag_id: tags[28].id },
+        { post_id: posts[14].id, tag_id: tags[29].id },
+        { post_id: posts[15].id, tag_id: tags[30].id },
+        { post_id: posts[15].id, tag_id: tags[31].id },
+        { post_id: posts[16].id, tag_id: tags[32].id },
+        { post_id: posts[16].id, tag_id: tags[33].id },
+        { post_id: posts[17].id, tag_id: tags[34].id },
+        { post_id: posts[17].id, tag_id: tags[35].id },
+        { post_id: posts[18].id, tag_id: tags[36].id },
+        { post_id: posts[18].id, tag_id: tags[37].id },
+        { post_id: posts[19].id, tag_id: tags[38].id },
+        { post_id: posts[19].id, tag_id: tags[39].id },
+      ],
+      { returning: true }
+    );
+
+    //seed postMedia
+    let imageId = 1000;
+    const width = 800;
+    const height = 600;
+    await PostMedia.bulkCreate(
+      [
+        {
+          post_id: posts[0].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[0].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[1].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[1].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[2].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[2].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[3].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[3].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[4].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[4].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[5].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[5].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[6].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[6].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[7].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[7].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[8].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[8].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[9].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[9].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[10].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[10].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[11].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[11].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[12].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[12].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[13].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[13].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[14].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[14].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[15].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[15].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[16].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[16].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[17].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[17].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[18].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[18].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[19].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[19].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[20].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+        {
+          post_id: posts[20].id,
+          media_type: "image",
+          media_url: `https://picsum.photos/id/${imageId++}/${width}/${height}`,
+        },
+      ],
+      { returning: true }
+    );
+    // Seed Comments
+    const comments = await Comments.bulkCreate(
+      [
+        {
+          content: "Great post!",
+          post_id: posts[0].id,
+          author_id: users[1].id,
+        },
+        {
+          content: "Thanks for sharing!",
+          post_id: posts[0].id,
+          author_id: users[2].id,
+        },
+        {
+          content: "Interesting read",
+          post_id: posts[1].id,
+          author_id: users[0].id,
+        },
+        {
+          content: "I love this!",
+          post_id: posts[1].id,
+          author_id: users[3].id,
+        },
+        {
+          content: "Can't wait for more!",
+          post_id: posts[2].id,
+          author_id: users[4].id,
+        },
+        {
+          content: "This is awesome!",
+          post_id: posts[2].id,
+          author_id: users[5].id,
+        },
+        {
+          content: "So inspiring!",
+          post_id: posts[3].id,
+          author_id: users[6].id,
+        },
+        {
+          content: "Keep it up!",
+          post_id: posts[3].id,
+          author_id: users[7].id,
+        },
+      ],
+      { returning: true }
+    );
+
+    // Seed PostLikes
+    await PostLikes.bulkCreate([
+      { post_id: posts[0].id, user_id: users[1].id, liked: true },
+      { post_id: posts[0].id, user_id: users[2].id, liked: true },
+      { post_id: posts[1].id, user_id: users[0].id, liked: true },
+      { post_id: posts[1].id, user_id: users[3].id, liked: false },
+      { post_id: posts[2].id, user_id: users[4].id, liked: true },
+      { post_id: posts[2].id, user_id: users[5].id, liked: false },
+      { post_id: posts[3].id, user_id: users[6].id, liked: true },
+      { post_id: posts[3].id, user_id: users[7].id, liked: false },
+      { post_id: posts[4].id, user_id: users[8].id, liked: true },
+      { post_id: posts[4].id, user_id: users[9].id, liked: true },
+      { post_id: posts[5].id, user_id: users[0].id, liked: false },
+      { post_id: posts[5].id, user_id: users[3].id, liked: false },
+    ]);
+
+    // Seed CommentLikes
+    await CommentLikes.bulkCreate([
+      { comment_id: comments[0].id, user_id: users[2].id, liked: false },
+      { comment_id: comments[1].id, user_id: users[0].id, liked: true },
+      { comment_id: comments[2].id, user_id: users[1].id, liked: true },
+      { comment_id: comments[3].id, user_id: users[3].id, liked: false },
+      { comment_id: comments[4].id, user_id: users[4].id, liked: true },
+      { comment_id: comments[5].id, user_id: users[5].id, liked: true },
+      { comment_id: comments[6].id, user_id: users[6].id, liked: false },
+    ]);
 
     console.log("Database seeded successfully!");
   } catch (error) {
