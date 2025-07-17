@@ -24,11 +24,58 @@ const {
   Tags,
   PostMedia,
   PostTags,
+  BandTags,
+  BandTagsRel,
+  Venues,
+  VenuesOwner,
+  VenueScores,
+
+  // Add missing models for destroy calls
+  // If you use any other model in destroy, add it here
 } = require("../models");
 const Users = require("../class/users.class.js");
 
 const seedDatabase = async () => {
   try {
+    console.log("Vaciando todas las tablas...");
+    console.log("Vaciando todas las tablas...");
+// Primero elimina tablas hijas (child tables)
+await Promise.all([
+  BandTagsRel.destroy({ where: {}, force: true }),
+  UserBands.destroy({ where: {}, force: true }),
+  BandMembers.destroy({ where: {}, force: true }),
+  SetListSongs.destroy({ where: {}, force: true }),
+  CartItems.destroy({ where: {}, force: true }),
+  PurchaseHistory.destroy({ where: {}, force: true }),
+  BandFollowers.destroy({ where: {}, force: true }),
+  MerchandiseFavorites.destroy({ where: {}, force: true }),
+  PostTags.destroy({ where: {}, force: true }),
+  PostMedia.destroy({ where: {}, force: true }),
+  PostLikes.destroy({ where: {}, force: true }),
+  CommentLikes.destroy({ where: {}, force: true }),
+  Comments.destroy({ where: {}, force: true }),
+  Lives.destroy({ where: {}, force: true }),
+  BandDefaultSchedules.destroy({ where: {}, force: true }),
+  Rehearsals.destroy({ where: {}, force: true }),
+]);
+// Luego elimina tablas padres (parent tables)
+await Promise.all([
+  BandTags.destroy({ where: {}, force: true }),
+  SetLists.destroy({ where: {}, force: true }),
+  Songs.destroy({ where: {}, force: true }),
+  MusicianProfile.destroy({ where: {}, force: true }),
+  Rehearsal_Locals.destroy({ where: {}, force: true }),
+  Merchandise.destroy({ where: {}, force: true }),
+  Carts.destroy({ where: {}, force: true }),
+  Categories.destroy({ where: {}, force: true }),
+  Posts.destroy({ where: {}, force: true }),
+  Tags.destroy({ where: {}, force: true }),
+  Bands.destroy({ where: {}, force: true }),
+  Venues.destroy({ where: {}, force: true }),
+  VenuesOwner.destroy({ where: {}, force: true }),
+  VenueScores.destroy({ where: {}, force: true }),
+  Users.deleteAll && Users.deleteAll(), // Si tienes método para vaciar usuarios
+]);
     console.log("Seeding database...");
 
     const userData = [
@@ -795,90 +842,122 @@ const seedDatabase = async () => {
     ]);
 
     //seed tags
-    // const tags = await BandTags.bulkCreate(
-    //   [
-    //     { name: "Pop" },
-    //     { name: "Rock" },
-    //     { name: "Country" },
-    //     { name: "Jazz" },
-    //     { name: "R&B" },
-    //     { name: "Hip-Hop" },
-    //     { name: "Electronic" },
-    //     { name: "Indie" },
-    //     { name: "Metal" },
-    //     { name: "Alternative" },
-    //     { name: "Folk" },
-    //     { name: "Classical" },
-    //     { name: "Blues" },
-    //     { name: "Soul" },
-    //     { name: "Funk" },
-    //     { name: "Reggae" },
-    //     { name: "Latin" },
-    //     { name: "World" },
-    //     { name: "Experimental" },
-    //     { name: "Punk" },
-    //     { name: "Gospel" },
-    //     { name: "Ska" },
-    //     { name: "Rap" },
-    //     { name: "Hip-Hop" },
-    //     { name: "Dance" },
-    //     { name: "Techno" },
-    //     { name: "House" },
-    //     { name: "Trance" },
-    //     { name: "Dubstep" },
-    //     { name: "Ambient" },
-    //     { name: "Chillout" },
-    //     { name: "Synthwave" },
-    //     { name: "Lo-fi" },
-    //     { name: "Acoustic" },
-    //     { name: "Experimental Rock" },
-    //     { name: "Post-Rock" },
-    //     { name: "Progressive Rock" },
-    //     { name: "Hard Rock" },
-    //     { name: "Soft Rock" },
-    //     { name: "Classic Rock" },
-    //     { name: "Grunge" },
-    //     { name: "Psychedelic Rock" },
-    //     { name: "Garage Rock" },
-    //     { name: "Surf Rock" },
-    //     { name: "Death Metal" },
-    //     { name: "Black Metal" },
-    //     { name: "Power Metal" },
-    //     { name: "Thrash Metal" },
-    //     { name: "Deathcore" },
-    //     { name: "Metalcore" },
-    //     { name: "Djent" },
-    //     { name: "Post-Hardcore" },
-    //     { name: "Screamo" },
-    //     { name: "Emo" },
-    //     { name: "Pop Punk" },
-    //     { name: "Skate Punk" },
-    //     { name: "Synth Punk" },
-    //     { name: "Techno Punk" },
-    //     { name: "Dubstep Punk" },
-    //     { name: "Minimal Punk" },
-    //     { name: "Alternative Rock Punk" },
-    //     { name: "Grunge Punk" },
-    //     { name: "Post-Grunge Punk" },
-    //     { name: "Alternative Grunge Punk" },
-    //     { name: "Post-Alternative Grunge Punk" },
-    //     { name: "Psychedelic Grunge Punk" },
-    //     { name: "Gangsta Punk" },
-    //     { name: "Punk Rock" },
-    //     { name: "Hardcore Punk" },
-    //     { name: "Deathcore Punk" },
-    //     { name: "Post-Deathcore Punk" },
-    //     { name: "Punk Rock Punk" },
-    //     { name: "Hardcore Punk Punk" },
-    //     { name: "Deathcore Punk Punk" },
-    //     { name: "Post-Deathcore Punk Punk" },
-    //     { name: "Alternative Rock Punk Punk" },
-    //     { name: "Grunge Punk Punk" },
-    //     { name: "Post-Grunge Punk Punk" },
-    //     { name: "Psychedelic Grunge Punk Punk" },
-    //   ],
-    //   { returning: true }
-    // );
+    // Seed BandTags
+    const bandTagsData = [
+      { tag_name: "Pop" },
+      { tag_name: "Rock" },
+      { tag_name: "Jazz" },
+      { tag_name: "Metal" },
+      { tag_name: "Indie" },
+      { tag_name: "Alternative" },
+      { tag_name: "Latin" },
+      { tag_name: "Electronic" },
+      { tag_name: "Hip-Hop" },
+      { tag_name: "R&B" },
+      { tag_name: "Folk" },
+      { tag_name: "Country" },
+      { tag_name: "Blues" },
+      { tag_name: "Classical" },
+      { tag_name: "Reggae" },
+      { tag_name: "Gospel" },
+      { tag_name: "Opera" },
+      { tag_name: "Fusion" },
+      { tag_name: "Reggaeton" },
+      { tag_name: "Dance" },
+      { tag_name: "EDM" },
+      { tag_name: "K-Pop" },
+      { tag_name: "Hip-Hop" },
+      { tag_name: "R&B" },
+      { tag_name: "Folk" },
+      { tag_name: "Country" },
+      { tag_name: "Blues" },
+      { tag_name: "Classical" },
+      { tag_name: "Reggae" },
+      { tag_name: "Gospel" },
+      { tag_name: "Opera" },
+      { tag_name: "Fusion" },
+    ];
+    const bandTags = await BandTags.bulkCreate(bandTagsData, {
+      returning: true,
+    });
+
+    // Seed BandTagsRel (relaciones entre bandas y tags)
+    await BandTagsRel.bulkCreate(
+      [
+        { band_id: bands[0].id, tag_id: bandTags[1].id }, // Band A - Rock
+        { band_id: bands[1].id, tag_id: bandTags[2].id }, // Band B - Jazz
+        { band_id: bands[2].id, tag_id: bandTags[0].id }, // Band C - Pop
+        { band_id: bands[3].id, tag_id: bandTags[3].id }, // Band D - Metal
+        { band_id: bands[4].id, tag_id: bandTags[4].id }, // Band E - Indie
+        { band_id: bands[5].id, tag_id: bandTags[5].id }, // Band F - Alternative
+        { band_id: bands[6].id, tag_id: bandTags[6].id }, // Band G - Latin
+      ],
+      { returning: true }
+    );
+
+    // Seed Venues
+    const venuesData = [
+      {
+        name: "Central Park Stage",
+        address: "Central Park, NYC",
+        city: "NYC",
+        state: "NY",
+        zip: "10001",
+        capacity: 5000,
+        description: "Main outdoor stage in Central Park.",
+        image_url: "https://example.com/centralpark.jpg",
+        website: "https://centralpark.com",
+        phone: "123-456-7890",
+        email: "info@centralpark.com",
+        notes: "Open air venue.",
+        score: 4.8,
+      },
+      {
+        name: "Hollywood Bowl",
+        address: "2301 N Highland Ave, Los Angeles, CA",
+        city: "LA",
+        state: "CA",
+        zip: "90068",
+        capacity: 17000,
+        description: "Famous amphitheater in LA.",
+        image_url: "https://example.com/hollywoodbowl.jpg",
+        website: "https://hollywoodbowl.com",
+        phone: "234-567-8901",
+        email: "info@hollywoodbowl.com",
+        notes: "Historic venue.",
+        score: 4.9,
+      },
+      {
+        name: "Alt Garage",
+        address: "789 Oak Blvd, Portland, OR",
+        city: "Portland",
+        state: "OR",
+        zip: "97205",
+        capacity: 800,
+        description: "Underground alternative venue.",
+        image_url: "https://example.com/altgarage.jpg",
+        website: "https://altgarage.com",
+        phone: "345-678-9012",
+        email: "info@altgarage.com",
+        notes: "Great for indie bands.",
+        score: 4.5,
+      },
+    ];
+    const venues = await Venues.bulkCreate(venuesData, { returning: true });
+
+    // Seed VenueOwners
+    await VenuesOwner.bulkCreate([
+      { venue_id: venues[0].id, owner_id: users[0].id },
+      { venue_id: venues[1].id, owner_id: users[1].id },
+      { venue_id: venues[2].id, owner_id: users[2].id },
+    ], { returning: true });
+
+    // Seed VenueScores
+    await VenueScores.bulkCreate([
+      { venue_id: venues[0].id, user_id: users[0].id, score: 5, comment: "Amazing sound!" },
+      { venue_id: venues[1].id, user_id: users[1].id, score: 4.5, comment: "Great atmosphere." },
+      { venue_id: venues[2].id, user_id: users[2].id, score: 4, comment: "Nice staff." },
+    ], { returning: true });
 
     //post Tags
     const tagsData = [
