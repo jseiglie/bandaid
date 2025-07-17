@@ -38,6 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "SetLists",
       timestamps: true, // ← corregido
       freezeTableName: true,
+      underscored: true, 
     }
   );
 

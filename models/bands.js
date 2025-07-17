@@ -91,6 +91,7 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "Bands",
       timestamps: true,
       freezeTableName: true,
+      underscored: true,
     }
   );
 
@@ -115,12 +116,18 @@ module.exports = (sequelize, DataTypes) => {
       as: "admin",
       onDelete: "SET NULL",
     });
+    Bands.belongsToMany(models.BandTags, {
+      through: "BandTagsRel",
+      foreignKey: "band_id",
+      otherKey: "tag_id",
+      onDelete: "CASCADE",
+    });
     Bands.hasMany(models.Merchandise, { foreignKey: "owner" });
   };
 
   Bands.prototype.toJSON = function () {
     const values = this.get();
-    
+
     delete values.createdAt;
     delete values.updatedAt;
     return values;

@@ -38,6 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "Subscriptions",
       timestamps: true,
       freezeTableName: true,
+      underscored: true, 
     }
   );
   //Associationswith users thought userSubscriptions

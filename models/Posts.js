@@ -35,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "Posts",
       timestamps: true,
       freezeTableName: true,
+      underscored: true, 
     }
   );
   Posts.associate = (models) => {

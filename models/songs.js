@@ -124,6 +124,7 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "Songs",
       timestamps: true,
       freezeTableName: true,
+      underscored: true, 
     }
   );
   Songs.associate = function (models) {

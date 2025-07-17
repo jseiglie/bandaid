@@ -42,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
         tableName: "MusicianProfiles",
         timestamps: true,
         freezeTableName: true,
+        underscored: true, 
       }
     );
   
