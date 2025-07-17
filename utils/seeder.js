@@ -29,53 +29,50 @@ const {
   Venues,
   VenuesOwner,
   VenueScores,
-
-  // Add missing models for destroy calls
-  // If you use any other model in destroy, add it here
 } = require("../models");
 const Users = require("../class/users.class.js");
 
 const seedDatabase = async () => {
   try {
     console.log("Vaciando todas las tablas...");
-    console.log("Vaciando todas las tablas...");
-// Primero elimina tablas hijas (child tables)
-await Promise.all([
-  BandTagsRel.destroy({ where: {}, force: true }),
-  UserBands.destroy({ where: {}, force: true }),
-  BandMembers.destroy({ where: {}, force: true }),
-  SetListSongs.destroy({ where: {}, force: true }),
-  CartItems.destroy({ where: {}, force: true }),
-  PurchaseHistory.destroy({ where: {}, force: true }),
-  BandFollowers.destroy({ where: {}, force: true }),
-  MerchandiseFavorites.destroy({ where: {}, force: true }),
-  PostTags.destroy({ where: {}, force: true }),
-  PostMedia.destroy({ where: {}, force: true }),
-  PostLikes.destroy({ where: {}, force: true }),
-  CommentLikes.destroy({ where: {}, force: true }),
-  Comments.destroy({ where: {}, force: true }),
-  Lives.destroy({ where: {}, force: true }),
-  BandDefaultSchedules.destroy({ where: {}, force: true }),
-  Rehearsals.destroy({ where: {}, force: true }),
-]);
-// Luego elimina tablas padres (parent tables)
-await Promise.all([
-  BandTags.destroy({ where: {}, force: true }),
-  SetLists.destroy({ where: {}, force: true }),
-  Songs.destroy({ where: {}, force: true }),
-  MusicianProfile.destroy({ where: {}, force: true }),
-  Rehearsal_Locals.destroy({ where: {}, force: true }),
-  Merchandise.destroy({ where: {}, force: true }),
-  Carts.destroy({ where: {}, force: true }),
-  Categories.destroy({ where: {}, force: true }),
-  Posts.destroy({ where: {}, force: true }),
-  Tags.destroy({ where: {}, force: true }),
-  Bands.destroy({ where: {}, force: true }),
-  Venues.destroy({ where: {}, force: true }),
-  VenuesOwner.destroy({ where: {}, force: true }),
-  VenueScores.destroy({ where: {}, force: true }),
-  Users.deleteAll && Users.deleteAll(), // Si tienes método para vaciar usuarios
-]);
+    // first child tables
+    await Promise.all([
+      BandTagsRel.destroy({ where: {}, force: true }),
+      UserBands.destroy({ where: {}, force: true }),
+      BandMembers.destroy({ where: {}, force: true }),
+      SetListSongs.destroy({ where: {}, force: true }),
+      CartItems.destroy({ where: {}, force: true }),
+      PurchaseHistory.destroy({ where: {}, force: true }),
+      BandFollowers.destroy({ where: {}, force: true }),
+      MerchandiseFavorites.destroy({ where: {}, force: true }),
+      PostTags.destroy({ where: {}, force: true }),
+      PostMedia.destroy({ where: {}, force: true }),
+      PostLikes.destroy({ where: {}, force: true }),
+      CommentLikes.destroy({ where: {}, force: true }),
+      Comments.destroy({ where: {}, force: true }),
+      Lives.destroy({ where: {}, force: true }),
+      BandDefaultSchedules.destroy({ where: {}, force: true }),
+      Rehearsals.destroy({ where: {}, force: true }),
+    ]);
+
+    // then parent tables
+    await Promise.all([
+      BandTags.destroy({ where: {}, force: true }),
+      SetLists.destroy({ where: {}, force: true }),
+      Songs.destroy({ where: {}, force: true }),
+      MusicianProfile.destroy({ where: {}, force: true }),
+      Rehearsal_Locals.destroy({ where: {}, force: true }),
+      Merchandise.destroy({ where: {}, force: true }),
+      Carts.destroy({ where: {}, force: true }),
+      Categories.destroy({ where: {}, force: true }),
+      Posts.destroy({ where: {}, force: true }),
+      Tags.destroy({ where: {}, force: true }),
+      Bands.destroy({ where: {}, force: true }),
+      Venues.destroy({ where: {}, force: true }),
+      VenuesOwner.destroy({ where: {}, force: true }),
+      VenueScores.destroy({ where: {}, force: true }),
+      Users.deleteAll && Users.deleteAll(), // Si tienes método para vaciar usuarios
+    ]);
     console.log("Seeding database...");
 
     const userData = [
@@ -946,18 +943,39 @@ await Promise.all([
     const venues = await Venues.bulkCreate(venuesData, { returning: true });
 
     // Seed VenueOwners
-    await VenuesOwner.bulkCreate([
-      { venue_id: venues[0].id, owner_id: users[0].id },
-      { venue_id: venues[1].id, owner_id: users[1].id },
-      { venue_id: venues[2].id, owner_id: users[2].id },
-    ], { returning: true });
+    await VenuesOwner.bulkCreate(
+      [
+        { venue_id: venues[0].id, owner_id: users[0].id },
+        { venue_id: venues[1].id, owner_id: users[1].id },
+        { venue_id: venues[2].id, owner_id: users[2].id },
+      ],
+      { returning: true }
+    );
 
     // Seed VenueScores
-    await VenueScores.bulkCreate([
-      { venue_id: venues[0].id, user_id: users[0].id, score: 5, comment: "Amazing sound!" },
-      { venue_id: venues[1].id, user_id: users[1].id, score: 4.5, comment: "Great atmosphere." },
-      { venue_id: venues[2].id, user_id: users[2].id, score: 4, comment: "Nice staff." },
-    ], { returning: true });
+    await VenueScores.bulkCreate(
+      [
+        {
+          venue_id: venues[0].id,
+          user_id: users[0].id,
+          score: 5,
+          comment: "Amazing sound!",
+        },
+        {
+          venue_id: venues[1].id,
+          user_id: users[1].id,
+          score: 4.5,
+          comment: "Great atmosphere.",
+        },
+        {
+          venue_id: venues[2].id,
+          user_id: users[2].id,
+          score: 4,
+          comment: "Nice staff.",
+        },
+      ],
+      { returning: true }
+    );
 
     //post Tags
     const tagsData = [
