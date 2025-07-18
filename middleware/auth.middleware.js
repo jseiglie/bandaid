@@ -48,6 +48,7 @@ const tokenMiddleware = async (req, res, next) => {
   if (!decoded) return res.status(401).json({ message: "Invalid token" });
 
   req.user = decoded;
+  req.is_admin = decoded.role === "admin";
   req.token = token;
   next();
 };

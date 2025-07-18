@@ -53,6 +53,8 @@ const seedDatabase = async () => {
       Lives.destroy({ where: {}, force: true }),
       BandDefaultSchedules.destroy({ where: {}, force: true }),
       Rehearsals.destroy({ where: {}, force: true }),
+      VenuesOwner.destroy({ where: {}, force: true }),
+
     ]);
 
     // then parent tables
@@ -85,6 +87,7 @@ const seedDatabase = async () => {
         avatar: null,
         phoneNumber: "123-456-7890",
         address: "123 Rock St, NYC",
+        has_subscription: 1,
       },
       {
         email: "user2@ex.com",
@@ -95,6 +98,7 @@ const seedDatabase = async () => {
         avatar: null,
         phoneNumber: "123-456-7891",
         address: "124 Rock St, NYC",
+        has_subscription: 1,
       },
       {
         email: "user3@ex.com",
@@ -105,6 +109,7 @@ const seedDatabase = async () => {
         avatar: null,
         phoneNumber: "123-456-7892",
         address: "125 Rock St, NYC",
+        has_subscription: 1,
       },
       {
         email: "user4@ex.com",
@@ -115,6 +120,7 @@ const seedDatabase = async () => {
         avatar: null,
         phoneNumber: "123-456-7893",
         address: "1230 Rock St, NYC",
+        has_subscription: 1,
       },
       {
         email: "user5@ex.com",
@@ -125,6 +131,7 @@ const seedDatabase = async () => {
         avatar: null,
         phoneNumber: "123-456-7895",
         address: "1238 Rock St, NYC",
+        has_subscription: 0,
       },
       {
         email: "user6@ex.com",
@@ -135,6 +142,7 @@ const seedDatabase = async () => {
         avatar: null,
         phoneNumber: "123-456-7896",
         address: "1231 Rock St, NYC",
+        has_subscription: 0,
       },
       {
         email: "user7@ex.com",
@@ -145,6 +153,7 @@ const seedDatabase = async () => {
         avatar: null,
         phoneNumber: "123-456-7899",
         address: "1234 Rock St, NYC",
+        has_subscription: 1,
       },
       {
         email: "user8@ex.com",
@@ -155,6 +164,7 @@ const seedDatabase = async () => {
         avatar: null,
         phoneNumber: "123-456-7870",
         address: "113 Rock St, NYC",
+        has_subscription: 0,
       },
       {
         email: "user9@ex.com",
@@ -165,6 +175,7 @@ const seedDatabase = async () => {
         avatar: null,
         phoneNumber: "123-456-6890",
         address: "23 Rock St, NYC",
+        has_subscription: 0,
       },
       {
         email: "user10@ex.com",
@@ -175,12 +186,24 @@ const seedDatabase = async () => {
         avatar: null,
         phoneNumber: "123-456-5890",
         address: "723 Rock St, NYC",
+        has_subscription: 1,
       },
     ];
 
     const users = [];
     for (const user of userData) {
-      const registeredUser = await Users.register(user.email, user.password);
+      // If Users.register is a static method, this is fine. Otherwise, instantiate Users and call register on the instance.
+      const registeredUser = await Users.createUserFromSeeder(
+        user.email,
+        user.password,
+        user.username,  
+        user.role,
+        user.admin,
+        user.avatar,
+        user.phoneNumber,
+        user.address,
+        user.has_subscription
+      );
       users.push(registeredUser);
     }
 

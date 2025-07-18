@@ -10,7 +10,10 @@ const BandMembers = require("../class/bandMembers.class.js");
 const MusicianProfile = require("../class/musicianProfile.class.js");
 const { Lives } = require("../models");
 const { Op } = require("sequelize");
-const { tokenGenerator, invalidateToken } = require("../middleware/auth.middleware.js");
+const {
+  tokenGenerator,
+  invalidateToken,
+} = require("../middleware/auth.middleware.js");
 const bandMembers = require("../models/BandMembers.js");
 const UserSubscriptions = require("../models/userSubscriptions.js");
 const Carts = require("./carts.class.js");
@@ -24,6 +27,51 @@ module.exports = class Users {
     } catch (error) {
       console.error("Error during logout:", error);
       return { success: false, error: error.message };
+    }
+  }
+
+  static async getPremuimUsers() {
+    try {
+      const users = await UsersModel.findAll({
+        where: { has_subscription: true },
+      });
+      if (!users) {
+        throw new Error("No premium users found");
+      }
+      const allMonths = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+
+      const groupedUsers = users.reduce((acc, user) => {
+            const month = allMonths[new Date(user.createdAt).getUTCMonth("default", {
+              month: "long",
+            })];
+        if (!acc[month]) {
+          acc[month] = 0;
+        }
+        acc[month]++;
+        return acc;
+      }, {});
+      console.log("Grouped users by month:****************************************************************************", groupedUsers);
+      const result = allMonths.map((month) => ({
+        name: month,
+        count: groupedUsers[month] || 0,
+      }));
+      return result;
+    } catch (error) {
+      console.error("Error fetching premium users:", error);
+      throw error;
     }
   }
 
@@ -44,7 +92,6 @@ module.exports = class Users {
       throw error;
     }
   }
-
 
   static async getUsers() {
     try {
@@ -179,7 +226,8 @@ module.exports = class Users {
           where: { email },
         })) ||
         (await UsersModel.findOne({
-          where: { username }, include: ["MusicianProfile", "Carts", "UserSubscriptions"] 
+          where: { username },
+          include: ["MusicianProfile", "Carts", "UserSubscriptions"],
         }));
 
       if (!user) {
@@ -312,10 +360,13 @@ module.exports = class Users {
   static async register(
     email,
     password,
-    username = null,
+    username = randomUsername(email),
     role = "user",
     admin = false,
-    avatar = null
+    avatar = null,
+    has_subscription = 0,
+    phoneNumber = null,
+    address = null
   ) {
     try {
       if (!email || !password) {
@@ -334,16 +385,49 @@ module.exports = class Users {
       const newUser = await UsersModel.create({
         email,
         password,
-        username: randomUsername(email),
+        username,
         role,
         admin,
         avatar,
+        has_subscription,
+        phoneNumber,
+        address,
       });
       // return the created user object without the password
       const user = newUser.toJSON();
       return user;
     } catch (error) {
       console.error("Error creating user:", error);
+      throw error;
+    }
+  }
+
+  static async createUserFromSeeder(
+    email,
+    password,
+    username = randomUsername(email),
+    role = "user",
+    admin = false,
+    avatar = null,
+    phoneNumber = null,
+    address = null,
+    has_subscription = false
+  ) {
+    try {
+      const user = await Users.register(
+        email,
+        password,
+        username,
+        role,
+        admin,
+        avatar,
+        has_subscription,
+        phoneNumber,
+        address
+      );
+      return user;
+    } catch (error) {
+      console.error("Error creating user from seeder:", error);
       throw error;
     }
   }

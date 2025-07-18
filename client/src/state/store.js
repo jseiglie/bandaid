@@ -6,6 +6,10 @@ export const initialStore = () => {
     ok: false,
     stripePriceId: "price_1RkPQ9A9wzTLXCekb76QAwvk", // Example price ID, replace with actual
     cart: [{ id: 1 }],
+    adminData:{
+      premiumUsers: [],
+      totalUsers: 0,
+    },
     features: [
       {
         feature: "Set List",
@@ -37,6 +41,12 @@ export const initialStore = () => {
 //  NO PUEDE SER ASYNC!!!!
 export default function storeReducer(store, action = {}) {
   switch (action.type) {
+    case "update_admin_data":
+      return {
+       ...store,
+        adminData: action.payload,
+      };
+    case "add_to_cart":
     case "logout":
       localStorage.removeItem("user");
       localStorage.removeItem("token");
