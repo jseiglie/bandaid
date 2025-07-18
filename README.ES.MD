@@ -17,6 +17,11 @@ BandAid proporciona una plataforma para que las bandas puedan:
 
 </br>
 
+## Documentación
+
+El proyecto incluye un archivo `doc` que describe cómo funciona cada parte de la aplicación con los tipos de datos y los parámetros recibidos. Se recomienda leerlo si tiene alguna duda sobre el uso de las clases, controladores o servicios disponibles en la aplicación.
+
+
 ## Comenzando
 
 ### Requisitos Previos

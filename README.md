@@ -18,6 +18,11 @@ BandAid provides a platform for bands to:
 
 </br>
 
+## Documentation
+
+The project has a `doc` file that contains how each part of the app works with data-types and received parameters description. It's strongly adviced to read it if you have any doubts on how to use any fo the classes, controllers or services availeable within the app.
+
+
 ## Getting Started
 
 ### Prerequisites
