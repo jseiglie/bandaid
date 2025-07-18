@@ -5,9 +5,9 @@ const {tokenMiddleware} = require("../middleware/auth.middleware");
 
 router.get("/", liveController.getLives);
 router.get("/:id", liveController.getLiveById);
-router.post("/", liveController.createLive);
-router.put("/:id", liveController.updateLive);
-router.delete("/:id", liveController.deleteLive);
+router.post("/", tokenMiddleware, liveController.createLive);
+router.put("/:id", tokenMiddleware, liveController.updateLive);
+router.delete("/:id", tokenMiddleware, liveController.deleteLive);
 
 
 

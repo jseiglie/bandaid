@@ -5,9 +5,9 @@ const {tokenMiddleware} = require("../middleware/auth.middleware");
 
 router.get("/", bandMemberController.getBandMembers);
 router.get("/:id", bandMemberController.getBandMemberById);
-router.post("/", bandMemberController.createBandMember);
-router.put("/:id", bandMemberController.updateBandMember);
-router.delete("/:id", bandMemberController.deleteBandMember);
+router.post("/", tokenMiddleware, bandMemberController.createBandMember);
+router.put("/:id", tokenMiddleware, bandMemberController.updateBandMember);
+router.delete("/:id", tokenMiddleware, bandMemberController.deleteBandMember);
 
 
 module.exports = {
