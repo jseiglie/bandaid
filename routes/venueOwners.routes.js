@@ -3,10 +3,10 @@ const venueOwnersController = require("../controllers/venueOwners.controller");
 const router = express.Router();
 const {tokenMiddleware} = require("../middleware/auth.middleware");
 
-router.get("/", venueOwnersController.getVenueOwners);
-router.post("/", tokenMiddleware, venueOwnersController.createVenueOwner);
-router.put("/:id", tokenMiddleware, venueOwnersController.updateVenueOwner);
-router.delete("/:id", tokenMiddleware, venueOwnersController.deleteVenueOwner);
+router.get("/", venueOwnersController.getAll);
+router.post("/", tokenMiddleware, venueOwnersController.create);
+router.put("/:id", tokenMiddleware, venueOwnersController.update);
+router.delete("/:id", tokenMiddleware, venueOwnersController.delete);
 
 module.exports = {
     router,
