@@ -3,11 +3,11 @@ import { ChartArea } from "../components/charts/AreaChart";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import chartUtils from "../utils/chartUtils";
 import adminService from "../services/adminServices";
+import ChartPie from "../components/charts/PieChart";
 
 export const AdminDashboard = () => {
   const { store, dispatch } = useGlobalReducer();
   useEffect(() => {
-    // Fetch premium users or any other admin data here
     adminService.getPremiumUsers().then((data) => {
       dispatch({
         type: "update_admin_data",
@@ -15,8 +15,7 @@ export const AdminDashboard = () => {
           premiumUsers: data,
         },
       });
-      console.log("Premium users", data);
-      console.log("Store after update:", store);
+      
     });
   }, []);
   return (
@@ -25,17 +24,19 @@ export const AdminDashboard = () => {
       <p>Manage users, content, and settings from this dashboard.</p>
       <ChartArea
         data={store.bands && chartUtils.groupByMonth(store.bands)}
-        usage="New Bands by Month"
+        usage="Bands"
         x="name"
         y="count"
       />
 
       <ChartArea
         data={store.adminData?.premiumUsers}
-        usage="New Premium Users by Month"
+        usage="Premium Users"
         x="name"
         y="count"
       />
+
+      <ChartPie />
     </div>
   );
 };

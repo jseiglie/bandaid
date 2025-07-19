@@ -34,6 +34,9 @@ export const ChartArea = ({ data, usage, x, y }) => {
           <Tooltip />
           <Area type="monotone" dataKey={y} stroke="#8884d8" fill="#8884d8" />
         </AreaChart>
+        <div className="total">
+          <strong>Total {usage}:</strong> {data && data.length}
+        </div>
       </ResponsiveContainer>
     </section>
   );
