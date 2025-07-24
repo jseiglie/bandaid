@@ -106,24 +106,31 @@ export const Authenticate = (props) => {
       });
   };
   return (
-    <section className="text-white">
-      <h3>Login</h3>
-      <form className="form-control" onSubmit={handleSubmit}>
-        <div className="form-floating mb-3">
-          <input
-            className={`form-control ${
-              error.error &&
-              error.error == "identifier" &&
-              "border border-2 border-danger"
-            }`}
+    <section className="container">
+
+      <form className=" row" onSubmit={handleSubmit}>
+        <div className="col-sm-12 col-md-6 col-lg-6 mx-auto align-items-center d-flex flex-column justify-content-center">
+          <h3 className="text-center text-primary  mb-4">
+            {props.login ? "Login" : "Register"}
+          </h3>
+          
+        </div>
+        <div className="col-sm-12 col-md-6 col-lg-6 mx-auto">
+          <div className="form-floating mb-3">
+            <input
+              className={`form-control ${
+                error.error &&
+                error.error == "identifier" &&
+                "border border-2 border-danger"
+              }`}
             type="text"
             name="identifier"
             id="identifier"
             onChange={handleChange}
             value={formData.identifier}
-            placeholder="email or username"
+            placeholder="email"
           />
-          <label htmlFor="floatingInput">Email or Username</label>
+          <label htmlFor="floatingInput">Email</label>
         </div>
         <div className="form-floating mb-3">
           <input
@@ -149,6 +156,7 @@ export const Authenticate = (props) => {
             error.error && "border-danger"
           }`}
         />
+        </div>
       </form>
       <div
         className="alert alert-danger"

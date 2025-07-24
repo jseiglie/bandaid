@@ -1,6 +1,5 @@
 import "./BandManagerCard.css";
-import { Link, useNavigate } from "react-router-dom";
-import React from "react";
+import { useNavigate } from "react-router-dom";
 import { removeSpace } from "../../utils/spaceRemover";
 
 export const BandManagerCard = (props) => {
