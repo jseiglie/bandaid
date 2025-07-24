@@ -10,7 +10,7 @@ export const Navbar = () => {
     localStorage.removeItem("user", "token");
   };
   return (
-    <nav className="nav nav-masthead nav-bg  justify-content-center float-md-end sticky-top p-2 mb-3">
+    <nav className="nav nav-bg  justify-content-center sticky-top p-2 ">
       <Link
         className="mx-2 nav-link text-white fw-bold py-1 px-0 active"
         aria-current="page"

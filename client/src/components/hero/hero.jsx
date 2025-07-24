@@ -4,19 +4,17 @@ import React from "react";
 
 export const Hero = () => {
   return (
-    <section className="px-3 text-center text-white hero-wrapper">
-      <div className="hero-hook">
+    <section className="p-3 text-center text-white hero-wrapper">
+      <div className="hero-hook p-3">
         <h1 className="fs-1">BandAid</h1>
         <p className="lead fw-bold">
-          Cover is a one-page template for building simple and beautiful home
-          pages. Download, edit the text, and add your own fullscreen background
-          photo to make it your own.
+          Your own personal manager for all things band-related and your one-stop solution for finding and connecting with local bands.
         </p>
       </div>
-      <p className="lead">
+      <p className="lead my-3">
         <Link
           to="/login"
-          className="btn btn-lg btn-light fw-bold border-white bg-white"
+          className="btn btn-lg hero-btn bg-dark fw-bold  text-white border-3 "
         >
           Hey ho, let's go!
         </Link>

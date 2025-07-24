@@ -1,12 +1,16 @@
-
-
-.hero-wrapper{
-    min-height: 80vh;
-    align-content: center;
-    background-image: url('../../assets/images/bg.jpg');
-    background-size: cover;
+.hero-wrapper {
+  min-height: 60vh;
+  align-content: center;
+  background-image: url("https://images.pexels.com/photos/952437/pexels-photo-952437.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-.hero-hook{
-    background-color: #ecebeb0a;
+.hero-hook {
+  background-color: #00000088;
+}
+
+.hero-btn:hover {
+  border-color: #ffffff;
 }
