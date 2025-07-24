@@ -52,7 +52,6 @@ export const BandManagerCard = (props) => {
           )}
         </div>
       </div>
-     
     </article>
   );
 };

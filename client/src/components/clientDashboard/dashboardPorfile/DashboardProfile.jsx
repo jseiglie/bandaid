@@ -1,6 +1,3 @@
-
 export const DashboardProfile = () => {
-  return (
-    <div>DashboardProfile</div>
-  )
-}
+  return <div>DashboardProfile</div>;
+};

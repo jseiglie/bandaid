@@ -129,7 +129,7 @@ export const BandManagerDashboard = () => {
             Logout
           </button>
         </div>
-        <div className="tab-content mx-auto" id="v-pills-tabContent">
+        <div className="tab-content mx-auto w-75" id="v-pills-tabContent">
           <div
             className="tab-pane fade show active "
             id="v-pills-start"
@@ -156,7 +156,7 @@ export const BandManagerDashboard = () => {
             aria-labelledby="v-pills-profile-tab"
             tabindex="0"
           >
-            <DashboardProfile/>
+            <DashboardProfile />
           </div>
           <div
             className="tab-pane fade"
@@ -173,12 +173,11 @@ export const BandManagerDashboard = () => {
             role="tabpanel"
             aria-labelledby="v-pills-messages-tab"
             tabindex="0"
-            
           >
             ...
           </div>
           <div
-            className="tab-pane fade"
+            className="tab-pane fade "
             id="v-pills-settings"
             role="tabpanel"
             aria-labelledby="v-pills-settings-tab"

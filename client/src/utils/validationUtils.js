@@ -64,5 +64,9 @@ validationUtils.validateJSONResponse = (contentType, endpoint) => {
     }
 }
 
+validationUtils.passwordMatch = (newPassword, confirmPassword) => {
+    return newPassword === confirmPassword;
+  
+}
 
 export default validationUtils;
