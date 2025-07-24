@@ -29,7 +29,7 @@ export const initialStore = () => {
       },
       {
         feature: "Lives",
-        img: "missing img",
+        img: "https://images.pexels.com/photos/164879/pexels-photo-164879.jpeg",
         description:
           "Create and manage your lives and share them with your bandmates and your fans.",
         link: "missing link",

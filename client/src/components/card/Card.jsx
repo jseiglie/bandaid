@@ -7,6 +7,7 @@ import defaultImgBands from "../../assets/images/img-placeholder-400.svg";
 export const Card = (props) => {
   const defaultImg =
     props.use !== "band" ? defaultImgFeatures : defaultImgBands;
+  console.log("defaultImg", defaultImg, props.use);
 
   return (
     <div
@@ -14,13 +15,19 @@ export const Card = (props) => {
         props.use == "band" && "mx-3"
       } `}
     >
-      <article className="card feature-card bg-dark text-white d-flex flex-column justify-content-between">
+      <article className="card box-shadow feature-card bg-dark text-white d-flex flex-column justify-content-between">
         {props.use == "band" ? (
           <Link className="text-white nav-link" to={props.link}>
             <div className="card-body p-0">
               <h5 className="feature-card-title">{props.feature}</h5>
               <figure>
-                <img className="img-fluid" src={defaultImg} />
+                <img
+                  className="img-fluid"
+                  src={defaultImg}
+                  onError={(e) => {
+                    e.target.src = defaultImg;
+                  }}
+                />
               </figure>
               <p className="card-text">{props.description}</p>
               {props.use !== "band" && (
@@ -35,8 +42,14 @@ export const Card = (props) => {
         ) : (
           <div className="card-body p-0">
             <h5 className="feature-card-title">{props.feature}</h5>
-            <figure>
-              <img className="img-fluid" src={defaultImg} />
+            <figure className="card-img-wrapper">
+              <img
+                className="img-fluid"
+                src={props.img}
+                onError={(e) => {
+                  e.target.src = defaultImg;
+                }}
+              />
             </figure>
             <p className="card-text">{props.description}</p>
             {props.use !== "band" && (

@@ -10,3 +10,7 @@
 .cursor-pointer {
   cursor: pointer;
 }
+
+.box-shadow{
+  box-shadow: 0px 0px 8px 5px #383838;
+}
