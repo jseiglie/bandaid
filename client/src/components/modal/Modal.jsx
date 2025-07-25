@@ -1,7 +1,10 @@
+import useGlobalReducer from "../../hooks/useGlobalReducer";
+import userServices from "../../services/userServices";
 import validationUtils from "../../utils/validationUtils";
 import "./modal.css";
 import { useState } from "react";
 export const Modal = (props) => {
+  const { dispatch } = useGlobalReducer();
   const [data, setData] = useState({});
   const [error, setError] = useState("");
   const passwordChange =
@@ -65,9 +68,23 @@ export const Modal = (props) => {
       return;
     }
 
-    console.log("Password changed");
-
-    props.closeModal();
+    userServices
+      .changePassword({currentPassword, newPassword})
+      .then((data) => {
+        if (!data.success) {
+          throw new Error(data.message || "Error changing password");
+        }
+        dispatch({ type: 'store', payload: { key: 'user', result: data.data } });
+        setData({});
+        props.closeModal();
+      })
+      .catch((error) => {
+        setError({
+          error: "form",
+          message: error.message,
+        });
+        clearError();
+      });
   };
 
   return (

@@ -54,16 +54,22 @@ module.exports = class Users {
       ];
 
       const groupedUsers = users.reduce((acc, user) => {
-            const month = allMonths[new Date(user.createdAt).getUTCMonth("default", {
+        const month =
+          allMonths[
+            new Date(user.createdAt).getUTCMonth("default", {
               month: "long",
-            })];
+            })
+          ];
         if (!acc[month]) {
           acc[month] = 0;
         }
         acc[month]++;
         return acc;
       }, {});
-      console.log("Grouped users by month:****************************************************************************", groupedUsers);
+      console.log(
+        "Grouped users by month:****************************************************************************",
+        groupedUsers
+      );
       const result = allMonths.map((month) => ({
         name: month,
         count: groupedUsers[month] || 0,
@@ -372,16 +378,6 @@ module.exports = class Users {
       if (!email || !password) {
         throw new Error("Username, email, and password are required");
       }
-      // Check if the email already exists
-      // const existingEmail = await UsersModel.findOne({
-      //   where: { email },
-      // });
-      // if (existingEmail) {
-      //   throw new Error("Email already exists");
-      // }
-
-      //const hashedPassword = await this.hash(password);
-
       const newUser = await UsersModel.create({
         email,
         password,
@@ -393,9 +389,14 @@ module.exports = class Users {
         phoneNumber,
         address,
       });
-      // return the created user object without the password
       const user = newUser.toJSON();
-      return user;
+      const token = tokenGenerator({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      });
+      return { user, token };
     } catch (error) {
       console.error("Error creating user:", error);
       throw error;
@@ -428,6 +429,32 @@ module.exports = class Users {
       return user;
     } catch (error) {
       console.error("Error creating user from seeder:", error);
+      throw error;
+    }
+  }
+
+  static async changePassword(userId, currentPassword, newPassword) {
+    try {
+      if (!userId || !currentPassword || !newPassword) {
+        throw new Error(
+          "User ID, current password, and new password are required"
+        );
+      }
+      const user = await UsersModel.findOne({
+        where: { id: userId },
+      });
+      const passwordMatch = await this.checkPassword(
+        currentPassword,  
+        user.password
+      );
+      if (!passwordMatch) {
+        throw new Error("Current password is incorrect");
+      }
+      user.password = newPassword;
+      await user.save();
+      return user;
+    } catch (error) {
+      console.error("Error changing password:", error);
       throw error;
     }
   }

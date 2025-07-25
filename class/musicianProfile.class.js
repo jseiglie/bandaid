@@ -12,7 +12,7 @@ module.exports = class MusicianProfile {
         where: { user_id },
       });
       if (!profile) {
-        throw new Error("No musician profile found for this user");
+        return await this.createProfile({ user_id });
       }
       return profile;
     } catch (error) {

@@ -46,5 +46,21 @@ userServices.logout = async () => {
   }
 };
 
+userServices.changePassword = async (data) => {
+  try {
+    const response = await fetcher("/users/change-password", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token"),
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error changing password");
+  }
+};
 
 export default userServices;

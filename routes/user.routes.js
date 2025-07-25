@@ -10,7 +10,7 @@ router.get("/:id", userController.getUserById);
 router.put("/:id", tokenMiddleware, userController.updateUser);
 router.delete("/:id", tokenMiddleware, userController.deleteUser);
 router.post("/auth/logout", tokenMiddleware, userController.logout);
-
+router.post("/change-password", tokenMiddleware, userController.changePassword);
 
 
 

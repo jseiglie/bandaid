@@ -86,7 +86,7 @@ export const Authenticate = (props) => {
           error: null,
           message: null,
         });
-        localStorage.setItem("token", data.data.token);
+        localStorage.setItem("token",   data.data.token);
         localStorage.setItem("user", JSON.stringify(data.data.user));
         console.log("data", data);
         dispatch({

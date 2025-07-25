@@ -1,23 +1,26 @@
 const userClass = require("../class/users.class.js");
 const responseObject = require("../utils/response.js");
 const userController = {};
-const { tokenGenerator, tokenExtractor } = require("../middleware/auth.middleware.js");
-const { default: validationUtils } = require("../client/src/utils/validationUtils.js");
+const {
+  tokenGenerator,
+  tokenExtractor,
+} = require("../middleware/auth.middleware.js");
+const {
+  default: validationUtils,
+} = require("../client/src/utils/validationUtils.js");
 
 userController.logout = async (req, res) => {
   try {
     const token = tokenExtractor(req);
-    const response = await userClass.logout(token);
-      return res
-        .status(200)
-        .send(responseObject(200, true, "Logout successful"));
+    await userClass.logout(token);
+    return res.status(200).send(responseObject(200, true, "Logout successful"));
   } catch (error) {
     console.error(error);
     res
       .status(500)
       .send(responseObject(500, false, "Internal server error", error));
   }
-};  
+};
 
 userController.getUsers = async (req, res) => {
   try {
@@ -112,19 +115,24 @@ userController.getUserByUsername = async (req, res) => {
 
 userController.login = async (req, res) => {
   try {
-    const {  identifier, password } = req.body;
+    const { identifier, password } = req.body;
     const credentials = {
-     
-      username:null,
-      email:  null,
+      username: null,
+      email: null,
       password: password || null,
-    }
+    };
 
-    
-    validationUtils.validateEmail(identifier)? credentials.email = identifier: credentials.username = identifier
+    validationUtils.validateEmail(identifier)
+      ? (credentials.email = identifier)
+      : (credentials.username = identifier);
 
-    if ((!credentials.email || !credentials.username) && !credentials.password) {
-      throw new Error("Missing credentials: Password is required. Must provide an username or valid email address ");
+    if (
+      (!credentials.email || !credentials.username) &&
+      !credentials.password
+    ) {
+      throw new Error(
+        "Missing credentials: Password is required. Must provide an username or valid email address "
+      );
     }
     const user = await userClass.login(credentials);
     if (user) {
@@ -142,8 +150,8 @@ userController.login = async (req, res) => {
 
 userController.register = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const user = await userClass.register(email, password);
+    const { identifier, password } = req.body;
+    const user = await userClass.register(identifier, password);
     if (user) {
       res
         .status(201)
@@ -169,6 +177,48 @@ userController.getUserByUsername = async (req, res) => {
     res
       .status(200)
       .send(responseObject(200, true, "User fetched successfully", user));
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send(responseObject(500, false, "Internal server error", null));
+  }
+};
+
+userController.changePassword = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { currentPassword, newPassword } = req.body;
+   
+    if (!currentPassword || !newPassword) {
+      return res
+        .status(400)
+        .send(
+          responseObject(
+            400,
+            false,
+            "Current and new passwords are required",
+            null
+          )
+        );
+    }
+    if (!validationUtils.validatePassword(newPassword)) {
+      return res
+        .status(400)
+        .send(responseObject(400, false, "Invalid password format", null));
+    }
+    
+    
+    const user = await userClass.changePassword(userId, currentPassword, newPassword);
+    if (!user) {
+      return res
+        .status(404)
+        .send(responseObject(404, false, "User not found", null));
+    }
+
+    res
+      .status(200)
+      .send(responseObject(200, true, "Password changed successfully", user));
   } catch (error) {
     console.error(error);
     res
