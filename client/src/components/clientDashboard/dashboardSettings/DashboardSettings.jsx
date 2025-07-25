@@ -76,9 +76,9 @@ export const DashboardSettings = () => {
         </form>
       </article>
 
-      <article className="border border-danger border-3 p-3">
+      <article className="border border-danger border-3 p-3 ">
         <h4 className="text-start text-danger">Danger Zone</h4>
-        <div className="d-flex">
+        <div className="d-flex justify-content-center align-items-center">
           <div className="card">
             <div className="card-body">
               <h5 className="card-title text-danger">Change Password</h5>

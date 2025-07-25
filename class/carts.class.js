@@ -6,6 +6,18 @@ const Merchandise = require("../models/").Merchandise;
 module.exports = class CartsClass {
   constructor() {}
 
+  static async createCartForUser(userId) {
+    try {
+      if (!userId) {
+        throw new Error("User ID is required");
+      }
+      const cart = await Carts.create({ user_id: userId });
+      return cart;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
   static async getUserCarts(userId) {
     try {
       if (!userId) {

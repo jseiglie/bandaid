@@ -31,6 +31,7 @@ const {
   VenueScores,
 } = require("../models");
 const Users = require("../class/users.class.js");
+const { user } = require("../config/db.config.js");
 
 const seedDatabase = async () => {
   try {
@@ -54,7 +55,6 @@ const seedDatabase = async () => {
       BandDefaultSchedules.destroy({ where: {}, force: true }),
       Rehearsals.destroy({ where: {}, force: true }),
       VenuesOwner.destroy({ where: {}, force: true }),
-
     ]);
 
     // then parent tables
@@ -196,7 +196,7 @@ const seedDatabase = async () => {
       const registeredUser = await Users.createUserFromSeeder(
         user.email,
         user.password,
-        user.username,  
+        user.username,
         user.role,
         user.admin,
         user.avatar,
@@ -403,47 +403,43 @@ const seedDatabase = async () => {
       { returning: true }
     );
 
-    // Create Carts for some users
-    const carts = await Carts.bulkCreate(
-      [
-        { user_id: users[0].id },
-        { user_id: users[1].id },
-        { user_id: users[2].id },
-        { user_id: users[3].id },
-      ],
-      { returning: true }
-    );
+    const carts = await Carts.findAll();
+    // Map carts by user_id for robust lookup
+    const cartMap = {};
+    for (const cart of carts) {
+      cartMap[cart.user_id] = cart;
+    }
 
-    // Add Cart Items
+    // Add Cart Items using cartMap
     await CartItems.bulkCreate(
       [
         {
-          cart_id: carts[0].id,
+          cart_id: cartMap[users[0].user.id]?.id,
           merchandise_id: merchandise[0].id,
           quantity: 2,
         },
         {
-          cart_id: carts[0].id,
+          cart_id: cartMap[users[0].user.id]?.id,
           merchandise_id: merchandise[1].id,
           quantity: 1,
         },
         {
-          cart_id: carts[1].id,
+          cart_id: cartMap[users[1].user.id]?.id,
           merchandise_id: merchandise[2].id,
           quantity: 3,
         },
         {
-          cart_id: carts[1].id,
+          cart_id: cartMap[users[1].user.id]?.id,
           merchandise_id: merchandise[3].id,
           quantity: 1,
         },
         {
-          cart_id: carts[0].id,
+          cart_id: cartMap[users[0].user.id]?.id,
           merchandise_id: merchandise[4].id,
           quantity: 2,
         },
         {
-          cart_id: carts[1].id,
+          cart_id: cartMap[users[1].user.id]?.id,
           merchandise_id: merchandise[5].id,
           quantity: 1,
         },
@@ -518,7 +514,7 @@ const seedDatabase = async () => {
         notes: "Percussion focus.",
       },
     ]);
-
+  
     const songs = await Songs.bulkCreate(
       [
         {
@@ -526,63 +522,63 @@ const seedDatabase = async () => {
           key: "C",
           isSingle: true,
           band_id: bands[0].id,
-          proposed_by: users[0].id,
+          proposed_by: users[0].user.id,
         },
         {
           title: "Song 2",
           key: "D",
           isSingle: false,
           band_id: bands[1].id,
-          proposed_by: users[1].id,
+          proposed_by: users[1].user.id,
         },
         {
           title: "Song 3",
           key: "E",
           isSingle: true,
           band_id: bands[2].id,
-          proposed_by: users[2].id,
+          proposed_by: users[2].user.id,
         },
         {
           title: "Song 4",
           key: "F",
           isSingle: false,
           band_id: bands[3].id,
-          proposed_by: users[3].id,
+          proposed_by: users[3].user.id,
         },
         {
           title: "Song 5",
           key: "G",
           isSingle: true,
           band_id: bands[4].id,
-          proposed_by: users[4].id,
+          proposed_by: users[4].user.id,
         },
         {
           title: "Song 6",
           key: "A",
           isSingle: true,
           band_id: bands[5].id,
-          proposed_by: users[5].id,
+          proposed_by: users[5].user.id,
         },
         {
           title: "Song 7",
           key: "B",
           isSingle: false,
           band_id: bands[5].id,
-          proposed_by: users[6].id,
+          proposed_by: users[6].user.id,
         },
         {
           title: "Song 8",
           key: "Am",
           isSingle: true,
           band_id: bands[6].id,
-          proposed_by: users[7].id,
+          proposed_by: users[7].user.id,
         },
         {
           title: "Song 9",
           key: "Dm",
           isSingle: false,
           band_id: bands[6].id,
-          proposed_by: users[8].id,
+          proposed_by: users[8].user.id,
         },
       ],
       { returning: true }
@@ -594,25 +590,25 @@ const seedDatabase = async () => {
           band_id: bands[0].id,
           name: "SetList 1",
           accepted: true,
-          proposed_by: users[0].id,
+          proposed_by: users[0].user.id,
         },
         {
           band_id: bands[1].id,
           name: "SetList 2",
           accepted: false,
-          proposed_by: users[1].id,
+          proposed_by: users[1].user.id,
         },
         {
           band_id: bands[5].id,
           name: "SetList 6",
           accepted: false,
-          proposed_by: users[5].id,
+          proposed_by: users[5].user.id,
         },
         {
           band_id: bands[6].id,
           name: "SetList 7",
           accepted: true,
-          proposed_by: users[6].id,
+          proposed_by: users[6].user.id,
         },
       ],
       { returning: true }
@@ -629,92 +625,120 @@ const seedDatabase = async () => {
     ]);
 
     await UserBands.bulkCreate([
-      { user_id: users[0].id, band_id: bands[0].id },
-      { user_id: users[1].id, band_id: bands[1].id },
-      { user_id: users[5].id, band_id: bands[5].id },
-      { user_id: users[6].id, band_id: bands[5].id },
-      { user_id: users[7].id, band_id: bands[6].id },
+      { user_id: users[0].user.id, band_id: bands[0].id },
+      { user_id: users[1].user.id, band_id: bands[1].id },
+      { user_id: users[5].user.id, band_id: bands[5].id },
+      { user_id: users[6].user.id, band_id: bands[5].id },
+      { user_id: users[7].user.id, band_id: bands[6].id },
     ]);
 
-    const musicianProfiles = await MusicianProfile.bulkCreate(
-      [
+    // Update musician profiles for users
+    const musicianProfileUpdates = [
+      {
+        user_id: users[0].user.id,
+        bio: "Experienced guitarist.",
+        instruments: "Guitar",
+        genres: "Rock",
+        experience: "10 years",
+        social_links: JSON.stringify({
+          instagram: "https://instagram.com/user1",
+        }),
+      },
+      {
+        user_id: users[1].user.id,
+        bio: "Jazz drummer.",
+        instruments: "Drums",
+        genres: "Jazz",
+        experience: "8 years",
+        social_links: JSON.stringify({
+          twitter: "https://twitter.com/user2",
+        }),
+      },
+      {
+        user_id: users[5].user.id,
+        bio: "Alternative vocalist.",
+        instruments: "Vocals",
+        genres: "Alternative",
+        experience: "5 years",
+        social_links: JSON.stringify({
+          instagram: "https://instagram.com/user6",
+        }),
+      },
+      {
+        user_id: users[6].user.id,
+        bio: "Metalcore guitarist.",
+        instruments: "Guitar",
+        genres: "Metalcore",
+        experience: "7 years",
+        social_links: JSON.stringify({
+          soundcloud: "https://soundcloud.com/user7",
+        }),
+      },
+      {
+        user_id: users[7].user.id,
+        bio: "Latin percussionist.",
+        instruments: "Percussion",
+        genres: "Latin",
+        experience: "9 years",
+        social_links: JSON.stringify({
+          youtube: "https://youtube.com/user8",
+        }),
+      },
+    ];
+
+    for (const update of musicianProfileUpdates) {
+      await MusicianProfile.update(
         {
-          user_id: users[0].id,
-          bio: "Experienced guitarist.",
-          instruments: "Guitar",
-          genres: "Rock",
-          experience: "10 years",
-          social_links: JSON.stringify({
-            instagram: "https://instagram.com/user1",
-          }),
+          bio: update.bio,
+          instruments: update.instruments,
+          genres: update.genres,
+          experience: update.experience,
+          social_links: update.social_links,
         },
-        {
-          user_id: users[1].id,
-          bio: "Jazz drummer.",
-          instruments: "Drums",
-          genres: "Jazz",
-          experience: "8 years",
-          social_links: JSON.stringify({
-            twitter: "https://twitter.com/user2",
-          }),
-        },
-        {
-          user_id: users[5].id,
-          bio: "Alternative vocalist.",
-          instruments: "Vocals",
-          genres: "Alternative",
-          experience: "5 years",
-          social_links: JSON.stringify({
-            instagram: "https://instagram.com/user6",
-          }),
-        },
-        {
-          user_id: users[6].id,
-          bio: "Metalcore guitarist.",
-          instruments: "Guitar",
-          genres: "Metalcore",
-          experience: "7 years",
-          social_links: JSON.stringify({
-            soundcloud: "https://soundcloud.com/user7",
-          }),
-        },
-        {
-          user_id: users[7].id,
-          bio: "Latin percussionist.",
-          instruments: "Percussion",
-          genres: "Latin",
-          experience: "9 years",
-          social_links: JSON.stringify({
-            youtube: "https://youtube.com/user8",
-          }),
-        },
-      ],
-      { returning: true }
-    );
+        { where: { user_id: update.user_id } }
+      );
+    }
+
+    // Fetch updated musician profiles and map by user_id
+    const musicianProfilesArr = await MusicianProfile.findAll({
+      where: {
+        user_id: [
+          users[0].user.id,
+          users[1].user.id,
+          users[5].user.id,
+          users[6].user.id,
+          users[7].user.id,
+        ],
+      },
+    });
+    const musicianProfileMap = {};
+    for (const mp of musicianProfilesArr) {
+      musicianProfileMap[mp.user_id] = mp;
+    }
 
     await BandMembers.bulkCreate([
       {
-        musician_id: musicianProfiles[0].id,
+        musician_id: musicianProfileMap[users[0].user.id]?.id,
         band_id: bands[0].id,
         role: "Guitarist",
       },
       {
-        musician_id: musicianProfiles[1].id,
+        musician_id: musicianProfileMap[users[1].user.id]?.id,
         band_id: bands[0].id,
         role: "Drummer",
       },
       {
-        musician_id: musicianProfiles[2].id,
+        musician_id: musicianProfileMap[users[5].user.id]?.id,
         band_id: bands[5].id,
         role: "Vocalist",
       },
       {
-        musician_id: musicianProfiles[3].id,
+        musician_id: musicianProfileMap[users[6].user.id]?.id,
         band_id: bands[5].id,
         role: "Guitarist",
       },
       {
-        musician_id: musicianProfiles[4].id,
+        musician_id: musicianProfileMap[users[7].user.id]?.id,
         band_id: bands[6].id,
         role: "Percussionist",
       },
@@ -773,70 +797,70 @@ const seedDatabase = async () => {
     await PurchaseHistory.bulkCreate(
       [
         {
-          user_id: users[0].id,
+          user_id: users[0].user.id,
           merchandise_id: merchandise[0].id,
           quantity: 2,
           purchaseDate: new Date(),
           totalPrice: merchandise[0].price * 2,
         },
         {
-          user_id: users[1].id,
+          user_id: users[1].user.id,
           merchandise_id: merchandise[1].id,
           quantity: 1,
           purchaseDate: new Date(),
           totalPrice: merchandise[1].price * 1,
         },
         {
-          user_id: users[2].id,
+          user_id: users[2].user.id,
           merchandise_id: merchandise[2].id,
           quantity: 3,
           purchaseDate: new Date(),
           totalPrice: merchandise[2].price * 3,
         },
         {
-          user_id: users[3].id,
+          user_id: users[3].user.id,
           merchandise_id: merchandise[0].id,
           quantity: 1,
           purchaseDate: new Date(),
           totalPrice: merchandise[0].price * 1,
         },
         {
-          user_id: users[0].id,
+          user_id: users[0].user.id,
           merchandise_id: merchandise[1].id,
           quantity: 2,
           purchaseDate: new Date(),
           totalPrice: merchandise[1].price * 2,
         },
         {
-          user_id: users[2].id,
+          user_id: users[2].user.id,
           merchandise_id: merchandise[2].id,
           quantity: 1,
           purchaseDate: new Date(),
           totalPrice: merchandise[2].price * 1,
         },
         {
-          user_id: users[2].id,
+          user_id: users[2].user.id,
           merchandise_id: merchandise[3].id,
           quantity: 4,
           purchaseDate: new Date(),
           totalPrice: merchandise[3].price * 4,
         },
         {
-          user_id: users[0].id,
+          user_id: users[0].user.id,
           merchandise_id: merchandise[4].id,
           quantity: 5,
           purchaseDate: new Date(),
           totalPrice: merchandise[4].price * 5,
         },
         {
-          user_id: users[0].id,
+          user_id: users[0].user.id,
           merchandise_id: merchandise[5].id,
           quantity: 1,
           purchaseDate: new Date(),
           totalPrice: merchandise[5].price * 1,
         },
         {
-          user_id: users[1].id,
+          user_id: users[1].user.id,
           merchandise_id: merchandise[6].id,
           quantity: 2,
           purchaseDate: new Date(),
@@ -847,18 +871,18 @@ const seedDatabase = async () => {
     );
     // Seed BandFollowers
     await BandFollowers.bulkCreate([
-      { band_id: bands[0].id, follower_id: users[1].id },
-      { band_id: bands[1].id, follower_id: users[2].id },
-      { band_id: bands[2].id, follower_id: users[3].id },
-      { band_id: bands[3].id, follower_id: users[4].id },
+      { band_id: bands[0].id, follower_id: users[1].user.id },
+      { band_id: bands[1].id, follower_id: users[2].user.id },
+      { band_id: bands[2].id, follower_id: users[3].user.id },
+      { band_id: bands[3].id, follower_id: users[4].user.id },
     ]);
 
     // Seed MerchandiseFavorites
     await MerchandiseFavorites.bulkCreate([
-      { user_id: users[0].id, merchandise_id: merchandise[0].id },
-      { user_id: users[1].id, merchandise_id: merchandise[1].id },
-      { user_id: users[2].id, merchandise_id: merchandise[2].id },
-      { user_id: users[3].id, merchandise_id: merchandise[3].id },
+      { user_id: users[0].user.id, merchandise_id: merchandise[0].id },
+      { user_id: users[1].user.id, merchandise_id: merchandise[1].id },
+      { user_id: users[2].user.id, merchandise_id: merchandise[2].id },
+      { user_id: users[3].user.id, merchandise_id: merchandise[3].id },
     ]);
 
     //seed tags
@@ -968,9 +992,9 @@ const seedDatabase = async () => {
     // Seed VenueOwners
     await VenuesOwner.bulkCreate(
       [
-        { venue_id: venues[0].id, owner_id: users[0].id },
-        { venue_id: venues[1].id, owner_id: users[1].id },
-        { venue_id: venues[2].id, owner_id: users[2].id },
+        { venue_id: venues[0].id, owner_id: users[0].user.id },
+        { venue_id: venues[1].id, owner_id: users[1].user.id },
+        { venue_id: venues[2].id, owner_id: users[2].user.id },
       ],
       { returning: true }
     );
@@ -980,19 +1004,19 @@ const seedDatabase = async () => {
       [
         {
           venue_id: venues[0].id,
-          user_id: users[0].id,
+          user_id: users[0].user.id,
           score: 5,
           comment: "Amazing sound!",
         },
         {
           venue_id: venues[1].id,
-          user_id: users[1].id,
+          user_id: users[1].user.id,
           score: 4.5,
           comment: "Great atmosphere.",
         },
         {
           venue_id: venues[2].id,
-          user_id: users[2].id,
+          user_id: users[2].user.id,
           score: 4,
           comment: "Nice staff.",
         },
@@ -1115,127 +1139,127 @@ const seedDatabase = async () => {
         {
           title: "First Post",
           content: "This is the first post",
-          author_id: users[0].id,
+          author_id: users[0].user.id,
         },
         {
           title: "Second Post",
           content: "This is the second post",
-          author_id: users[1].id,
+          author_id: users[1].user.id,
         },
         {
           title: "Third Post",
           content: "This is the third post",
-          author_id: users[2].id,
+          author_id: users[2].user.id,
         },
         {
           title: "Fourth Post",
           content: "This is the fourth post",
-          author_id: users[3].id,
+          author_id: users[3].user.id,
         },
         {
           title: "Fifth Post",
           content: "This is the fifth post",
-          author_id: users[4].id,
+          author_id: users[4].user.id,
         },
         {
           title: "Sixth Post",
           content: "This is the sixth post",
-          author_id: users[5].id,
+          author_id: users[5].user.id,
         },
         {
           title: "Seventh Post",
           content: "This is the seventh post",
-          author_id: users[6].id,
+          author_id: users[6].user.id,
         },
         {
           title: "Eighth Post",
           content: "This is the eighth post",
-          author_id: users[7].id,
+          author_id: users[7].user.id,
         },
         {
           title: "Ninth Post",
           content: "This is the ninth post",
-          author_id: users[8].id,
+          author_id: users[8].user.id,
         },
         {
           title: "Tenth Post",
           content: "This is the tenth post",
-          author_id: users[9].id,
+          author_id: users[9].user.id,
         },
         {
           title: "Eleventh Post",
           content: "This is the eleventh post",
-          author_id: users[0].id,
+          author_id: users[0].user.id,
         },
         {
           title: "Twelfth Post",
           content: "This is the twelfth post",
-          author_id: users[1].id,
+          author_id: users[1].user.id,
         },
         {
           title: "Thirteenth Post",
           content: "This is the thirteenth post",
-          author_id: users[2].id,
+          author_id: users[2].user.id,
         },
         {
           title: "Fourteenth Post",
           content: "This is the fourteenth post",
-          author_id: users[3].id,
+          author_id: users[3].user.id,
         },
         {
           title: "Fifteenth Post",
           content: "This is the fifteenth post",
-          author_id: users[4].id,
+          author_id: users[4].user.id,
         },
         {
           title: "Sixteenth Post",
           content: "This is the sixteenth post",
-          author_id: users[5].id,
+          author_id: users[5].user.id,
         },
         {
           title: "Seventeenth Post",
           content: "This is the seventeenth post",
-          author_id: users[6].id,
+          author_id: users[6].user.id,
         },
         {
           title: "Eighteenth Post",
           content: "This is the eighteenth post",
-          author_id: users[7].id,
+          author_id: users[7].user.id,
         },
         {
           title: "Nineteenth Post",
           content: "This is the nineteenth post",
-          author_id: users[8].id,
+          author_id: users[8].user.id,
         },
         {
           title: "Twentieth Post",
           content: "This is the twentieth post",
-          author_id: users[9].id,
+          author_id: users[9].user.id,
         },
         {
           title: "Twenty-First Post",
           content: "This is the twenty-first post",
-          author_id: users[0].id,
+          author_id: users[0].user.id,
         },
         {
           title: "Twenty-Second Post",
           content: "This is the twenty-second post",
-          author_id: users[1].id,
+          author_id: users[1].user.id,
         },
         {
           title: "Twenty-Third Post",
           content: "This is the twenty-third post",
-          author_id: users[2].id,
+          author_id: users[2].user.id,
         },
         {
           title: "Twenty-Fourth Post",
           content: "This is the twenty-fourth post",
-          author_id: users[3].id,
+          author_id: users[3].user.id,
         },
         {
           title: "Twenty-Fifth Post",
           content: "This is the twenty-fifth post",
-          author_id: users[4].id,
+          author_id: users[4].user.id,
         },
       ],
       { returning: true }
@@ -1513,42 +1537,42 @@ const seedDatabase = async () => {
         {
           content: "Great post!",
           post_id: posts[0].id,
-          author_id: users[1].id,
+          author_id: users[1].user.id,
         },
         {
           content: "Thanks for sharing!",
           post_id: posts[0].id,
-          author_id: users[2].id,
+          author_id: users[2].user.id,
         },
         {
           content: "Interesting read",
           post_id: posts[1].id,
-          author_id: users[0].id,
+          author_id: users[0].user.id,
         },
         {
           content: "I love this!",
           post_id: posts[1].id,
-          author_id: users[3].id,
+          author_id: users[3].user.id,
         },
         {
           content: "Can't wait for more!",
           post_id: posts[2].id,
-          author_id: users[4].id,
+          author_id: users[4].user.id,
         },
         {
           content: "This is awesome!",
           post_id: posts[2].id,
-          author_id: users[5].id,
+          author_id: users[5].user.id,
         },
         {
           content: "So inspiring!",
           post_id: posts[3].id,
-          author_id: users[6].id,
+          author_id: users[6].user.id,
         },
         {
           content: "Keep it up!",
           post_id: posts[3].id,
-          author_id: users[7].id,
+          author_id: users[7].user.id,
         },
       ],
       { returning: true }
@@ -1556,29 +1580,29 @@ const seedDatabase = async () => {
 
     // Seed PostLikes
     await PostLikes.bulkCreate([
-      { post_id: posts[0].id, user_id: users[1].id, liked: true },
-      { post_id: posts[0].id, user_id: users[2].id, liked: true },
-      { post_id: posts[1].id, user_id: users[0].id, liked: true },
-      { post_id: posts[1].id, user_id: users[3].id, liked: false },
-      { post_id: posts[2].id, user_id: users[4].id, liked: true },
-      { post_id: posts[2].id, user_id: users[5].id, liked: false },
-      { post_id: posts[3].id, user_id: users[6].id, liked: true },
-      { post_id: posts[3].id, user_id: users[7].id, liked: false },
-      { post_id: posts[4].id, user_id: users[8].id, liked: true },
-      { post_id: posts[4].id, user_id: users[9].id, liked: true },
-      { post_id: posts[5].id, user_id: users[0].id, liked: false },
-      { post_id: posts[5].id, user_id: users[3].id, liked: false },
+      { post_id: posts[0].id, user_id: users[1].user.id, liked: true },
+      { post_id: posts[0].id, user_id: users[2].user.id, liked: true },
+      { post_id: posts[1].id, user_id: users[0].user.id, liked: true },
+      { post_id: posts[1].id, user_id: users[3].user.id, liked: false },
+      { post_id: posts[2].id, user_id: users[4].user.id, liked: true },
+      { post_id: posts[2].id, user_id: users[5].user.id, liked: false },
+      { post_id: posts[3].id, user_id: users[6].user.id, liked: true },
+      { post_id: posts[3].id, user_id: users[7].user.id, liked: false },
+      { post_id: posts[4].id, user_id: users[8].user.id, liked: true },
+      { post_id: posts[4].id, user_id: users[9].user.id, liked: true },
+      { post_id: posts[5].id, user_id: users[0].user.id, liked: false },
+      { post_id: posts[5].id, user_id: users[3].user.id, liked: false },
     ]);
 
     // Seed CommentLikes
     await CommentLikes.bulkCreate([
-      { comment_id: comments[0].id, user_id: users[2].id, liked: false },
-      { comment_id: comments[1].id, user_id: users[0].id, liked: true },
-      { comment_id: comments[2].id, user_id: users[1].id, liked: true },
-      { comment_id: comments[3].id, user_id: users[3].id, liked: false },
-      { comment_id: comments[4].id, user_id: users[4].id, liked: true },
-      { comment_id: comments[5].id, user_id: users[5].id, liked: true },
-      { comment_id: comments[6].id, user_id: users[6].id, liked: false },
+      { comment_id: comments[0].id, user_id: users[2].user.id, liked: false },
+      { comment_id: comments[1].id, user_id: users[0].user.id, liked: true },
+      { comment_id: comments[2].id, user_id: users[1].user.id, liked: true },
+      { comment_id: comments[3].id, user_id: users[3].user.id, liked: false },
+      { comment_id: comments[4].id, user_id: users[4].user.id, liked: true },
+      { comment_id: comments[5].id, user_id: users[5].user.id, liked: true },
+      { comment_id: comments[6].id, user_id: users[6].user.id, liked: false },
     ]);
 
     console.log("Database seeded successfully!");

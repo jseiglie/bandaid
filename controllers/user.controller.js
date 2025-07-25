@@ -101,7 +101,7 @@ userController.updateUser = async (req, res) => {
 
 userController.deleteUser = async (req, res) => {
   try {
-    const userId = req.params.id;
+    const userId = req.user.id;
     const user = await userClass.deleteUser(userId);
     res
       .status(200)

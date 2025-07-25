@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const bandController = require("../controllers/band.controller.js");
 const Bands = require("./bands.class");
 const BandMembers = require("../class/bandMembers.class.js");
+const Carts = require("./carts.class.js");
 const MusicianProfile = require("../class/musicianProfile.class.js");
 const { Lives } = require("../models");
 const { Op } = require("sequelize");
@@ -16,7 +17,6 @@ const {
 } = require("../middleware/auth.middleware.js");
 const bandMembers = require("../models/BandMembers.js");
 const UserSubscriptions = require("../models/userSubscriptions.js");
-const Carts = require("./carts.class.js");
 module.exports = class Users {
   constructor() {}
 
@@ -66,10 +66,7 @@ module.exports = class Users {
         acc[month]++;
         return acc;
       }, {});
-      console.log(
-        "Grouped users by month:****************************************************************************",
-        groupedUsers
-      );
+
       const result = allMonths.map((month) => ({
         name: month,
         count: groupedUsers[month] || 0,
@@ -389,13 +386,22 @@ module.exports = class Users {
         phoneNumber,
         address,
       });
+
+      const cart = await Carts.createCartForUser(newUser.dataValues.id);
+      const profile = await MusicianProfile.getProfileByUserId(
+        newUser.dataValues.id
+      );
+
       const user = newUser.toJSON();
+      user.cart = cart;
+      user.profile = profile ? profile.toJSON() : null;
       const token = tokenGenerator({
         id: user.id,
         username: user.username,
         email: user.email,
         role: user.role,
       });
+
       return { user, token };
     } catch (error) {
       console.error("Error creating user:", error);
@@ -415,7 +421,7 @@ module.exports = class Users {
     has_subscription = false
   ) {
     try {
-      const user = await Users.register(
+      const user = await this.register(
         email,
         password,
         username,
@@ -426,6 +432,7 @@ module.exports = class Users {
         phoneNumber,
         address
       );
+
       return user;
     } catch (error) {
       console.error("Error creating user from seeder:", error);
@@ -444,7 +451,7 @@ module.exports = class Users {
         where: { id: userId },
       });
       const passwordMatch = await this.checkPassword(
-        currentPassword,  
+        currentPassword,
         user.password
       );
       if (!passwordMatch) {

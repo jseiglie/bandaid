@@ -71,6 +71,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(20),
         allowNull: true,
       },
+      is_active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+        allowNull: false,
+      },
 
       // last_login: {
       //   type: DataTypes.DATE,
