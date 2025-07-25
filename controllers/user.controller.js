@@ -8,6 +8,7 @@ const {
 const {
   default: validationUtils,
 } = require("../client/src/utils/validationUtils.js");
+const { user } = require("../config/db.config.js");
 
 userController.logout = async (req, res) => {
   try {
@@ -29,6 +30,36 @@ userController.getUsers = async (req, res) => {
     res
       .status(200)
       .send(responseObject(200, true, "Users fetched successfully", bands));
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send(responseObject(500, false, "Internal server error", null));
+  }
+};
+
+userController.getUser = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await userClass.getUserById(userId);
+    res
+      .status(200)
+      .send(responseObject(200, true, "User fetched successfully", user));
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send(responseObject(500, false, "Internal server error", null));
+  }
+};
+
+userController.getMe = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await userClass.getUserById(userId);
+    res
+      .status(200)
+      .send(responseObject(200, true, "User fetched successfully", user));
   } catch (error) {
     console.error(error);
     res

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BandManagerCard } from "../components/bandManagerCard/BandManagerCard";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { useNavigate } from "react-router-dom";
@@ -24,6 +24,24 @@ export const BandManagerDashboard = () => {
       setError(null);
     }, 3000);
   };
+
+  useEffect(() => {
+    if (!store.user) {
+      if (localStorage.getItem("token")) {
+        userServices.getUserInfo().then((data) => {
+          if (data.success) {
+            dispatch({
+              type: "store",
+              payload: { key: "user", result: data.data },
+            });
+            localStorage.setItem("user", JSON.stringify(data.data));
+          }
+        });
+      } else {
+        navigate("/");
+      }
+    }
+  }, [store.user, navigate]);
 
   return (
     <section

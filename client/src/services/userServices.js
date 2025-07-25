@@ -63,4 +63,20 @@ userServices.changePassword = async (data) => {
   }
 };
 
+userServices.getUserInfo = async () => {
+  try {
+    const response = await fetcher("/users/auth/me", {
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token"),
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error fetching user info");
+  }
+};
+
 export default userServices;
