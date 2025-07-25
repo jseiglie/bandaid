@@ -23,7 +23,10 @@ module.exports = class CartsClass {
       if (!userId) {
         throw new Error("User ID is required");
       }
-      const carts = await Carts.findAll({ where: { user_id: userId }, include: [{ model: CartItems }] });
+      const carts = await Carts.findAll({
+        where: { user_id: userId },
+        include: [{ model: CartItems }],
+      });
       return carts;
     } catch (error) {
       throw new Error(error.message);

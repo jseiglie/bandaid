@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       active_subscription_id: {
         type: DataTypes.INTEGER,
-        allowNull: true, // puede no tener ninguna activa
+        allowNull: true, 
       },
       address: {
         type: DataTypes.STRING(255),
@@ -101,23 +101,13 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "user_id",
       onDelete: "CASCADE",
     });
-    
-    Users.hasMany(models.VenueScores, { foreignKey: "user_id", onDelete: "CASCADE" });
-    
-    
+    Users.hasMany(models.VenueScores, {
+      foreignKey: "user_id",
+      onDelete: "CASCADE",
+    });
     Users.hasMany(models.Carts, { foreignKey: "user_id" });
-    
-    //venues owners
     Users.hasMany(models.VenuesOwner, { foreignKey: "owner_id" });
     Users.hasMany(models.VenueScores, { foreignKey: "user_id" });
-    
-    // Users.hasMany(models.BandMembers, { foreignKey: "user_id" });
-
-    // Users.belongsToMany(models.Bands, {
-    //   through: "UserBands",
-    //   foreignKey: "user_id",
-    //   onDelete: "CASCADE",
-    // });
   };
 
   Users.beforeCreate(async (user) => {
@@ -125,11 +115,8 @@ module.exports = (sequelize, DataTypes) => {
     const existingUsername = await Users.findOne({
       where: { username: user.username },
     });
-
     if (existingUser) throw new Error("Email already registered");
     if (existingUsername) throw new Error("Username already registered");
-
-    // Encriptar contraseña
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
   });
