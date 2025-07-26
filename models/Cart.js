@@ -14,6 +14,8 @@ module.exports = (sequelize, DataTypes) => {
           model: "Users",
           key: "id",
         },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
     },
     {
@@ -28,5 +30,8 @@ module.exports = (sequelize, DataTypes) => {
     Carts.hasMany(models.CartItems, { foreignKey: "cart_id" });
   };
 
+  Carts.prototype.toJSON = function () {
+    return Object.assign({}, this.get());
+  };
   return Carts;
 };

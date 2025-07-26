@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/bandaid.png";
+import "./Footer.css";
 export const Footer = () => {
   return (
     <footer className="bg-dark text-white mt-5 p-3">

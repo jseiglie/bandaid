@@ -19,6 +19,7 @@ import { Checkout } from "./pages/checkout";
 import { CompletedPayment } from "./pages/CompletedPayment";
 import { SubscriptionPage } from "./pages/SubscriptionPage";
 import { AdminDashboard } from "./pages/AdminDashboard";
+import { Cart } from "./pages/Cart";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,6 +39,7 @@ export const router = createBrowserRouter(
       <Route path="/complete" element={<CompletedPayment />} />
       <Route path="/subscribe" element={<SubscriptionPage />} />
       <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/cart" element={<Cart />} />
       <Route path="*" element={<h1>Not found!</h1>} />
     </Route>
   )

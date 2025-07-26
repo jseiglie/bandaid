@@ -37,10 +37,12 @@ export const Navbar = () => {
             to="/cart"
           >
             <span className="fa-solid fa-xl fa-cart-shopping"></span>
-            <span className="position-absolute top-1 start-100 translate-middle badge rounded-pill bg-primary">
-              {store.cart.length}
-              <span className="visually-hidden">items</span>
-            </span>
+            {store.user.cart.CartItems.length > 0 && (
+              <span className="position-absolute top-1 start-100 translate-middle badge rounded-pill bg-primary">
+                {store.user.cart.CartItems.length}
+                <span className="visually-hidden">items</span>
+              </span>
+            )}
           </Link>
         )}
         <Link

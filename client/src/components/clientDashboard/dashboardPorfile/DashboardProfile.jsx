@@ -1,100 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./DashboardProfile.css";
+import useGlobalReducer from "../../../hooks/useGlobalReducer";
 export const DashboardProfile = () => {
-  const [data, setData] = useState({
-    id: 1,
-    username: "rockstar1",
-    email: "user1@ex.com",
-    admin: false,
-    avatar: null,
-    avatar_public_id: null,
-    has_subscription: true,
-    active_subscription_id: null,
-    address: "123 Rock St, NYC",
-    phone: null,
-    city: null,
-    country: null,
-    state: null,
-    zip_code: null,
-    is_active: true,
-    createdAt: "2025-07-25T11:03:13.000Z",
-    updatedAt: "2025-07-25T11:03:13.000Z",
-    profile: {
-      id: 1,
-      bio: "Experienced guitarist.",
-      instruments: "Guitar",
-      genres: "Rock",
-      experience: "10 years",
-      social_links: {
-        instagram: "https://instagram.com/user1",
-      },
-    },
-    bands: [
-      {
-        id: 1,
-        role: "Guitarist",
-        createdAt: "2025-07-25T11:03:13.000Z",
-        updatedAt: "2025-07-25T11:03:13.000Z",
-        Band: {
-          id: 1,
-          name: "Band A",
-          band_admin: null,
-          description: "Rock band",
-          genre: "Rock",
-          location: "NYC",
-          website: null,
-          logo: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ffreepngimg.com%2Fthumb%2Fband%2F26223-1-band-photos.png&f=1&nofb=1&ipt=4d20faa39f989336905b6721f7dba99b693a340d1df470aed77958d3f02a72ef",
-          cover_photo: null,
-          logo_public_id: null,
-          cover_photo_public_id: null,
-          contact_email: null,
-          contact_phone: null,
-          contact_person: null,
-          established_year: null,
-          members_count: null,
-          is_active: true,
-          social_media:
-            '[{"name":"Instagram","link":"https://instagram.com/bandA"}]',
-          createdAt: "2025-07-25T11:03:13.000Z",
-        },
-      },
-    ],
-    cart: [
-      {
-        id: 1,
-        user_id: 1,
-        createdAt: "2025-07-25T11:03:13.000Z",
-        updatedAt: "2025-07-25T11:03:13.000Z",
-        CartItems: [
-          {
-            id: 1,
-            cart_id: 1,
-            merchandise_id: 1,
-            quantity: 2,
-            createdAt: "2025-07-25T11:03:13.000Z",
-            updatedAt: "2025-07-25T11:03:13.000Z",
-          },
-          {
-            id: 2,
-            cart_id: 1,
-            merchandise_id: 2,
-            quantity: 1,
-            createdAt: "2025-07-25T11:03:13.000Z",
-            updatedAt: "2025-07-25T11:03:13.000Z",
-          },
-          {
-            id: 5,
-            cart_id: 1,
-            merchandise_id: 5,
-            quantity: 2,
-            createdAt: "2025-07-25T11:03:13.000Z",
-            updatedAt: "2025-07-25T11:03:13.000Z",
-          },
-        ],
-      },
-    ],
-  });
+  const {store} = useGlobalReducer();
+  const [data, setData] = useState(store.user)
+   
 
   return (
     <section className="dashboard-profile">

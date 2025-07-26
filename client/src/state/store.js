@@ -58,7 +58,6 @@ export default function storeReducer(store, action = {}) {
       };
     case "login":
     case "store":
-      console.log("storeReducer", action.payload);
       return {
         ...store,
         [action.payload.key]: action.payload.result,

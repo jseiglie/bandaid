@@ -94,19 +94,46 @@ export const BandManagerDashboard = () => {
           >
             <span className="fa-solid fa-address-card"></span> Profile
           </button>
+
           <button
             className="p-3 fs-5 nav-link text-start"
-            id="v-pills-merchandise-tab"
+            id="v-pills-songs-tab"
             data-bs-toggle="pill"
-            data-bs-target="#v-pills-merchandise"
+            data-bs-target="#v-pills-songs"
             type="button"
             role="tab"
-            aria-controls="v-pills-merchandise"
+            aria-controls="v-pills-songs"
             aria-selected="false"
-            disabled
           >
-            <span className="fa-solid fa-store"></span> Merchandise
+            <span className="fa-solid fa-music"></span> Songs
           </button>
+
+          <button
+            className="p-3 fs-5 nav-link text-start"
+            id="v-pills-setLists-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#v-pills-setLists"
+            type="button"
+            role="tab"
+            aria-controls="v-pills-setLists"
+            aria-selected="false"
+          >
+            <span className="fa-solid fa-bars-staggered"></span> Setlists
+          </button>
+
+          <button
+            className="p-3 fs-5 nav-link text-start"
+            id="v-pills-lives-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#v-pills-lives"
+            type="button"
+            role="tab"
+            aria-controls="v-pills-lives"
+            aria-selected="false"
+          >
+            <span className="fa-solid fa-guitar"></span> Lives
+          </button>
+
           <button
             className="p-3 fs-5 nav-link text-start"
             id="v-pills-messages-tab"
@@ -122,6 +149,19 @@ export const BandManagerDashboard = () => {
           </button>
           <button
             className="p-3 fs-5 nav-link text-start"
+            id="v-pills-merchandise-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#v-pills-merchandise"
+            type="button"
+            role="tab"
+            aria-controls="v-pills-merchandise"
+            aria-selected="false"
+            disabled
+          >
+            <span className="fa-solid fa-store"></span> Merchandise
+          </button>
+          <button
+            className="p-3 fs-5 nav-link text-start"
             id="v-pills-settings-tab"
             data-bs-toggle="pill"
             data-bs-target="#v-pills-settings"
@@ -131,6 +171,24 @@ export const BandManagerDashboard = () => {
             aria-selected="false"
           >
             <span className="fa-solid fa-gear"></span> Settings
+          </button>
+          <button
+            className="p-3 fs-5 nav-link  text-start"
+            id="v-pills-cart-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#v-pills-cart"
+            type="button"
+            role="tab"
+            aria-controls="v-pills-cart"
+            aria-selected="false"
+          >
+            <span className="fa-solid fa-cart-shopping"></span> Cart
+            {store.user.cart.CartItems.length > 0 && (
+              <span className="ms-2 translate-middle badge rounded-pill bg-primary">
+                {store.user.cart.CartItems.length}
+                <span className="visually-hidden">items</span>
+              </span>
+            )}
           </button>
           <button
             className="p-3 fs-5 nav-link text-danger text-start"
@@ -153,7 +211,7 @@ export const BandManagerDashboard = () => {
             id="v-pills-start"
             role="tabpanel"
             aria-labelledby="v-pills-start-tab"
-            tabindex="0"
+            tabIndex="0"
           >
             <DashboardStart />
           </div>
@@ -163,7 +221,7 @@ export const BandManagerDashboard = () => {
             id="v-pills-profile-band"
             role="tabpanel"
             aria-labelledby="v-pills-profile-band-tab"
-            tabindex="0"
+            tabIndex="0"
           >
             <DashboardBandProfile />
           </div>
@@ -172,16 +230,43 @@ export const BandManagerDashboard = () => {
             id="v-pills-profile"
             role="tabpanel"
             aria-labelledby="v-pills-profile-tab"
-            tabindex="0"
+            tabIndex="0"
           >
             <DashboardProfile />
+          </div>
+          <div
+            className="tab-pane fade"
+            id="v-pills-songs"
+            role="tabpanel"
+            aria-labelledby="v-pills-songs-tab"
+            tabIndex="0"
+          >
+            <p>Songs management will be here soon!</p>
+          </div>
+          <div
+            className="tab-pane fade"
+            id="v-pills-setLists"
+            role="tabpanel"
+            aria-labelledby="v-pills-setLists-tab"
+            tabIndex="0"
+          >
+            <p>Setlists management will be here soon!</p>
+          </div>
+          <div
+            className="tab-pane fade"
+            id="v-pills-lives"
+            role="tabpanel"
+            aria-labelledby="v-pills-lives-tab"
+            tabIndex="0"
+          >
+            <p>Lives management will be here soon!</p>
           </div>
           <div
             className="tab-pane fade"
             id="v-pills-merchandise"
             role="tabpanel"
             aria-labelledby="v-pills-merchandise-tab"
-            tabindex="0"
+            tabIndex="0"
           >
             ...
           </div>
@@ -190,7 +275,7 @@ export const BandManagerDashboard = () => {
             id="v-pills-messages"
             role="tabpanel"
             aria-labelledby="v-pills-messages-tab"
-            tabindex="0"
+            tabIndex="0"
           >
             ...
           </div>
@@ -199,7 +284,7 @@ export const BandManagerDashboard = () => {
             id="v-pills-settings"
             role="tabpanel"
             aria-labelledby="v-pills-settings-tab"
-            tabindex="0"
+            tabIndex="0"
           >
             <DashboardSettings />
           </div>

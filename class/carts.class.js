@@ -1,6 +1,6 @@
 const Carts = require("../models/").Carts;
 const CartItems = require("../models/").CartItems;
-
+const Bands = require("../models/").Bands;
 const Merchandise = require("../models/").Merchandise;
 
 module.exports = class CartsClass {
@@ -23,11 +23,68 @@ module.exports = class CartsClass {
       if (!userId) {
         throw new Error("User ID is required");
       }
-      const carts = await Carts.findAll({
+
+      let carts = await Carts.findOne({
         where: { user_id: userId },
         include: [{ model: CartItems }],
       });
+
+      if (!carts) {
+        carts = await this.createCartForUser(userId);
+      }
+
+      carts = carts.toJSON();
+      if (!carts.CartItems) {
+        carts.CartItems = [];
+        return carts;
+      }
+
+      carts.CartItems = await Promise.all(
+        carts.CartItems.map(async (cartItem) => {
+          const merchandise = await Merchandise.findOne({
+            where: { id: cartItem.merchandise_id },
+            include: [{ model: Bands, attributes: ["name"] }],
+          });
+
+          if (!merchandise) return null;
+
+          return {
+            id: merchandise.id,
+            name: merchandise.name,
+            description: merchandise.description,
+            price: merchandise.price,
+            stock: merchandise.stock,
+            imageUrl: merchandise.imageUrl,
+            timesSold: merchandise.timesSold,
+            isAvailable: merchandise.isAvailable,
+            category_id: merchandise.category_id,
+            createdAt: merchandise.createdAt,
+            updatedAt: merchandise.updatedAt,
+            owner: merchandise.Band?.name || null,
+          };
+        })
+      );
+
+      carts.CartItems = carts.CartItems.filter((item) => item !== null);
+
       return carts;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  static async getCartItems(cartId) {
+    try {
+      if (!cartId) {
+        throw new Error("Cart ID is required");
+      }
+      const cart = await Carts.findByPk(cartId, {
+        include: [{ model: CartItems, include: [Merchandise] }],
+      });
+      if (!cart) {
+        throw new Error("No cart found with this ID");
+      }
+      return cart.CartItems;
     } catch (error) {
       throw new Error(error.message);
     }
