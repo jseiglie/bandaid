@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { CartItem } from "../components/cartItem/CartItem";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 
@@ -46,9 +47,9 @@ export const Cart = () => {
                 €
               </p>
               <div className="d-flex flex-column align-items-center">
-                <button className="btn btn-primary w-75">
+                <Link to="/checkout" className="btn btn-primary w-75">
                   <span className="fa-solid fa-cash-register"></span> Checkout
-                </button>
+                </Link>
               </div>
             </div>
           </section>

@@ -40,6 +40,8 @@ export const router = createBrowserRouter(
       <Route path="/subscribe" element={<SubscriptionPage />} />
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/cart" element={<Cart />} />
+      
+      <Route path="/checkout" element={<Checkout />} />
       <Route path="*" element={<h1>Not found!</h1>} />
     </Route>
   )
