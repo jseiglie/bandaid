@@ -4,7 +4,6 @@ import "./Navbar.css";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 export const Navbar = () => {
   const { store, dispatch } = useGlobalReducer();
-  const { user } = store;
   const handleLogout = () => {
     dispatch({ type: "store", payload: { key: "user", data: null } });
     localStorage.removeItem("user", "token");
@@ -30,12 +29,27 @@ export const Navbar = () => {
       >
         Contact
       </Link>
-      <Link
-        className="mx-2 nav-link text-white fw-bold py-1 px-0"
-        to={user ? "/band_manager" : "/auth"}
-      >
-        <span className="fa-regular fa-xl fa-circle-user"></span>
-      </Link>
+
+      <div className="text-end  d-flex">
+        {store.user && (
+          <Link
+            className="mx-2 nav-link text-white fw-bold py-1 px-0 position-relative"
+            to="/cart"
+          >
+            <span className="fa-solid fa-xl fa-cart-shopping"></span>
+            <span className="position-absolute top-1 start-100 translate-middle badge rounded-pill bg-primary">
+              {store.cart.length}
+              <span className="visually-hidden">items</span>
+            </span>
+          </Link>
+        )}
+        <Link
+          className="mx-2 nav-link text-white fw-bold py-1 px-0"
+          to={store.user ? "/band_manager" : "/auth"}
+        >
+          <span className="fa-regular fa-xl fa-circle-user"></span>
+        </Link>
+      </div>
     </nav>
   );
 };

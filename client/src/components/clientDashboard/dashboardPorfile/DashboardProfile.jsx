@@ -124,6 +124,81 @@ export const DashboardProfile = () => {
                   id="avatar"
                 />
               </div>
+              <div className="form-group">
+                <label htmlFor="address" className="form-label">
+                  Address:
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="address"
+                  id="address"
+                  defaultValue={data.address}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="phone" className="form-label">
+                  Phone:
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="phone"
+                  id="phone"
+                  defaultValue={data.phone || ""}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="city" className="form-label">
+                  City:
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="city"
+                  id="city"
+                  defaultValue={data.city || ""}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="country" className="form-label">
+                  Country:
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="country"
+                  id="country"
+                  defaultValue={data.country || ""}
+                />
+              </div>
+
+              <div className="form-group row gx-3 gy-2 align-items-center">
+                <div className="col">
+                  <label htmlFor="state" className="form-label">
+                    State:
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="state"
+                    id="state"
+                    defaultValue={data.state || ""}
+                  />
+                </div>
+                <div className="col">
+                  <label htmlFor="zip" className="form-label">
+                    Zip Code:
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="zip"
+                    id="zip"
+                    defaultValue={data.zip || ""}
+                  />
+                </div>
+              </div>
             </div>
             <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6">
               <div className="form-group">
@@ -176,23 +251,12 @@ export const DashboardProfile = () => {
               </div>
             </div>
           </div>
+
           <p>
             <strong>Username:</strong> {data.username}
           </p>
           <p>
             <strong>Email:</strong> {data.email}
-          </p>
-          <p>
-            <strong>Bio:</strong> {data.profile.bio}
-          </p>
-          <p>
-            <strong>Instruments:</strong> {data.profile.instruments}
-          </p>
-          <p>
-            <strong>Genres:</strong> {data.profile.genres}
-          </p>
-          <p>
-            <strong>Experience:</strong> {data.profile.experience}
           </p>
           <p>
             <strong>Social Links:</strong> {data.profile.social_links.instagram}

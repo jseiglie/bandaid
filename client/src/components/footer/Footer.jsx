@@ -6,7 +6,7 @@ export const Footer = () => {
       <div className="container ">
         <div className="d-flex  justify-content-between align-items-center">
           <Link className="text-white  nav-link " to="/">
-            <img src={logo} alt="BandAid Logo" />
+            <img src={logo} alt="BandAid Logo" className="img-fluid"/>
           </Link>
           <div className="d-flex flex-column flex-md-row flex-sm-row ">
             <ul className="list-group list-group-flush ">

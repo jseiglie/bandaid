@@ -45,7 +45,7 @@ export const BandManagerDashboard = () => {
 
   return (
     <section
-      className="bandManagerDashboard__container vh-100"
+      className="bandManagerDashboard__container "
       id="bandManagerDashboard"
     >
       <h2 className="bandManagerDashboard__title mt-5">Dashboard</h2>
